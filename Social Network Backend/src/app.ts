@@ -1,5 +1,5 @@
 // importa express e l'interfaccia Express dal pacchetto express
-import express, { Express, Request, Response } from "express"
+import express, { Express, NextFunction, Request, Response } from "express"
 
 // permette di gestire la ricarica della pagina in caso in cui l'utente si trovi già in una pagina di tipo 404
 import history from "connect-history-api-fallback"
@@ -31,6 +31,7 @@ app.use(express.static("dist-frontend"))
 // es. app.use(usersRouter);
 
 
+/* SOLO PROVA. POI ELEMINARE */
 // metodo di express per definire il comportamento di express quando viene visitata la pagina "/" con il metodo GET
 app.get("/", 
     // arrow function di callback che riceve 2 parametri req e res che sono gli oggetti richiesta e risposta
@@ -39,6 +40,13 @@ app.get("/",
     // metodo di Express che permette di inviare al client la risposta "Hello world"
     res.send("Hello world");
 });
+
+
+// Gestione delle rotte non esistenti
+app.use(function(req: Request, res: Response, next: NextFunction) {
+    res.setHeader("Content-Type", "text/plain")
+    res.status(404).send("Ops... Pagina non trovata")
+  })
 
 // Avvia il server sulla porta scelta
 app.listen(port, 
