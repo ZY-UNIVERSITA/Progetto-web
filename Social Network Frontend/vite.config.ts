@@ -9,5 +9,12 @@ export default defineConfig({
       "/api": "http://localhost:3000",
       "/img": "http://localhost:3000"
     }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
   }
 })
