@@ -4,7 +4,7 @@ const connection: Connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "root",
-    database: "socialnetwork"
+    database: "social_network_project"
 });
 
 // Esporta la connessione per poter essere usato all'esterno
