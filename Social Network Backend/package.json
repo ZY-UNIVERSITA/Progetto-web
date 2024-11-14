@@ -12,12 +12,14 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/connect-history-api-fallback": "^1.5.4",
     "@types/express": "^5.0.0",
     "@types/node": "^22.9.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "connect-history-api-fallback": "^2.0.0",
     "express": "^4.21.1",
     "mysql2": "^3.11.4"
   }
