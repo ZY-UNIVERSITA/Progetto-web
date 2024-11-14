@@ -1,1 +1,9 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# TypeScript compiled output
+dist/
+
+# Altro
+.vscode/
+.idea/
