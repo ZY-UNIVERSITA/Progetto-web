@@ -5,17 +5,13 @@ import express, { Express, NextFunction, Request, Response } from "express"
 import history from "connect-history-api-fallback"
 
 // importazione dei vari router
-// es. import usersRouter from "./routes/users-route"
+import usersRouter from "./routes/users-route"
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
 const app: Express = express();
 
 // crea una variabile port di tipo number
 const port: number = 3000;
-
-
-// use history fall back
-app.use(history())
 
 // middleware di express che permette di gestire file statici come css e img
 app.use(express.static("public"));
@@ -24,12 +20,10 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // permette di usare le pagine del front-end
-app.use(express.static("dist-frontend"))
-
+app.use(express.static("dist-frontend"));
 
 // permette di usare il router per gestire gli utenti
-// es. app.use(usersRouter);
-
+app.use(usersRouter);
 
 /* SOLO PROVA. POI ELEMINARE */
 // metodo di express per definire il comportamento di express quando viene visitata la pagina "/" con il metodo GET
@@ -41,12 +35,17 @@ app.get("/",
     res.send("Hello world");
 });
 
+// use history fall back
+app.use(history());
 
 // Gestione delle rotte non esistenti
-app.use(function(req: Request, res: Response, next: NextFunction) {
-    res.setHeader("Content-Type", "text/plain")
-    res.status(404).send("Ops... Pagina non trovata")
-  })
+app.use( 
+    (req: Request, res: Response, next: NextFunction) => {
+        res.setHeader("Content-Type", "text/plain")
+        res.status(404).send("Ops... Pagina non trovata")
+    }
+)
+
 
 // Avvia il server sulla porta scelta
 app.listen(port, 
