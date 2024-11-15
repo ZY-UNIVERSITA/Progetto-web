@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser"
 // importazione dei vari router
 import usersRouter from "./routes/users-router"
 import postsRouter from "./routes/posts-router"
+import authRouter from "./routes/auth-router"
 
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
@@ -34,6 +35,7 @@ app.use(cookieParser())
 // permette di usare il router per gestire gli utenti
 app.use(usersRouter);
 app.use(postsRouter);
+app.use(authRouter)
 
 
 /* SOLO PROVA. POI ELEMINARE */
