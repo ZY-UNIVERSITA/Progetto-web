@@ -8,15 +8,15 @@ export const userProfile = async (req: Request, res: Response): Promise<void> =>
     // Diventerà una stringa di valore dinamico
     const visibility: string = "public";
 
-    connection.execute(
+    // Viene eseguito una query SQL
+    const [ results ]: any = await (await connection).execute(
         `
         SELECT u.username, u.full_name, u.bio, u.birth_date, u.profile_picture, u.banner_picture
         FROM users as u
         WHERE u.username = ? AND u.visibility LIKE ?
         `,
         [ username, visibility ],
-        function(err, results, fields) {
-            res.json(results)
-        }
     )
+
+    res.json(results);
 }

@@ -1,6 +1,7 @@
-import mysql, { Connection } from "mysql2";
+import mysql, { Connection } from "mysql2/promise";
 
-const connection: Connection = mysql.createConnection({
+// Restituisce una promise che promette di restituire un dato di tipo Connection
+const connection: Promise<Connection> = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "root",
