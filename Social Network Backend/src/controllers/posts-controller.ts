@@ -1,5 +1,6 @@
-import { Request, Response } from "express"
-import connection from "../utils/db"
+import { Request, Response } from "express";
+import connection from "../utils/db";
+import executeQuerySQL from "../utils/querySQL";
 
 
 // First class function con funzione anonima di ts che ritorna una promise di tipo void
@@ -9,16 +10,14 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
     // Diventerà una stringa di valore dinamico
     const visibility: string = "public";
 
-    const [ results ]: any = await (await connection).execute(
-        `
+    const querySQL: string = 
+    `
         SELECT p.post_id, p.user_id, p.content, p.created_at, p.visibility, p.likes, p.comments, p.shares, u.username, u.full_name
         FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
         WHERE p.post_id = ? AND p.visibility LIKE ?
-        `,
-        [ postID, visibility ]
-    )
+    `;
 
-    res.json(results)
+    await executeQuerySQL(req, res, querySQL, postID, visibility);
 };
 
 export const postsUser = async (req: Request, res: Response): Promise<void> => {
@@ -27,24 +26,23 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
     // Diventerà una stringa di valore dinamico
     const visibility: string = "public";
 
-    const [ results ]: any = await (await connection).execute(
-        `
+    const querySQL: string = 
+    `
         SELECT p.post_id, p.user_id, p.content, p.created_at, p.visibility, p.likes, p.comments, p.shares
         FROM posts as p
         WHERE p.user_id = ? AND p.visibility LIKE ?
-        `,
-        [ userID, visibility ]
-    )
+    `;
 
-    res.json(results)
+    await executeQuerySQL(req, res, querySQL, userID, visibility);
 };
+
 
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     // Diventerà una stringa di valore dinamico
     const visibility: string = "public";
 
-    const [ results ]: any = await (await connection).execute(
-        `
+    const querySQL: string = 
+    `
         SELECT p.post_id, p.user_id, p.content, p.created_at, p.visibility, p.likes, p.comments, p.shares, u.username, u.full_name
         FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
 
@@ -56,9 +54,7 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
         -- Il punteggio di un post diminuisce nel tempo
         ORDER BY (p.likes * 0.5 + p.comments * 0.3 + p.shares * 0.2 - 0.1 * TIMESTAMPDIFF(HOUR, created_at, NOW())) DESC
         LIMIT 20
-        `,
-        [ visibility ]
-    )
+    `;
 
-    res.json(results)
-};
+    await executeQuerySQL(req, res, querySQL, visibility)
+}
