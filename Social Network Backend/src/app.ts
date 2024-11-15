@@ -4,9 +4,12 @@ import express, { Express, NextFunction, Request, Response } from "express"
 // permette di gestire la ricarica della pagina in caso in cui l'utente si trovi già in una pagina di tipo 404
 import history from "connect-history-api-fallback"
 
+// permette di lavorare con i cookie
+import cookieParser from "cookie-parser"
+
 // importazione dei vari router
-import usersRouter from "./routes/users-route"
-import postsRouter from "./routes/posts-route"
+import usersRouter from "./routes/users-router"
+import postsRouter from "./routes/posts-router"
 
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
@@ -24,6 +27,9 @@ app.use(express.static("dist-frontend"));
 
 // middelware per permettere di leggere il corpo del post
 app.use(express.urlencoded({ extended: true }));
+
+// permette di usare il cookie-parser
+app.use(cookieParser())
 
 // permette di usare il router per gestire gli utenti
 app.use(usersRouter);
