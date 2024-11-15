@@ -16,5 +16,5 @@ export const userProfile = async (req: Request, res: Response): Promise<void> =>
         WHERE u.username = ? AND u.visibility LIKE ?
     `;
 
-    await executeQuerySQL(req, res, querySQL, username, visibility);
+    await executeQuerySQL(req, res, querySQL, true, username, visibility);
 }

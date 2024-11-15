@@ -16,7 +16,7 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
         WHERE p.post_id = ? AND p.visibility LIKE ?
     `;
 
-    await executeQuerySQL(req, res, querySQL, postID, visibility);
+    await executeQuerySQL(req, res, querySQL, true, postID, visibility);
 };
 
 export const postsUser = async (req: Request, res: Response): Promise<void> => {
@@ -32,7 +32,7 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
         WHERE p.user_id = ? AND p.visibility LIKE ?
     `;
 
-    await executeQuerySQL(req, res, querySQL, userID, visibility);
+    await executeQuerySQL(req, res, querySQL, true, userID, visibility);
 };
 
 
@@ -55,5 +55,5 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
         LIMIT 20
     `;
 
-    await executeQuerySQL(req, res, querySQL, visibility)
+    await executeQuerySQL(req, res, querySQL, true, visibility)
 }
