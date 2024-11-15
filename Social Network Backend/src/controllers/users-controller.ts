@@ -9,9 +9,10 @@ export const userProfile = async (req: Request, res: Response): Promise<void> =>
     const visibility: string = "public";
 
     connection.execute(
-        `SELECT u.username, u.full_name, u.bio, u.birth_date, u.profile_picture, u.banner_picture
-         FROM users as u
-         WHERE u.username = ? AND u.visibility LIKE ?
+        `
+        SELECT u.username, u.full_name, u.bio, u.birth_date, u.profile_picture, u.banner_picture
+        FROM users as u
+        WHERE u.username = ? AND u.visibility LIKE ?
         `,
         [ username, visibility ],
         function(err, results, fields) {

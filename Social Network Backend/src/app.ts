@@ -6,6 +6,8 @@ import history from "connect-history-api-fallback"
 
 // importazione dei vari router
 import usersRouter from "./routes/users-route"
+import postsRouter from "./routes/posts-route"
+
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
 const app: Express = express();
@@ -13,17 +15,20 @@ const app: Express = express();
 // crea una variabile port di tipo number
 const port: number = 3000;
 
+
 // middleware di express che permette di gestire file statici come css e img
 app.use(express.static("public"));
-
-// middelware per permettere di leggere il corpo del post
-app.use(express.urlencoded({ extended: true }));
 
 // permette di usare le pagine del front-end
 app.use(express.static("dist-frontend"));
 
+// middelware per permettere di leggere il corpo del post
+app.use(express.urlencoded({ extended: true }));
+
 // permette di usare il router per gestire gli utenti
 app.use(usersRouter);
+app.use(postsRouter);
+
 
 /* SOLO PROVA. POI ELEMINARE */
 // metodo di express per definire il comportamento di express quando viene visitata la pagina "/" con il metodo GET
@@ -35,8 +40,10 @@ app.get("/",
     res.send("Hello world");
 });
 
+
 // use history fall back
 app.use(history());
+
 
 // Gestione delle rotte non esistenti
 app.use( 
