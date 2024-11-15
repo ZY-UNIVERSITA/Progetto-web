@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import connection from "../utils/db";
 import executeQuerySQL from "../utils/querySQL";
 
 
