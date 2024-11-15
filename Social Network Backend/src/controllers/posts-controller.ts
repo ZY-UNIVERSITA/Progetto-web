@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import connection from "../utils/db"
 
+
 // First class function con funzione anonima di ts che ritorna una promise di tipo void
 export const postID = async (req: Request, res: Response): Promise<void> => {
     const postID: string = req.params.id;
@@ -15,7 +16,7 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
         WHERE p.post_id = ? AND p.visibility LIKE ?
         `,
         [ postID, visibility ],
-        function(err, results, fields) {
+        (err, results, fields) => {
             console.log(results)
             res.json(results)
         }

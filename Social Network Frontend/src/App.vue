@@ -3,6 +3,19 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
+  <header>
+    <h1>Social Network</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><router-link to="/">Home</router-link></li>
+    </ul>
+  </nav>
+
+  <main>
+    <router-view></router-view>
+  </main>
+
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
@@ -14,7 +27,12 @@ import HelloWorld from './components/HelloWorld.vue'
   <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
+<style lang="css" scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
