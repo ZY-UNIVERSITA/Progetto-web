@@ -2,7 +2,7 @@
   import { defineComponent } from 'vue';
   import axios from 'axios';
   import { User } from './utils/types';
-import { RouterView } from 'vue-router';
+  import { RouterView } from 'vue-router';
  
   export default defineComponent({
     data() {

@@ -1,31 +1,53 @@
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { User } from '../utils/types';
- 
-  export default defineComponent({
+    import { defineComponent } from 'vue';
+    import axios from 'axios';
+    import { Post, User } from '../utils/types';
+    import singlePostComponent from '../components/singlePostComponent.vue';
+
+    export default defineComponent({
+    components: {
+        singlePostComponent, 
+    },
     data() {
-      return {
-      }
+        return {
+        posts: null as Post | null
+        }
     },
     inject: [
-        "provideUserInfo"
+        "provideUserInfo",
     ],
     computed: {
         axiosCompleted(): User | null {
             if (typeof this.provideUserInfo === "function") {
-                return this.provideUserInfo();
+                const userData: User | null = this.provideUserInfo();
+                this.getPopularPosts();
+                return userData;
             }
             return null;
         }
     },
-  });
-  </script>
+    methods: {
+        async getPopularPosts() {
+            const results: any = await axios.get("/api/popularPosts");
+            this.posts = results.data;
+        }
+    },
+    mounted() {
+        this.getPopularPosts();
+    }
+    });
+    </script>
 
 <template>
     <template v-if="axiosCompleted">
         <p>Welcome {{ axiosCompleted.username }}</p>
+        
     </template>
     <template v-else>
-        <p>The page is loading. Wait for a second...</p>
+        <section id="popularPosts">
+            <template v-for="post in posts">
+                <singlePostComponent :post="post"></singlePostComponent>
+            </template>
+        </section>
     </template>
 </template>
