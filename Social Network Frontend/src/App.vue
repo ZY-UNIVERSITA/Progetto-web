@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { computed, defineComponent } from 'vue';
+  import { defineComponent } from 'vue';
   import axios from 'axios';
   import { User } from './utils/types';
+import { RouterView } from 'vue-router';
  
   export default defineComponent({
     data() {
       return {
-        user: null as User | null
+        user: null as User | null,
       }
     }, 
     methods: {
@@ -17,6 +18,18 @@
     },
     mounted() {
       this.getUserInfo();
+    },
+    // Effettua un provide a tutti i discendenti figli di una funzione computed
+    provide() {
+      return {
+        provideUserInfo: (() => this.dataUserComputed) as () => User | null,
+      }
+    },
+    // ritorna il valore di this.user in modo dinamico. Permettendo di gestire il caso in cui il componente figlio venisse caricato prima della fine della chiamata axios
+    computed: {
+      dataUserComputed(): User | null {
+        return this.user;
+      }
     }
   });
 </script>
@@ -33,7 +46,7 @@
   </nav>
 
   <main>
-    <router-view></router-view>
+    <RouterView></RouterView>
   </main>
 
 </template>
