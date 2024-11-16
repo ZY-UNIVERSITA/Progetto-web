@@ -19,8 +19,7 @@ export const setUser = (req: Request, res: Response, user: any) => {
         // non può essere manipolato dal JS lato utente
         httpOnly: true,
         // la trasmissione del cookie avviene solo tramite HTTPS
-        // In questo caso si usa una connessione HTTP quindi viene disabilito
-        secure: false,
+        secure: true,
         // Il cookie viene allegato solo per il dominio del sito
         sameSite: true,
      })
@@ -49,5 +48,5 @@ export const getUser = (req: Request, res: Response) => {
 // Effettua il logout andando ad eliminare il cookie
 export const unsetUser = (req: Request, res: Response) => {
     res.clearCookie(COOKIE_NAME);
-  };
+};
   
