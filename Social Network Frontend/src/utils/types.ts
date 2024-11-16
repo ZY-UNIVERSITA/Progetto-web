@@ -16,5 +16,6 @@ export interface Post {
     images: string[],
 
     username: string,
+    full_name: string,
     profile_picture: string,
 }
