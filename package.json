@@ -1,0 +1,13 @@
+{
+    "scripts": {
+      "install:frontend": "cd \"Social Network Frontend\" && npm install",
+      "install:backend": "cd \"Social Network Backend\" && npm install",
+      "install": "npm run install:frontend && npm run install:backend",
+      "build:frontend": "cd \"Social Network Frontend\" && npm run build",
+      "copy:frontend": "robocopy \"Social Network Frontend\\dist\" \"Social Network Backend\\dist-frontend\" /E",
+      "build:backend": "cd \"Social Network Backend\" && npm run build",
+      "start:backend": "cd \"Social Network Backend\" && npm start",
+      "build": "npm run build:frontend && npm run build:backend && npm run copy:frontend",
+      "start": "npm run start:backend"
+    }
+  }
