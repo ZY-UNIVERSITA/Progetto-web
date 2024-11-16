@@ -3,8 +3,6 @@ import { Request, Response } from "express";
 import { getUser, setUser, unsetUser } from "../utils/auth";
 import { RegisterRequest, LoginRequest, User, UserUsernameEmail, LoginVerify } from "../utils/types";
 import executeQuerySQL from "../utils/querySQL";
-import { randomInt } from "crypto";
-import { get } from "http";
 
 /* REGISTER A NEW ACCOUNT */
 export const register = async (req: Request, res: Response): Promise<void> => {
