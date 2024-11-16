@@ -1,5 +1,24 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+  import { computed, defineComponent } from 'vue';
+  import axios from 'axios';
+  import { User } from './utils/types';
+ 
+  export default defineComponent({
+    data() {
+      return {
+        user: null as User | null
+      }
+    }, 
+    methods: {
+      async getUserInfo() {
+        const results: any = await axios.get("/api/auth/profile");
+        this.user = results.data;
+      }
+    },
+    mounted() {
+      this.getUserInfo();
+    }
+  });
 </script>
 
 <template>
@@ -9,6 +28,7 @@ import HelloWorld from './components/HelloWorld.vue'
   <nav>
     <ul>
       <li><router-link to="/">Home</router-link></li>
+      <li><router-link to="/account">Account</router-link></li>
     </ul>
   </nav>
 
@@ -16,33 +36,24 @@ import HelloWorld from './components/HelloWorld.vue'
     <router-view></router-view>
   </main>
 
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style lang="css" scoped>
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+  .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+  .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+  .logo.vue:hover {
+    filter: drop-shadow(0 0 2em #42b883aa);
+  }
 </style>
