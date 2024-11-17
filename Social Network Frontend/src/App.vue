@@ -25,7 +25,8 @@
         provideUserInfo: (() => this.dataUserComputed) as () => User | null,
       }
     },
-    // ritorna il valore di this.user in modo dinamico. Permettendo di gestire il caso in cui il componente figlio venisse caricato prima della fine della chiamata axios
+    // ritorna il valore di this.user in modo dinamico.
+    // Permettendo di gestire il caso in cui il componente figlio venisse caricato prima della fine della chiamata axios
     computed: {
       dataUserComputed(): User | null {
         return this.user;
@@ -36,7 +37,7 @@
 
 <template>
   <header>
-    <h1>Social Network</h1>
+    <h1>DailyDot</h1>
   </header>
   <nav>
     <ul>

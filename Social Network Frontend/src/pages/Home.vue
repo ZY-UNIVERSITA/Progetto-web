@@ -50,13 +50,10 @@
     </script>
 
 <template>
-    <header>
-        <h1>DailyDot</h1>
-        <div class="auth-buttons">
-          <button v-if="!isUserLoggedIn" @click="login">Login</button>
-          <button v-if="isUserLoggedIn" @click="logout">Logout</button>
-        </div>
-    </header>
+    <div class="auth-buttons">
+        <button v-if="!isUserLoggedIn" @click="login">Login</button>
+        <button v-if="isUserLoggedIn" @click="logout">Logout</button>
+    </div>
 
     <section id="popularPosts">
         <template v-for="post in posts">
