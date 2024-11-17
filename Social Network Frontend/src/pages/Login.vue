@@ -4,7 +4,7 @@
     import { User } from '../utils/types';
 
     export default defineComponent({
-        name: "Account",
+        name: "Login",
         data() {
             return {
                 logged: true as boolean

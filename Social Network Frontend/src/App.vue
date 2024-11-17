@@ -44,7 +44,7 @@
       <li><router-link to="/">Home</router-link></li>
       <li><router-link to="/search">Search</router-link></li>
       <li><router-link to="/post">Add Post</router-link></li>
-      <li><router-link to="/account">Account</router-link></li>
+      <li><router-link to="/profile">Profile</router-link></li>
     </ul>
   </nav>
   <main>
