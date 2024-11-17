@@ -10,22 +10,33 @@ body {
 }
 
 h1 {
+    position: relative;
     font-family: $font-primary;
     color: $main-color;
     font-size: $size-name;
-    margin-bottom: 1em;
+    margin: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
 }
 
+.auth-buttons {
+    position: absolute;
+    right: 0;
+    top: 7%;
+    transform: translateY(-50%);
+    align-items: center;
+    margin-left: auto;
+    width: auto;
 
-button {
-  border-radius: 40px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: $main-color;
-  transition: border-color 0.25s;
+    button {
+        border-radius: 40px;
+        padding: 0.6em 1.2em;
+        font-size: 1em;
+        font-weight: bold;
+        font-family: $font-secondary;
+        background-color: $main-color;
+    }
 }
 
 nav {
