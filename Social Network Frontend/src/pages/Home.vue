@@ -40,7 +40,7 @@
         },
         login() {
             this.isUserLoggedIn = true;
-            axios.post("/api/auth/login").then(response => { this.isUserLoggedIn = true; });
+            axios.post("/api/auth/login").then(() => { this.isUserLoggedIn = true; });
         }
     },
     mounted() {
@@ -50,15 +50,17 @@
     </script>
 
 <template>
-    <template v-if="axiosCompleted">
-        <p>Welcome {{ axiosCompleted.username }}</p>
-        
-    </template>
-    <template v-else>
-        <section id="popularPosts">
-            <template v-for="post in posts">
-                <singlePostComponent :post="post"></singlePostComponent>
-            </template>
-        </section>
-    </template>
+    <header>
+        <h1>DailyDot</h1>
+        <div class="auth-buttons">
+          <button v-if="!isUserLoggedIn" @click="login">Login</button>
+          <button v-if="isUserLoggedIn" @click="logout">Logout</button>
+        </div>
+    </header>
+
+    <section id="popularPosts">
+        <template v-for="post in posts">
+            <singlePostComponent :post="post"></singlePostComponent>
+        </template>
+    </section>
 </template>
