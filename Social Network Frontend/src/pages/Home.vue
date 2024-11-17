@@ -10,7 +10,8 @@
     },
     data() {
         return {
-        posts: null as Post | null
+        posts: null as Post | null,
+        isUserLoggedIn: false
         }
     },
     inject: [
@@ -20,6 +21,8 @@
         axiosCompleted(): User | null {
             if (typeof this.provideUserInfo === "function") {
                 const userData: User | null = this.provideUserInfo();
+                if (userData) { this.isUserLoggedIn = true; }
+                else { this.isUserLoggedIn = false; }
                 this.getPopularPosts();
                 return userData;
             }
@@ -30,6 +33,14 @@
         async getPopularPosts() {
             const results: any = await axios.get("/api/popularPosts");
             this.posts = results.data;
+        },
+        logout() {
+            this.isUserLoggedIn = false;
+            axios.post("/api/auth/logout").then(() => { this.isUserLoggedIn = false; })
+        },
+        login() {
+            this.isUserLoggedIn = true;
+            axios.post("/api/auth/login").then(response => { this.isUserLoggedIn = true; });
         }
     },
     mounted() {
