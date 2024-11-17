@@ -8,7 +8,7 @@
         data() {
             return {
                 logged: true as boolean,
-                usernameOrEmail: "" as string,
+                username: "" as string,
                 password: "" as string
             }
         },
@@ -20,6 +20,21 @@
         methods: {
             loginRegisterButton() {
                 this.logged = !this.logged;
+            },
+            async login() {
+                try {
+                    await axios.post("/api/auth/login", {
+                        usernameOrEmail: this.username,
+                        password: this.password,
+                    });
+                    location.href="/"
+                } catch (e: any) {
+                    console.error('Errore durante il login:', e);
+
+                    console.error(e.response);
+                    console.error(e.request);
+                }
+                
             }
         },
         props: {
@@ -29,7 +44,6 @@
 </script>
 
 <template>
-    {{ user }}
     <form>  
         <input type="button" v-on:click="loginRegisterButton" v-bind:value="loginRegisterText"></input>
     </form>
@@ -54,15 +68,26 @@
             <input type="submit" value="Logout" />
         </form>
     </template>
-    <template v-else>
+    <!-- <template v-else>
         <form method="POST" action="/api/auth/login">
             <label for="usernameOrEmail">Enter your username/email: </label>
-            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="usernameOrEmail" />
+            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required />
+    
+            <label for="password">Enter your password*: </label>
+            <input type="password" name="password" id="password" minlength="16" required />
+        
+            <input type="submit" value="Login" />
+        </form>
+    </template> -->
+
+    <template v-else>
+        <form @submit.prevent="login">
+            <label>Enter your username/email: </label>
+            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="username" />
     
             <label for="password">Enter your password*: </label>
             <input type="password" name="password" id="password" minlength="16" required v-model="password" />
-        
-            <input type="submit" value="Login" />
+            <button type="submit">button</button>
         </form>
     </template>
 </template>

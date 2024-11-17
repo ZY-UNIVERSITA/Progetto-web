@@ -2,7 +2,6 @@
   import { defineComponent } from 'vue';
   import axios from 'axios';
   import { User } from './utils/types';
-  import { RouterView } from 'vue-router';
  
   export default defineComponent({
     data() {
@@ -12,8 +11,12 @@
     }, 
     methods: {
       async getUserInfo() {
-        const results: any = await axios.get("/api/auth/profile");
-        this.user = results.data;
+        try {
+          const results: any = await axios.get("/api/auth/profile");
+          this.user = results.data;
+        } catch (e: any) {
+          console.error("error", e);
+        }
       }
     },
     mounted() {

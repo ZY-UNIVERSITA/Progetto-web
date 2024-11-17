@@ -7,6 +7,8 @@ import history from "connect-history-api-fallback"
 // permette di lavorare con i cookie
 import cookieParser from "cookie-parser"
 
+import bodyParser from "body-parser"
+
 // importazione dei vari router
 import usersRouter from "./routes/users-router"
 import postsRouter from "./routes/posts-router"
@@ -20,6 +22,11 @@ const app: Express = express();
 const port: number = 3000;
 
 
+app.use(bodyParser.json())
+
+// permette di usare il cookie-parser
+app.use(cookieParser())
+
 // middleware di express che permette di gestire file statici come css e img
 app.use(express.static("public"));
 
@@ -28,9 +35,6 @@ app.use(express.static("dist-frontend"));
 
 // middelware per permettere di leggere il corpo del post
 app.use(express.urlencoded({ extended: true }));
-
-// permette di usare il cookie-parser
-app.use(cookieParser())
 
 // permette di usare il router per gestire gli utenti
 app.use(usersRouter);

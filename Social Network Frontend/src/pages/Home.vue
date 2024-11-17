@@ -18,22 +18,31 @@
         },
         methods: {
             async getPopularPosts() {
-                const results: any = await axios.get("/api/popularPosts");
-                this.posts = results.data;
+                try {
+                    const results: any = await axios.get("/api/popularPosts");
+                    this.posts = results.data;
+                } catch (e: any) {
+                    console.error(e);
+                }
             }, 
             async getPopularPersonalizedPost() {
-                const results: any = await axios.get("/api/popularPosts/loggedUser");
-                this.posts = results.data;
+                try {
+                    const results: any = await axios.get("/api/popularPosts/loggedUser");
+                    this.posts = results.data;
+                } catch (e: any) {
+                    console.error(e);
+                }
             }
         },
-        mounted() {
+        created() {
             if (this.user !== null) {
-                console.log(this.user);
+                console.log("Sei loggato");
                 this.getPopularPersonalizedPost();
             } else {
-                console.log("not logged")
+                console.log("Non sei loggato")
                 this.getPopularPosts(); 
             }
+            console.log(this.user);
         },
     });
 </script>
