@@ -1,11 +1,11 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory, Router } from 'vue-router';
-import axios from 'axios';
 import App from './App.vue';
 import Account from './pages/Account.vue';
 import Home from './pages/Home.vue';
 import UserProfile from './pages/UserProfile.vue';
 import { User } from './utils/types';
+import axios from 'axios';
 import './style.css';
 
 const router: Router = createRouter({
@@ -17,11 +17,10 @@ const router: Router = createRouter({
     ]
 });
 
-/*
+
 router.beforeEach(async (to) => {
-    const res = await axios.get("/api/auth/profile");
-    const user = res.data as User | null;
+    const results = await axios.get("/api/auth/profile");
 });
-*/
+
 
 createApp(App).use(router).mount('#app');
