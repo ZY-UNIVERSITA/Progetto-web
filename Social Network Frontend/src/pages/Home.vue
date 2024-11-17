@@ -10,7 +10,7 @@
     },
     data() {
         return {
-        posts: null as Post | null
+        posts: null as Post[] | null
         }
     },
     inject: [
