@@ -19,18 +19,6 @@
     mounted() {
       this.getUserInfo();
     },
-    // Effettua un provide a tutti i discendenti figli di una funzione computed
-    provide() {
-      return {
-        provideUserInfo: (() => this.dataUserComputed) as () => User | null,
-      }
-    },
-    // ritorna il valore di this.user in modo dinamico. Permettendo di gestire il caso in cui il componente figlio venisse caricato prima della fine della chiamata axios
-    computed: {
-      dataUserComputed(): User | null {
-        return this.user;
-      }
-    }
   });
 </script>
 
@@ -40,13 +28,13 @@
   </header>
   <nav>
     <ul>
-      <li><router-link to="/">Home</router-link></li>
-      <li><router-link to="/account">Account</router-link></li>
+      <li><RouterLink to="/">Home</RouterLink></li>
+      <li><RouterLink to="/account">Account</RouterLink></li>
     </ul>
   </nav>
 
   <main>
-    <RouterView></RouterView>
+    <RouterView :user="user"></RouterView>
   </main>
 
 </template>
