@@ -79,7 +79,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
 /* LOGIN CONTROLLER */
 export const login = async (req: Request, res: Response): Promise<void> => {
-    /* CONTROLLA SE IL LOGIN è GIà EFFETTUATO */
+/* CONTROLLA SE IL LOGIN è GIà EFFETTUATO */
     // Verifica se l'utente ha già effettuato il login
     const user: User | null = getUser(req, res);
 

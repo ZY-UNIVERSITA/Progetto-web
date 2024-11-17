@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { defineComponent, PropType } from 'vue';
+    import { defineComponent, Prop, PropType } from 'vue';
     import axios from "axios"
     import { User } from '../utils/types';
 
@@ -7,7 +7,9 @@
         name: "Account",
         data() {
             return {
-                logged: true as boolean
+                logged: true as boolean,
+                usernameOrEmail: "" as string,
+                password: "" as string
             }
         },
         computed: {
@@ -20,10 +22,14 @@
                 this.logged = !this.logged;
             }
         },
+        props: {
+            user: Object as PropType<User>
+        }
     });
 </script>
 
 <template>
+    {{ user }}
     <form>  
         <input type="button" v-on:click="loginRegisterButton" v-bind:value="loginRegisterText"></input>
     </form>
@@ -51,10 +57,10 @@
     <template v-else>
         <form method="POST" action="/api/auth/login">
             <label for="usernameOrEmail">Enter your username/email: </label>
-            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required />
+            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="usernameOrEmail" />
     
             <label for="password">Enter your password*: </label>
-            <input type="password" name="password" id="password" minlength="16" required />
+            <input type="password" name="password" id="password" minlength="16" required v-model="password" />
         
             <input type="submit" value="Login" />
         </form>
