@@ -1,6 +1,7 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
     import axios from 'axios';
+    import { useRouter } from 'vue-router';
     import { Post, User } from '../utils/types';
     import singlePostComponent from '../components/singlePostComponent.vue';
 
@@ -21,9 +22,7 @@
         axiosCompleted(): User | null {
             if (typeof this.provideUserInfo === "function") {
                 const userData: User | null = this.provideUserInfo();
-                if (userData) { this.isUserLoggedIn = true; }
-                else { this.isUserLoggedIn = false; }
-                this.getPopularPosts();
+                this.isUserLoggedIn = !!userData;
                 return userData;
             }
             return null;
@@ -39,8 +38,7 @@
             axios.post("/api/auth/logout").then(() => { this.isUserLoggedIn = false; })
         },
         login() {
-            this.isUserLoggedIn = true;
-            axios.post("/api/auth/login").then(() => { this.isUserLoggedIn = true; });
+            this.$router.push({ name: 'Login' });
         }
     },
     mounted() {

@@ -10,7 +10,7 @@ const router: Router = createRouter({
     history: createWebHashHistory(),
     routes: [
         { path: "/", component: Home},
-        { path: "/login", component: Login },
+        { path: "/login", name: "Login", component: Login },
         { path: "/user/:username", component: Profile },
         { path: "/:pathMatch(.*)*", component: NotFound }
     ]
