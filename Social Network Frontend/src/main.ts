@@ -4,7 +4,6 @@ import App from './App.vue';
 import Account from './pages/Account.vue';
 import Home from './pages/Home.vue';
 import UserProfile from './pages/UserProfile.vue';
-import { User } from './utils/types';
 import axios from 'axios';
 import './style.css';
 
@@ -19,7 +18,7 @@ const router: Router = createRouter({
 
 
 router.beforeEach(async (to) => {
-    const results = await axios.get("/api/auth/profile");
+    await axios.get("/api/auth/profile");
 });
 
 
