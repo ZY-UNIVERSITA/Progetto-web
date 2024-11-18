@@ -5,11 +5,14 @@
     import singlePostComponent from '../components/singlePostComponent.vue';
 
     export default defineComponent({
-        components: {
-            singlePostComponent, 
+        components: { 
+            singlePostComponent
         },
         props: {
-            user: Object as PropType<User>
+            user: {
+                type: Object as PropType<User | null>,
+                required: false,
+            },
         },
         data() {
             return {
@@ -25,22 +28,29 @@
                     console.error(e);
                 }
             },
+            async logout() {   
+                try {
+                    await axios.post("/api/auth/logout");
+                    location.href="/"
+                } catch (e: any) {
+                    console.error(e);
+                }
+            },
+            login() {
+                this.$router.push({ name: 'Login' });
+            }
         },
         created() {
             this.getPopularPosts(); 
-        },
+        }
     });
 </script>
 
 <template>
-    <template v-if="user">
-        <p>Welcome {{ user.username }}</p>
-    </template>
-
-    <template v-else>
-        <p>Not welcome</p>
-    </template>
-    
+    <div class="auth-buttons">
+        <button v-if="!user" @click="login">Login</button>
+        <button v-else @click="logout">Logout</button>
+    </div>
     <section id="popularPosts">
         <template v-for="post in posts">
             <singlePostComponent :post="post"></singlePostComponent>

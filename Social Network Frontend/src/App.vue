@@ -21,25 +21,25 @@
     },
     mounted() {
       this.getUserInfo();
-    },
+    }
   });
 </script>
 
 <template>
   <header>
-    <h1>Social Network</h1>
+    <h1>DailyDot</h1>
   </header>
   <nav>
     <ul>
-      <li><RouterLink to="/">Home</RouterLink></li>
-      <li><RouterLink to="/account">Account</RouterLink></li>
+      <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
+      <li><RouterLink to="/search"><img src="/icons/search.svg" alt="Search"/></RouterLink></li>
+      <li><RouterLink to="/post"><img src="/icons/add.svg" alt="Add Post"/></RouterLink></li>
+      <li><RouterLink to="/profile"><img src="/icons/user.svg" alt="Profile"/></RouterLink></li>
     </ul>
   </nav>
-
   <main>
     <RouterView :user="user"></RouterView>
   </main>
-
 </template>
 
 <style lang="scss">

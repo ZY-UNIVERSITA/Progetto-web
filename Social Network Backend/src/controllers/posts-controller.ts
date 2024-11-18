@@ -12,7 +12,6 @@ const friendVisibility: string = "friends";
 
 
 // LAVORARCI PENSANDO CHE SI DEBBA FARE TUTTE LE CHIAMATE AXIOS
-/*
 export const postID = async (req: Request, res: Response): Promise<void> => {
     const { user_id, username, visibility }: postID_interface = req.body;
     const post_id = req.params.id;
@@ -37,7 +36,6 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
             res.status(400).send("Not found or not friend");
             return;
         }
-        }
     }
 
     const querySQL: string = 
@@ -47,10 +45,8 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
         WHERE p.post_id = ? AND p.visibility LIKE ?
     `;
 
-    
-
     await executeQuerySQL(req, res, querySQL, true, post_id, publicVisibility);
-};*/
+};
 
 
 export const postsUser = async (req: Request, res: Response): Promise<void> => {

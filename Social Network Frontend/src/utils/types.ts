@@ -3,8 +3,7 @@ export interface User {
     username: string
 }
 
-export interface Post {
-    post_id: string,
+export interface Post extends User {
     user_id: string,
     content: string,
     created_at: Date,
@@ -15,7 +14,6 @@ export interface Post {
 
     images: string[],
 
-    username: string,
     full_name: string,
     profile_picture: string,
 }
