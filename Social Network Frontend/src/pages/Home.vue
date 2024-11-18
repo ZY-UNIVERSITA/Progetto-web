@@ -9,7 +9,7 @@
         components: { singlePostComponent },
         props: {
             user: {
-                type: Object as PropType<User | undefined>,
+                type: Object as PropType<User | null>,
                 required: false,
             },
         },
@@ -43,7 +43,7 @@
 <template>
     <div class="auth-buttons">
         <button v-if="!user" @click="login">Login</button>
-        <button v-if="user" @click="logout">Logout</button>
+        <button v-else @click="logout">Logout</button>
     </div>
     <section id="popularPosts">
         <template v-for="post in posts">
