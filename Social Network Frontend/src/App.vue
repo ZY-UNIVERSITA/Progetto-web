@@ -2,7 +2,6 @@
   import { defineComponent } from 'vue';
   import axios from 'axios';
   import { User } from './utils/types';
-  import { RouterView } from 'vue-router';
  
   export default defineComponent({
     data() {
@@ -12,25 +11,16 @@
     }, 
     methods: {
       async getUserInfo() {
-        const results: any = await axios.get("/api/auth/profile");
-        this.user = results.data;
+        try {
+          const results: any = await axios.get("/api/auth/profile");
+          this.user = results.data;
+        } catch (e: any) {
+          console.error("error", e);
+        }
       }
     },
     mounted() {
       this.getUserInfo();
-    },
-    // Effettua un provide a tutti i discendenti figli di una funzione computed
-    provide() {
-      return {
-        provideUserInfo: (() => this.dataUserComputed) as () => User | null,
-      }
-    },
-    // ritorna il valore di this.user in modo dinamico.
-    // Permettendo di gestire il caso in cui il componente figlio venisse caricato prima della fine della chiamata axios
-    computed: {
-      dataUserComputed(): User | null {
-        return this.user;
-      }
     }
   });
 </script>
@@ -48,7 +38,7 @@
     </ul>
   </nav>
   <main>
-    <RouterView></RouterView>
+    <RouterView :user="user"></RouterView>
   </main>
 </template>
 

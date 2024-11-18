@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { defineComponent, PropType } from 'vue';
+    import { defineComponent, Prop, PropType } from 'vue';
     import axios from "axios"
     import { User } from '../utils/types';
 
@@ -7,7 +7,9 @@
         name: "Login",
         data() {
             return {
-                logged: true as boolean
+                logged: true as boolean,
+                username: "" as string,
+                password: "" as string
             }
         },
         computed: {
@@ -18,8 +20,26 @@
         methods: {
             loginRegisterButton() {
                 this.logged = !this.logged;
+            },
+            async login() {
+                try {
+                    await axios.post("/api/auth/login", {
+                        usernameOrEmail: this.username,
+                        password: this.password,
+                    });
+                    location.href="/"
+                } catch (e: any) {
+                    console.error('Errore durante il login:', e);
+
+                    console.error(e.response);
+                    console.error(e.request);
+                }
+                
             }
         },
+        props: {
+            user: Object as PropType<User>
+        }
     });
 </script>
 
@@ -48,7 +68,7 @@
             <input type="submit" value="Logout" />
         </form>
     </template>
-    <template v-else>
+    <!-- <template v-else>
         <form method="POST" action="/api/auth/login">
             <label for="usernameOrEmail">Enter your username/email: </label>
             <input type="text" name="usernameOrEmail" id="usernameOrEmail" required />
@@ -57,6 +77,17 @@
             <input type="password" name="password" id="password" minlength="16" required />
         
             <input type="submit" value="Login" />
+        </form>
+    </template> -->
+
+    <template v-else>
+        <form @submit.prevent="login">
+            <label>Enter your username/email: </label>
+            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="username" />
+    
+            <label for="password">Enter your password*: </label>
+            <input type="password" name="password" id="password" minlength="16" required v-model="password" />
+            <button type="submit">button</button>
         </form>
     </template>
 </template>
