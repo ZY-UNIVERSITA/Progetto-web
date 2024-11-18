@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { defineComponent, Prop, PropType } from 'vue';
+    import { defineComponent, PropType } from 'vue';
     import axios from "axios"
     import { User } from '../utils/types';
 

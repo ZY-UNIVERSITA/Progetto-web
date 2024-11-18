@@ -22,7 +22,7 @@ const router: Router = createRouter({
     ]
 });
 
-router.beforeEach(async (to) => {
+router.beforeEach(async (/*to*/) => {
     await axios.get("/api/auth/profile");
 });
 
