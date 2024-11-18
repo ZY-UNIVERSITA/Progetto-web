@@ -19,7 +19,7 @@ export const setUser = (req: Request, res: Response, user: any) => {
         // non può essere manipolato dal JS lato utente
         httpOnly: true,
         // la trasmissione del cookie avviene solo tramite HTTPS
-        secure: true,
+        // secure: false,
         // Il cookie viene allegato solo per il dominio del sito
         sameSite: true,
      })
