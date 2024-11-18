@@ -1,12 +1,13 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
-    import { useRouter } from 'vue-router';
     import { Post, User } from '../utils/types';
     import singlePostComponent from '../components/singlePostComponent.vue';
 
     export default defineComponent({
-        components: { singlePostComponent },
+        components: { 
+            singlePostComponent
+        },
         props: {
             user: {
                 type: Object as PropType<User | null>,
@@ -27,8 +28,13 @@
                     console.error(e);
                 }
             },
-            logout() {
-                axios.post("/api/auth/logout").then(() => { })
+            async logout() {   
+                try {
+                    await axios.post("/api/auth/logout");
+                    location.href="/"
+                } catch (e: any) {
+                    console.error(e);
+                }
             },
             login() {
                 this.$router.push({ name: 'Login' });

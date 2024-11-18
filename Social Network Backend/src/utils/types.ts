@@ -3,6 +3,10 @@ export interface User {
     username: string
 }
 
+export interface postID_interface extends User {
+    visibility: string
+}
+
 export interface RegisterRequest {
     username: string,
     email: string,

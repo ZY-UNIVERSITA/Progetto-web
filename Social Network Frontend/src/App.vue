@@ -31,10 +31,10 @@
   </header>
   <nav>
     <ul>
-      <li><router-link to="/"><img src="/icons/home.svg" alt="Home"/></router-link></li>
-      <li><router-link to="/search"><img src="/icons/search.svg" alt="Search"/></router-link></li>
-      <li><router-link to="/post"><img src="/icons/add.svg" alt="Add Post"/></router-link></li>
-      <li><router-link to="/profile"><img src="/icons/user.svg" alt="Profile"/></router-link></li>
+      <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
+      <li><RouterLink to="/search"><img src="/icons/search.svg" alt="Search"/></RouterLink></li>
+      <li><RouterLink to="/post"><img src="/icons/add.svg" alt="Add Post"/></RouterLink></li>
+      <li><RouterLink to="/profile"><img src="/icons/user.svg" alt="Profile"/></RouterLink></li>
     </ul>
   </nav>
   <main>
