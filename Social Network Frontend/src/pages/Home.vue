@@ -24,25 +24,10 @@
                 } catch (e: any) {
                     console.error(e);
                 }
-            }, 
-            async getPopularPersonalizedPost() {
-                try {
-                    const results: any = await axios.get("/api/popularPosts/loggedUser");
-                    this.posts = results.data;
-                } catch (e: any) {
-                    console.error(e);
-                }
-            }
+            },
         },
         created() {
-            if (this.user !== null) {
-                console.log("Sei loggato");
-                this.getPopularPersonalizedPost();
-            } else {
-                console.log("Non sei loggato")
-                this.getPopularPosts(); 
-            }
-            console.log(this.user);
+            this.getPopularPosts(); 
         },
     });
 </script>
