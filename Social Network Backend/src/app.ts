@@ -22,10 +22,10 @@ const app: Express = express();
 const port: number = 3000;
 
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // permette di usare il cookie-parser
-app.use(cookieParser())
+app.use(cookieParser());
 
 // middleware di express che permette di gestire file statici come css e img
 app.use(express.static("public"));
