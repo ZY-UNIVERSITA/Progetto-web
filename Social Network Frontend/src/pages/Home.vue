@@ -38,6 +38,9 @@
             },
             login() {
                 this.$router.push({ name: 'Login' });
+            },
+            goToPost(postID: string) {
+                this.$router.push({ name: 'SinglePost', params: { id: postID }});
             }
         },
         created() {
@@ -53,7 +56,7 @@
     </div>
     <section id="popularPosts">
         <template v-for="post in posts">
-            <singlePostComponent :post="post"></singlePostComponent>
+            <singlePostComponent :post="post" v-on:click="goToPost(post.post_id)"></singlePostComponent>
         </template>
     </section>
 </template>

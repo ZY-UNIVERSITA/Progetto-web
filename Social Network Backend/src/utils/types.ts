@@ -29,3 +29,17 @@ export interface LoginVerify {
     user_id: string,
     password_hash: string
 }
+
+export interface Post {
+    post_id: string,
+    user_id: string,
+    content: string,
+    created_at: Date,
+    likes: number,
+    comments: number, 
+    shares: number, 
+    post_visibility: string, 
+    username: string,
+    full_name: string,
+    user_visibility: string
+}
