@@ -4,6 +4,7 @@ export interface User {
 }
 
 export interface Post extends User {
+    post_id: string,
     user_id: string,
     content: string,
     created_at: Date,

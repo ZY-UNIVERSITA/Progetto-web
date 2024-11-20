@@ -8,6 +8,7 @@ import Login from './pages/Login.vue';
 import Profile from './pages/Profile.vue';
 import Search from './pages/Search.vue';
 import AddPost from './pages/AddPost.vue';
+import SinglePost from './pages/SinglePost.vue';
 
 const router: Router = createRouter({
     history: createWebHashHistory(),
@@ -17,6 +18,7 @@ const router: Router = createRouter({
         { path: "/user/:username", component: Profile },
         { path: "/search", component: Search },
         { path: "/post", component: AddPost },
+        { path: "/post/:id", name: "SinglePost", component: SinglePost },
         { path: "/profile", component: Profile },
         { path: "/:pathMatch(.*)*", component: NotFound }
     ]
