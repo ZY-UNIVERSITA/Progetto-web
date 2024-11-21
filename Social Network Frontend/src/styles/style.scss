@@ -1,5 +1,6 @@
 @use "./variables" as *;
 @use "./mixins" as *;
+@use "sass:color";
 
 body {
     @include theme($bg-color-dark, $text-color-dark);
@@ -114,7 +115,7 @@ form {
         border: none;
 
         &:hover {
-            background-color: darken($main-color, 10%);
+            background-color: color.scale($main-color, $lightness: -10%);
         }
 
         &:active {
@@ -128,10 +129,10 @@ form.light-mode {
     @include theme($bg-color-light, $text-color-light);
 
     input {
-        border: 1px solid lighten($main-color, 10%);
+        border: 1px solid color.scale($main-color, $lightness: 10%);
     }
 
     input[type="submit"], input[type="button"] {
-        background-color: lighten($main-color, 10%);
+        background-color: color.scale($main-color, $lightness: 10%);
     }
 }
