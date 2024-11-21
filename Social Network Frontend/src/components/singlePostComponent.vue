@@ -26,14 +26,14 @@
 
 <template>
     <article :id="post?.post_id">
-        <header>
+        <header class ='profileHeader'>
             <template v-if="post?.profile_picture">
                 <img class="profilePicture" :src="'/images/profile_photo/' + post?.username + '.jpg'" alt="profileImage" />
             </template>
             <template v-else>
                 <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
             </template>
-            <p>
+            <p class="full-name">
                 {{ post.full_name }}
                 <RouterLink :to="'/user/' + post?.username">{{ "@" + post?.username }}</RouterLink>
             </p>
