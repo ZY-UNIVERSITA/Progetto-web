@@ -84,6 +84,53 @@ nav {
     }
 }
 
+article {
+    @include theme($bg-color-dark, $text-color-dark);
+    text-align: left;
+    border-radius: 10px;
+    margin: 1%;
+    padding: 2.5%;
+
+    &.light-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
+}
+
+.heart {
+    fill: white;
+    stroke: black;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: transform 0.5s, fill 0.5s, stroke-width 0.5s;
+    width: 35px;
+    height: 35px;
+
+    &.red {
+        fill: red;
+        stroke-width: 0;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.5);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    &.pulse {
+        animation: pulse 0.5s ease;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}
+
 form {
     @include theme($bg-color-dark, $text-color-dark);
     margin: 2em auto;
