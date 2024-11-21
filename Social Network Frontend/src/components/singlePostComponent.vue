@@ -27,7 +27,6 @@
 <template>
     <article :id="post?.post_id">
         <header>
-            <h2>Post</h2>
             <template v-if="post?.profile_picture">
                 <img class="profilePicture" :src="'/images/profile_photo/' + post?.username + '.jpg'" alt="profileImage" />
             </template>
