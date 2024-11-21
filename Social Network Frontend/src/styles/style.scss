@@ -47,6 +47,7 @@ nav {
     z-index: 999;
     position: fixed;
     bottom: 0;
+    padding: 15px 0;
 
     &.light-mode {
         @include theme($bg-color-light, $text-color-light);
@@ -78,7 +79,7 @@ nav {
     }
 
     img {
-        width: 35%;
+        width: 50%;
         display: block;
         margin: 0 auto;
     }
