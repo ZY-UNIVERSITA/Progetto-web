@@ -211,3 +211,17 @@ form.light-mode {
         background-color: color.scale($main-color, $lightness: 10%);
     }
 }
+
+.NotFound {
+    color: $main-color;
+    font-weight: bolder;
+    text-align: center;
+
+    h3 {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 70px;
+    }
+}
