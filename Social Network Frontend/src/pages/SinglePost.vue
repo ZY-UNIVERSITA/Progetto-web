@@ -19,16 +19,23 @@
         data() {
             return {
                 post: null as Post | null,
+                loading: true as boolean,
             }
         },
         methods: {
             async getPostByID() {
                 try {
+                    this.loading = true;
                     const results: any = await axios.get("/api/post/" + this.$route.params.id);
                     this.post = results.data;
                 } catch (e: any) {
                     console.error(e);
                 }
+
+                // Simula un ritardo per evitare che la pagina carichi se non ci sono ritardi nella query
+                setTimeout(() => {
+                    this.loading = false;
+                }, 2500);
             }
         },
         // Vue riusa lo stesso componente quindi se si cambia id del post potrebbe non funzionare
@@ -36,7 +43,7 @@
         watch: {
             '$route.params': {
                 handler() {
-                    // Resetta il post
+                    // resetta il post
                     this.post = null;
                     // Fai una nuova fetch
                     this.getPostByID();
@@ -50,11 +57,16 @@
 
 <template>
     <section id="post">
-        <template v-if="post">
-            <singlePostComponent :post="post"></singlePostComponent>
+        <template v-if="loading">
+            <p>Page is loading...</p>
         </template>
         <template v-else>
-            <notFound></notFound>    
+            <template v-if="post">
+                <singlePostComponent :post="post"></singlePostComponent>
+            </template>
+            <template v-else>
+                <notFound></notFound>    
+            </template>
         </template>
     </section>
 </template>

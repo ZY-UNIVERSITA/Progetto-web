@@ -40,7 +40,10 @@
                 this.$router.push({ name: 'Login' });
             },
             goToPost(postID: string) {
-                this.$router.push({ name: 'SinglePost', params: { id: postID }});
+                this.$router.push({ 
+                    name: 'SinglePost', 
+                    params: { "id": postID }
+                });
             }
         },
         created() {

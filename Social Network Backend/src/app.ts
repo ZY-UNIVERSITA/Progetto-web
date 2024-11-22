@@ -13,6 +13,7 @@ import bodyParser from "body-parser"
 import usersRouter from "./routes/users-router"
 import postsRouter from "./routes/posts-router"
 import authRouter from "./routes/auth-router"
+import interactionRouter from "./routes/interaction-router"
 
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
@@ -39,7 +40,8 @@ app.use(express.urlencoded({ extended: true }));
 // permette di usare il router per gestire gli utenti
 app.use(usersRouter);
 app.use(postsRouter);
-app.use(authRouter)
+app.use(authRouter);
+app.use(interactionRouter);
 
 
 /* SOLO PROVA. POI ELEMINARE */
