@@ -41,5 +41,6 @@ export interface Post {
     post_visibility: string, 
     username: string,
     full_name: string,
-    user_visibility: string
+    user_visibility: string,
+    post_liked: number,
 }

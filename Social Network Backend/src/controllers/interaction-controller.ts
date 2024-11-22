@@ -8,13 +8,13 @@ const publicVisibility: string = "public";
 const privateVisibility: string = "private";
 
 // First class function con funzione anonima di ts che ritorna una promise di tipo void
-export const postLike = async (req: Request, res: Response): Promise<void> => {
+export const postLikeAdd = async (req: Request, res: Response): Promise<void> => {
     const { post_id } = req.body;
 
     const user: User | null = getUser(req, res);
 
     if (user === null || post_id === null) {
-        console.log("L'utente ha prova a mettere like ma non è loggato");
+        console.log("L'utente ha provato a mettere like ma non è loggato");
         res.status(401).send("User don't have the permission to do this.");
         return;
     }
@@ -31,7 +31,8 @@ export const postLike = async (req: Request, res: Response): Promise<void> => {
 
     // Se il like esiste, ritorna errore
     if (result !== undefined) {
-        res.status(409).send("L'utente ha già messo like");
+        console.log("L'utente ha già messo like.")
+        res.status(409).send("L'utente ha già messo like.");
         return;
     }
 
@@ -45,4 +46,45 @@ export const postLike = async (req: Request, res: Response): Promise<void> => {
 
     console.log("Like messo");
     res.status(201).send("Il like è stato messo");
+};
+
+
+export const postLikeRemove = async (req: Request, res: Response): Promise<void> => {
+    const { post_id } = req.body;
+
+    const user: User | null = getUser(req, res);
+
+    if (user === null || post_id === null) {
+        console.log("L'utente ha provato a togliere like ma non è loggato");
+        res.status(401).send("User don't have the permission to do this.");
+        return;
+    }
+
+    // Controlla se il like è presente
+    const likeQuerySQL: string = 
+    `
+        SELECT *
+        FROM posts_likes as pl
+        WHERE pl.post_id LIKE ? AND pl.user_id LIKE ?
+    `;
+
+    const [ result ]: any = await executeQuerySQL(req, res, likeQuerySQL, false, post_id, user.user_id);    
+
+    // Se il like non esiste, allora ritorna errore
+    if (result === undefined) {
+        console.log("L'utente non ha mai messo like.")
+        res.status(409).send("L'utente non ha mai messo like.");
+        return;
+    }
+
+    const querySQL: string = 
+    `
+        DELETE FROM posts_likes as pl
+        WHERE pl.post_id LIKE ? AND pl.user_id LIKE ?;
+    `;
+
+    await executeQuerySQL(req, res, querySQL, false, post_id, user.user_id);    
+
+    console.log("Like tolto");
+    res.status(201).send("Il like è stato tolto");
 };

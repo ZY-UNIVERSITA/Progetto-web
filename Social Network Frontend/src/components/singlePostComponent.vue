@@ -1,6 +1,6 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { Post } from '../utils/types';
+    import { Post, User } from '../utils/types';
     import axios from 'axios';
 
     export default defineComponent({
@@ -13,23 +13,39 @@
             post: {
                 type: Object as PropType<Post>,
                 required: true
-            }
+            },
+            user: {
+                type: Object as PropType<User | null>,
+                required: false,
+            },
         },
         methods: {
             async like(event: Event): Promise<void> {
-                const elem = event.currentTarget as SVGElement;
+                /*const elem = event.currentTarget as SVGElement;*/
                 this.addedLike = !this.addedLike;
-                
-                try {
-                    await axios.post("/api/post/like/", {
-                        post_id: this.post.post_id
-                    });
-                    console.log("Like messo");
-                } catch (e: any) {
-                    console.error(e);
+
+                if (this.user != undefined) {
+                    
+                    try {
+                        if (this.addedLike) {
+                            await axios.post("/api/post/like/add", {
+                                post_id: this.post.post_id
+                            });
+                            console.log("Like messo");
+                        } else {
+                            await axios.post("/api/post/like/remove", {
+                                post_id: this.post.post_id
+                            });
+                            console.log("Like rimosso");
+                        }
+                        
+                    } catch (e: any) {
+                        console.error(e);
+                    }
                 }
-            },
-            
+            }
+        }, mounted() {
+            this.addedLike = this.post.post_liked == 1 ? true : false;
         }
     });
   </script>

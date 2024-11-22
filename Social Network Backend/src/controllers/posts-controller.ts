@@ -13,14 +13,46 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
 
     const user: User | null = getUser(req, res);
 
-    const querySQL: string = 
-    `
-        SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-        FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-        WHERE p.post_id = ?
+    const querySQL: string = `
+        SELECT DISTINCT 
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.created_at, 
+            p.likes, 
+            p.comments, 
+            p.shares, 
+            p.visibility AS post_visibility, 
+            u.username, 
+            u.full_name, 
+            u.visibility AS user_visibility,
+            CASE
+                 -- Se l'utente non è loggato, post_liked = 0
+                WHEN ? IS NULL THEN 0
+                -- Se c'è un like da parte dell'utente loggato, post_liked = 1
+                WHEN pl.user_id IS NOT NULL THEN 1 
+                -- Se l'utente è loggato ma non ha messo like, post_liked = 0
+                ELSE 0
+            END AS post_liked
+        FROM 
+            posts AS p
+        JOIN 
+            users AS u ON (p.user_id = u.user_id)
+        LEFT JOIN 
+            posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
+        WHERE 
+            p.post_id = ?;
     `;
 
-    const [ result ]: Post[] = await executeQuerySQL(req, res, querySQL, false, post_id);
+    let userId: string = "NULL";
+
+    if (user !== null) {
+        userId = user.user_id;
+    }
+
+    const [ result ]: Post[] = await executeQuerySQL(req, res, querySQL, false, userId, userId, post_id);
+
+    console.log(result);
 
     // Controlla se il post esiste
     if (result === undefined) {
@@ -238,33 +270,67 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
 //  
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
+
+    let userId: string = "NULL";
+
+    if (user !== null) {
+        userId = user.user_id;
+    }
+
+    let querySQL: string = `
+        SELECT DISTINCT 
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.created_at, 
+            p.likes, 
+            p.comments, 
+            p.shares, 
+            p.visibility AS post_visibility, 
+            u.username, 
+            u.full_name, 
+            u.visibility AS user_visibility,
+            CASE
+                -- Se l'utente non è loggato, post_liked = 0
+                WHEN ? IS NULL THEN 0
+                -- Se c'è un like da parte dell'utente loggato, post_liked = 1
+                WHEN pl.user_id IS NOT NULL THEN 1 
+                -- Se l'utente è loggato ma non ha messo like, post_liked = 0
+                ELSE 0
+            END AS post_liked
+    `;          
+
+    const orderingQuerySQL: string = 
+    `
+        -- Permette di ordinare i valori tramite un algoritmo di ranking basato su un punteggio ponderato
+        -- Il numero di likes, commenti e shares permette di ottenere un punteggio elevato
+        -- Il punteggio di un post diminuisce nel tempo
+        ORDER BY (p.likes * 0.5 + p.comments * 0.3 + p.shares * 0.2 - 0.1 * TIMESTAMPDIFF(HOUR, p.created_at, NOW())) DESC
+        LIMIT 20
+    `;
+
     // L'UTENTE NON è REGISTRATO
     if (!user) {
         console.log("L'utente non è registrato");
-        const querySQL: string = 
+        querySQL += 
         `
-            SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, u.username, u.full_name, p.visibility as post_visibility, u.visibility as user_visibility
-            FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
+            FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
 
             -- Permette di selezionare solo i post non più vecchi di 30 giorni rispetto al momento in cui si effettua la query
             WHERE p.visibility LIKE ? AND u.visibility LIKE ? AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-
-            -- Permette di ordinare i valori tramite un algoritmo di ranking basato su un punteggio ponderato
-            -- Il numero di likes, commenti e shares permette di ottenere un punteggio elevato
-            -- Il punteggio di un post diminuisce nel tempo
-            ORDER BY (p.likes * 0.5 + p.comments * 0.3 + p.shares * 0.2 - 0.1 * TIMESTAMPDIFF(HOUR, created_at, NOW())) DESC
-            LIMIT 20
         `;
-        await executeQuerySQL(req, res, querySQL, true, publicVisibility, publicVisibility);
+
+        querySQL += orderingQuerySQL;
+
+        await executeQuerySQL(req, res, querySQL, true, userId, userId, publicVisibility, publicVisibility);
 
     // L'UTENTE è REGISTRATO
     } else {
         console.log("Utente è registrato");
         
-        const querySQL: string = 
+        querySQL += 
         `
-            SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, u.username, u.full_name, p.visibility as post_visibility, u.visibility as user_visibility
-            FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN follower as f ON p.user_id = f.following_user_id
+            FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN follower as f ON p.user_id = f.following_user_id LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
 
             -- Permette di selezionare solo i post non più vecchi di 30 giorni rispetto al momento in cui si effettua la query
             WHERE ((p.visibility LIKE ? AND u.visibility LIKE ?)
@@ -272,15 +338,12 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
             OR (p.visibility LIKE ? AND u.visibility LIKE ? AND p.user_id LIKE ?)
             OR (p.visibility LIKE ? AND u.visibility LIKE ? AND p.user_id LIKE ?))
             AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-
-            -- Permette di ordinare i valori tramite un algoritmo di ranking basato su un punteggio ponderato
-            -- Il numero di likes, commenti e shares permette di ottenere un punteggio elevato
-            -- Il punteggio di un post diminuisce nel tempo
-            ORDER BY (p.likes * 0.5 + p.comments * 0.3 + p.shares * 0.2 - 0.1 * TIMESTAMPDIFF(HOUR, created_at, NOW())) DESC
-            LIMIT 20
         `;
+        
+        querySQL += orderingQuerySQL;
 
-        await executeQuerySQL(req, res, querySQL, true, publicVisibility, publicVisibility, 
+        await executeQuerySQL(req, res, querySQL, true, userId, userId,
+                                                        publicVisibility, publicVisibility, 
                                                         publicVisibility, privateVisibility, user.user_id, user.user_id,
                                                         privateVisibility, publicVisibility, user.user_id,
                                                         privateVisibility, privateVisibility, user.user_id)
