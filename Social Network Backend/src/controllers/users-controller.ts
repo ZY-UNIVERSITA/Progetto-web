@@ -13,7 +13,7 @@ export const userProfile = async (req: Request, res: Response): Promise<void> =>
     // Viene eseguito una query SQL
     const querySQL: string =
         `
-        SELECT u.user_id, u.username, u.full_name, u.visibility, u.bio, u.birth_date, u.profile_picture, u.banner_picture
+        SELECT u.user_id, u.username, u.full_name, u.bio, u.birth_date, u.profile_picture, u.banner_picture, u.visibility
         FROM users as u
         WHERE u.username = ?
     `;

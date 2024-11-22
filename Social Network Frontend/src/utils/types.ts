@@ -1,9 +1,18 @@
-export interface User {
-    user_id: string
-    username: string
+export interface User extends UserToken {
+    full_name: string,
+    bio: string,
+    birth_date: Date,
+    profile_picture: string,
+    banner_picture: string,
+    visibility: string
 }
 
-export interface Post extends User {
+export interface UserToken {
+    user_id: string,
+    username: string,
+}
+
+export interface Post extends UserToken {
     post_id: string,
     user_id: string,
     content: string,

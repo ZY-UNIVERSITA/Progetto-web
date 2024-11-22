@@ -1,18 +1,18 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
-    import { Post, User } from '../utils/types';
+    import { Post, User, UserToken } from '../utils/types';
     import singlePostComponent from '../components/singlePostComponent.vue';
-    import notFound from './NotFound.vue';
+    import NotFound from './NotFound.vue';
 
     export default defineComponent({
         components: { 
             singlePostComponent,
-            notFound,
+            NotFound,
         },
         props: {
             user: {
-                type: Object as PropType<User | null>,
+                type: Object as PropType<UserToken | null>,
                 required: false,
             },
         },
@@ -65,7 +65,7 @@
                 <singlePostComponent :post="post" :user="user"></singlePostComponent>
             </template>
             <template v-else>
-                <notFound></notFound>    
+                <NotFound></NotFound>    
             </template>
         </template>
     </section>

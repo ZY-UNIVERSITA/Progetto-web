@@ -1,6 +1,6 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { Post, User } from '../utils/types';
+    import { Post, UserToken } from '../utils/types';
     import axios from 'axios';
 
     export default defineComponent({
@@ -15,7 +15,7 @@
                 required: true
             },
             user: {
-                type: Object as PropType<User | null>,
+                type: Object as PropType<UserToken | null>,
                 required: false,
             },
         },
