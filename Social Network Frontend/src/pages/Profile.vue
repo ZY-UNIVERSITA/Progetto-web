@@ -1,3 +1,3 @@
 <template>
-    <p>prova</p>
+    <p>User personal profile</p>
 </template>

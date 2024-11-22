@@ -5,17 +5,18 @@ import App from './App.vue'
 import Home from './pages/Home.vue';
 import NotFound from "./pages/NotFound.vue"
 import Login from './pages/Login.vue';
-import Profile from './pages/Profile.vue';
 import Search from './pages/Search.vue';
 import AddPost from './pages/AddPost.vue';
 import SinglePost from './pages/SinglePost.vue';
+import SingleProfile from './pages/SingleUser.vue';
+import Profile from './pages/Profile.vue';
 
 const router: Router = createRouter({
     history: createWebHashHistory(),
     routes: [
         { path: "/", component: Home },
         { path: "/login", name: "Login", component: Login },
-        { path: "/user/:username", component: Profile },
+        { path: "/user/:username", component: SingleProfile },
         { path: "/search", component: Search },
         { path: "/post", component: AddPost },
         { path: "/post/:id", name: "SinglePost", component: SinglePost },

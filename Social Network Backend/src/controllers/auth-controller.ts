@@ -119,6 +119,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     if (!passwordComparison) {
         res.status(400).send("Username/Email/Password is wrong. Check you input.")
+        return;
     }
 
 

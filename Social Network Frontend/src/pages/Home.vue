@@ -1,7 +1,7 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
-    import { Post, User } from '../utils/types';
+    import { Post, UserToken     } from '../utils/types';
     import singlePostComponent from '../components/singlePostComponent.vue';
 
     export default defineComponent({
@@ -10,13 +10,13 @@
         },
         props: {
             user: {
-                type: Object as PropType<User | null>,
+                type: Object as PropType<UserToken | null>,
                 required: false,
             },
         },
         data() {
             return {
-                posts: [] as Post[]
+                posts: [] as Post[],
             }
         },
         methods: {
