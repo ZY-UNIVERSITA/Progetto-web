@@ -187,11 +187,11 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
 
             // CONTROLLA SE CLIENT E UTENTE SONO AMICI
             const confirmIfFriendQuerySQL: string = 
-                    `
-                        SELECT *
-                        FROM follower as f
-                        WHERE f.follower_user_id = ? AND f.following_user_id = ?
-                    `;
+            `
+                SELECT *
+                FROM follower as f
+                WHERE f.follower_user_id = ? AND f.following_user_id = ?
+            `;
                 
             const resultFriend: any[] = await executeQuerySQL(req, res, confirmIfFriendQuerySQL, false, user.user_id, result.user_id);
             
@@ -240,6 +240,7 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
     const user: User | null = getUser(req, res);
     // L'UTENTE NON è REGISTRATO
     if (!user) {
+        console.log("L'utente non è registrato");
         const querySQL: string = 
         `
             SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, u.username, u.full_name, p.visibility as post_visibility, u.visibility as user_visibility
