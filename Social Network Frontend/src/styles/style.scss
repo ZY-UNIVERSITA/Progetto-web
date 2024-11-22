@@ -1,5 +1,6 @@
 @use "./variables" as *;
 @use "./mixins" as *;
+@use "sass:color";
 
 body {
     @include theme($bg-color-dark, $text-color-dark);
@@ -46,6 +47,7 @@ nav {
     z-index: 999;
     position: fixed;
     bottom: 0;
+    padding: 15px 0;
 
     &.light-mode {
         @include theme($bg-color-light, $text-color-light);
@@ -77,9 +79,83 @@ nav {
     }
 
     img {
-        width: 35%;
+        width: 50%;
         display: block;
         margin: 0 auto;
+    }
+}
+
+article {
+    @include theme($bg-color-dark, $text-color-dark);
+    text-align: left;
+    border-radius: 10px;
+    margin: 1%;
+    padding: 2.5%;
+
+    &.light-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+
+        .profilePicture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        p {
+            &.full-name {
+                color: $main-color;
+                margin: 0;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+
+                a {
+                    color: $main-color;
+                    text-decoration: none
+                }
+            }
+        }
+    }
+}
+
+.heart {
+    fill: white;
+    stroke: black;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: transform 0.5s, fill 0.5s, stroke-width 0.5s;
+    width: 35px;
+    height: 35px;
+
+    &.red {
+        fill: red;
+        stroke-width: 0;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.5);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    &.pulse {
+        animation: pulse 0.5s ease;
+    }
+
+    a {
+        text-decoration: none;
     }
 }
 
@@ -114,7 +190,7 @@ form {
         border: none;
 
         &:hover {
-            background-color: darken($main-color, 10%);
+            background-color: color.scale($main-color, $lightness: -10%);
         }
 
         &:active {
@@ -128,10 +204,48 @@ form.light-mode {
     @include theme($bg-color-light, $text-color-light);
 
     input {
-        border: 1px solid lighten($main-color, 10%);
+        border: 1px solid color.scale($main-color, $lightness: 10%);
     }
 
     input[type="submit"], input[type="button"] {
-        background-color: lighten($main-color, 10%);
+        background-color: color.scale($main-color, $lightness: 10%);
+    }
+}
+
+.search-container {
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 10px 20px;
+    border-radius: 8px;
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-right: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        outline: none;
+
+        &:focus {
+            border-color: $main-color;
+        }
+    }
+}
+
+.NotFound {
+    color: $main-color;
+    font-weight: bolder;
+    text-align: center;
+
+    h3 {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 70px;
     }
 }

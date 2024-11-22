@@ -36,15 +36,14 @@
 
 <template>
     <article :id="post?.post_id">
-        <header>
-            <h2>Post</h2>
+        <header class ='profileHeader'>
             <template v-if="post?.profile_picture">
                 <img class="profilePicture" :src="'/images/profile_photo/' + post?.username + '.jpg'" alt="profileImage" />
             </template>
             <template v-else>
                 <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
             </template>
-            <p>
+            <p class="full-name">
                 {{ post.full_name }}
                 <RouterLink :to="'/user/' + post?.username">{{ "@" + post?.username }}</RouterLink>
             </p>
@@ -66,48 +65,3 @@
         </section>
     </article>
 </template>
-
-<style scoped>
-    article {
-        text-align: left;
-        background-color: #1c314b;
-        border-radius: 10px;
-        margin: 1%;
-        padding: 2.5%;
-    }
-
-    .heart {
-        fill: white;
-        stroke: black;
-        stroke-width: 2;
-        cursor: pointer;
-        transition: transform 0.5s, fill 0.5s, stroke-width 0.5s;
-        width: 35px;
-        height: 35px;
-    }
-
-    .heart.red {
-            fill: red;
-            stroke-width: 0;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.5);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .heart.pulse {
-            animation: pulse 0.5s ease;
-        }
-
-        a {
-            text-decoration: none;
-        }
-</style>
