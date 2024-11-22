@@ -35,7 +35,7 @@
                 // Simula un ritardo per evitare che la pagina carichi se non ci sono ritardi nella query
                 setTimeout(() => {
                     this.loading = false;
-                }, 2500);
+                }, 1000);
             }
         },
         // Vue riusa lo stesso componente quindi se si cambia id del post potrebbe non funzionare
@@ -48,7 +48,7 @@
                     // Fai una nuova fetch
                     this.getPostByID();
                 },
-                // Esegue la funzione al caricamento del componente ed è come fosse created()
+                // Esegue la funzione al caricamento del componente ed è come se this.getPostByID() fosse inserito in created()
                 immediate: true,
             },
         },
@@ -62,7 +62,7 @@
         </template>
         <template v-else>
             <template v-if="post">
-                <singlePostComponent :post="post"></singlePostComponent>
+                <singlePostComponent :post="post" :user="user"></singlePostComponent>
             </template>
             <template v-else>
                 <notFound></notFound>    

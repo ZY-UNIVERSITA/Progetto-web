@@ -17,4 +17,6 @@ export interface Post extends User {
 
     full_name: string,
     profile_picture: string,
+
+    post_liked: number,
 }

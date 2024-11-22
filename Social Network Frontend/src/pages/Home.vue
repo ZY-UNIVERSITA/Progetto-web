@@ -59,7 +59,7 @@
     </div>
     <section id="popularPosts">
         <template v-for="post in posts">
-            <singlePostComponent :post="post" v-on:click="goToPost(post.post_id)"></singlePostComponent>
+            <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
         </template>
     </section>
 </template>
