@@ -1,6 +1,7 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import { Post } from '../utils/types';
+    import axios from 'axios';
 
     export default defineComponent({
         data() {
@@ -14,10 +15,19 @@
             }
         },
         methods: {
-            like(event: Event): void {
+            async like(event: Event): Promise<void> {
                 const elem = event.currentTarget as SVGElement;
                 elem.classList.toggle("red");
                 elem.classList.toggle("pulse");
+                
+                try {
+                    await axios.post("/api/post/like/", {
+                        post_id: this.post.post_id
+                    });
+                    console.log("Like messo");
+                } catch (e: any) {
+                    console.error(e);
+                }
             },
             
         }
