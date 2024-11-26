@@ -1,8 +1,9 @@
-import { query, Request, Response } from "express";
+import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
-import { Post, postID_interface, User } from "../utils/types";
+import { createNewPost, Post, postID_interface, User } from "../utils/types";
 import { getUser } from "../utils/auth";
-import { Query } from "mysql2/typings/mysql/lib/protocol/sequences/Query";
+import { upload } from "../utils/upload";
+
 
 
 const publicVisibility: string = "public";
@@ -314,185 +315,10 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
             }
         }
     }
-
-    
-    /*
-    // SE IL PROFILO è PRIVATO
-    if (!userIsPublic) {
-        // L'UTENTE NON è LOGGATO
-        if (user === null) {
-            console.log("Il profilo è privato e l'utente non è registrato.");
-            res.status(404).send("Errore");
-            return;
-        } else {
-
-            // L'UTENTE IL PROPRIETARIO DEL PROFILO
-            if (clientIsOwner) {
-                console.log("Il profilo è privato e l'utente ne è il proprietario.");
-
-                const userPostsQuerySQL: string = 
-                `
-                    -- SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-                    -- FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-
-                SELECT DISTINCT 
-                    p.post_id, 
-                    p.user_id, 
-                    p.content, 
-                    p.created_at, 
-                    p.likes, 
-                    p.comments, 
-                    p.shares, 
-                    p.visibility AS post_visibility, 
-                    u.username, 
-                    u.full_name, 
-                    u.visibility AS user_visibility,
-                    CASE
-                        -- Se l'utente non è loggato, post_liked = 0
-                        WHEN ? IS NULL THEN 0
-                        -- Se c'è un like da parte dell'utente loggato, post_liked = 1
-                        WHEN pl.user_id IS NOT NULL THEN 1 
-                        -- Se l'utente è loggato ma non ha messo like, post_liked = 0
-                        ELSE 0
-                    END AS post_liked
-                FROM 
-                    posts AS p
-                JOIN 
-                    users AS u ON (p.user_id = u.user_id)
-                LEFT JOIN 
-                    posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-                WHERE u.username LIKE ?
-                `;
-
-                const postsResults: any = await executeQuerySQL(req, res, userPostsQuerySQL, false, user.user_id, user.user_id, username);
-
-                res.send(postsResults);
-                return;
-            } 
-
-
-            // CONTROLLA SE CLIENT E UTENTE SONO AMICI
-            const confirmIfFriendQuerySQL: string = 
-            `
-                SELECT *
-                FROM follower as f
-                WHERE f.follower_user_id = ? AND f.following_user_id = ?
-            `;
-                
-            const resultFriend: any[] = await executeQuerySQL(req, res, confirmIfFriendQuerySQL, false, user.user_id, result.user_id);
-            
-
-            // SE IL CLIENT E L'UTENTE SONO AMICI
-            if (resultFriend.length > 0) {
-                console.log("Il client è amico con l'utente.");
-                const userPostsQuerySQL: string = 
-                `
-                    -- SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-                    -- FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-
-                    SELECT DISTINCT 
-                        p.post_id, 
-                        p.user_id, 
-                        p.content, 
-                        p.created_at, 
-                        p.likes, 
-                        p.comments, 
-                        p.shares, 
-                        p.visibility AS post_visibility, 
-                        u.username, 
-                        u.full_name, 
-                        u.visibility AS user_visibility,
-                        CASE
-                            -- Se l'utente non è loggato, post_liked = 0
-                            WHEN ? IS NULL THEN 0
-                            -- Se c'è un like da parte dell'utente loggato, post_liked = 1
-                            WHEN pl.user_id IS NOT NULL THEN 1 
-                            -- Se l'utente è loggato ma non ha messo like, post_liked = 0
-                            ELSE 0
-                        END AS post_liked
-                    FROM 
-                        posts AS p
-                    JOIN 
-                        users AS u ON (p.user_id = u.user_id)
-                    LEFT JOIN 
-                        posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-                    WHERE u.username LIKE ? AND p.visibility LIKE ?
-                `;
-
-                const postsResults: any = await executeQuerySQL(req, res, userPostsQuerySQL, false, user.user_id, user.user_id, username, publicVisibility);
-
-                res.send(postsResults);
-                return;
-
-            // SE NON SONO AMICI
-            } else {
-                console.log("Il profilo è privato e l'utente non è amico con il proprietario.");
-                res.status(404).send("Errore");
-                return;
-            }
-        }
-    }
-
-
-    if (userIsPublic && user !== null) {
-
-        console.log("qua");
-
-        const userPostsQuerySQL: string = 
-        `
-            -- SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-            -- FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-
-            SELECT DISTINCT 
-                p.post_id, 
-                p.user_id, 
-                p.content, 
-                p.created_at, 
-                p.likes, 
-                p.comments, 
-                p.shares, 
-                p.visibility AS post_visibility, 
-                u.username, 
-                u.full_name, 
-                u.visibility AS user_visibility,
-                CASE
-                    -- Se l'utente non è loggato, post_liked = 0
-                    WHEN ? IS NULL THEN 0
-                    -- Se c'è un like da parte dell'utente loggato, post_liked = 1
-                    WHEN pl.user_id IS NOT NULL THEN 1 
-                    -- Se l'utente è loggato ma non ha messo like, post_liked = 0
-                    ELSE 0
-                END AS post_liked
-            FROM 
-                posts AS p
-            JOIN 
-                users AS u ON (p.user_id = u.user_id)
-            LEFT JOIN 
-                posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-            WHERE u.username LIKE ? AND p.visibility LIKE ?
-        `;
-
-        const postsResults: any = await executeQuerySQL(req, res, userPostsQuerySQL, false, user.user_id, user.user_id, username, publicVisibility);
-
-        res.send(postsResults);
-        return;
-    }
-
-    // MOSTRA I POST PUBBLICI DELL'ACCOUNT PUBBLICO
-    const userPostsQuerySQL: string = 
-    `
-        SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-        FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-        WHERE u.username LIKE ? AND p.visibility LIKE ?
-    `;
-
-    const postsResults: any = await executeQuerySQL(req, res, userPostsQuerySQL, false, username, publicVisibility);
-
-    res.send(postsResults);
-    */
 };
 
-//  
+
+/* GET POPULAR POST */ 
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
 
@@ -542,7 +368,8 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
             FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
 
             -- Permette di selezionare solo i post non più vecchi di 30 giorni rispetto al momento in cui si effettua la query
-            WHERE p.visibility LIKE ? AND u.visibility LIKE ? AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            WHERE p.visibility LIKE ? AND u.visibility LIKE ? 
+            AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         `;
 
         querySQL += orderingQuerySQL;
@@ -573,4 +400,37 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
                                                         privateVisibility, publicVisibility, user.user_id,
                                                         privateVisibility, privateVisibility, user.user_id)
     }
+}
+
+export const newPost = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+
+    if (user === null) {
+        console.log("User tried to create a new post but is not logged.");
+        res.status(401).send("You must login to continue");
+        return;
+    }
+
+    let { postContent, visibility }: createNewPost = req.body;
+
+    let files = req.files;
+
+    if (visibility === "public" || visibility === "private") {
+    } else {
+        visibility = publicVisibility;
+    }
+
+    console.log(user.user_id);
+    console.log(postContent);
+    console.log(visibility);
+    console.log(files);
+
+    const querySQL: string = 
+    `
+        INSERT INTO posts (user_id, content, visibility)
+        VALUES (?, ?, ?)
+    `;
+
+    await executeQuerySQL(req, res, querySQL, false, user.user_id, postContent, visibility);
+    res.send("Tutto ok");
 }

@@ -44,3 +44,9 @@ export interface Post {
     user_visibility: string,
     post_liked: number,
 }
+
+export interface createNewPost {
+    postContent: string,
+    image?: string,
+    visibility: string
+}

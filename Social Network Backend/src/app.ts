@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser"
 
 import bodyParser from "body-parser"
 
+import multer from "multer"
+
 // importazione dei vari router
 import usersRouter from "./routes/users-router"
 import postsRouter from "./routes/posts-router"
