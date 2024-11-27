@@ -1,6 +1,17 @@
+@use "sass:color";
+
 @mixin theme($bg-color, $text-color) {
     background-color: $bg-color;
     color: $text-color;
     transition: background-color 0.3s, color 0.3s;
   }
   
+@mixin button-interaction($color) {
+  &:hover {
+    background-color: color.scale($color, $lightness: -10%);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}

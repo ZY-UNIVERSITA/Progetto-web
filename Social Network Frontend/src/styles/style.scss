@@ -223,41 +223,57 @@ textarea {
     margin: 0;
 }
 
+label, select {
+    font: 16px, $font-secondary;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.add-img-btn, label[for="visibility"], #visibility {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+  gap: 10px;
+}
+
+label[for="visibility"] {
+    margin-bottom: 0;
+    font: bold 16px;
+}
+  
+select#visibility {
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px;
+    width: 30%;
+    background-color: white;
+    color: $black-color;
+    font-family: $font-secondary;
+    outline: none;
+}
+
 .cancel-btn, .publish-btn {
     background-color: $main-color;
     color: $black-color;
     font-weight: bold;
+    font-size: 16px;
     border: none;
     border-radius: 8px;
     margin-right: 20px;
     padding: 10px 20px;
     width: 30%;
-
-    &:hover {
-        background-color: color.scale($main-color, $lightness: -10%);
-    }
-
-    &:active {
-        transform: scale(0.98);
-    }
 }
 
 .add-img-btn {
     border-radius: 40px;
     padding: 10px 20px;
     width: 20%;
-    font-size: 1em;
-    font-weight: bold;
-    font-family: $font-secondary;
+    font: bold 1em $font-secondary;
     background-color: $main-color;
+}
 
-    &:hover {
-        background-color: color.scale($main-color, $lightness: -10%);
-    }
-
-    &:active {
-        transform: scale(0.98);
-    }
+.cancel-btn, .publish-btn, .add-img-btn {
+    @include button-interaction($main-color);
 }
 
 .search-container {
