@@ -1,12 +1,13 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { Post, UserToken } from '../utils/types';
+    import { Post, PostImages, UserToken } from '../utils/types';
     import axios from 'axios';
 
     export default defineComponent({
         data() {
             return {
                 addedLike: false as boolean,
+                images: [] as PostImages[]
             }
         },
         props: {
@@ -20,8 +21,7 @@
             },
         },
         methods: {
-            async like(event: Event): Promise<void> {
-                /*const elem = event.currentTarget as SVGElement;*/
+            async like(/*event: Event*/): Promise<void> {
                 this.addedLike = !this.addedLike;
 
                 if (this.user != undefined) {
@@ -43,9 +43,22 @@
                         console.error(e);
                     }
                 }
+            },
+            async getPostImages(): Promise<void> {
+                try {
+                    const result = await axios.get("/api/post/images/", {
+                        params: {
+                            post_id: this.post.post_id
+                        }
+                    });
+                    this.images = result.data;
+                } catch (e: any) {
+                    console.error(e);
+                }
             }
         }, mounted() {
             this.addedLike = this.post.post_liked == 1 ? true : false;
+            this.getPostImages();
         }
     });
   </script>
@@ -53,7 +66,7 @@
 <template>
     <article :id="post?.post_id">
         <header class ='profileHeader'>
-            <template v-if="post?.profile_picture">
+            <template v-if="post.profile_picture">
                 <img class="profilePicture" :src="'/images/profile_photo/' + post?.username + '.jpg'" alt="profileImage" />
             </template>
             <template v-else>
@@ -68,8 +81,10 @@
         <section>
             <p class="flex-item">{{ post?.content }}</p>
 
-            <template v-if="post.profile_picture">
-                <img class="" :src="'/img/posts/' + post.post_id + '.png'" alt="postImage"/>
+            <template v-if="images.length > 0">
+                <template v-for="image in images">
+                    <img class="" :src="'/usersUploads/' + image.url" alt="postImage"/>
+                </template>
             </template>
 
             <p>{{ post.created_at }}</p>
@@ -81,3 +96,9 @@
         </section>
     </article>
 </template>
+
+<style>
+    img {
+        width: 50%
+    }
+</style>

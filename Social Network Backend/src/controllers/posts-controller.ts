@@ -413,7 +413,7 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
 
     let { postContent, visibility }: createNewPost = req.body;
 
-    let files = req.files;
+    let files = req.files as Express.Multer.File[];
 
     if (visibility === "public" || visibility === "private") {
     } else {
@@ -431,6 +431,42 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
         VALUES (?, ?, ?)
     `;
 
-    await executeQuerySQL(req, res, querySQL, false, user.user_id, postContent, visibility);
-    res.send("Tutto ok");
+    const result = await executeQuerySQL(req, res, querySQL, false, user.user_id, postContent, visibility);
+
+    const insertImageIntoDatabase: string = 
+    `
+        INSERT INTO posts_images (post_id, url)
+        VALUES (?, ?)
+    `;
+
+
+    if (files !== undefined) {
+        for (let i = 0; i < files.length; i++) {
+            await executeQuerySQL(req, res, insertImageIntoDatabase, false, result.insertId, files[i].filename);
+        }
+    }
+
+
+    res.status(200).send("Tutto ok");
+}
+
+export const postImages = async (req: Request, res: Response): Promise<void> => {
+    const post_id = req.query.post_id as string;
+
+    const querySQL: string = 
+    `
+        SELECT pi.url
+        FROM posts_images as pi
+        WHERE pi.post_id LIKE ?
+    `;
+
+    const result = await executeQuerySQL(req, res, querySQL, false, post_id);
+
+    if (result.length === 0) {
+        console.log("vuoto");
+    } else {
+        console.log(result);
+    }
+
+    res.send(result);
 }

@@ -29,3 +29,7 @@ export interface Post extends UserToken {
 
     post_liked: number,
 }
+
+export interface PostImages {
+    url: string
+}

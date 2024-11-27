@@ -10,6 +10,7 @@ import crypto from "crypto"
 export const authBeforeUpload = async (req: Request, res: Response, next: any): Promise<void> => {
     const user: User | null = getUser(req, res);
 
+    // Simula un upload che ci mette 5 secondi
     setTimeout(() => {
         if (user != null) {
             // Se l'utente è loggato allora ritorna il prossimo middleware ovveroq quello di caricamento
@@ -21,7 +22,7 @@ export const authBeforeUpload = async (req: Request, res: Response, next: any): 
 };
 
 const storage = multer.diskStorage({
-    destination: (req: Request, file: Express.Multer.File, cb) => {
+    destination: (req: Request, file: Express.Multer.File, cb): void => {
         // Cartella di upload
         const uploadPath = path.join(__dirname, "../../public/usersUploads");
     
@@ -33,7 +34,7 @@ const storage = multer.diskStorage({
         // Setta la cartella di upload
         cb(null, uploadPath);
     },
-    filename: (req: Request, file: Express.Multer.File, cb) => {
+    filename: (req: Request, file: Express.Multer.File, cb): void => {
         // crea un file name tramite una funzione di hash
         const timeStamp: Number = Date.now();
         const fileName: string = file.originalname;
@@ -44,7 +45,7 @@ const storage = multer.diskStorage({
     },
 });
 
-const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: any): void => {
     // Consenti solo file con estensioni jpg, jpeg o png
     const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png'];
 
