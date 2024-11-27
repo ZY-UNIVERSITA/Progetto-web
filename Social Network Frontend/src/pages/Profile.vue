@@ -10,8 +10,8 @@
         },
         props: {
             user: {
-                type: Object as PropType<UserToken | null>,
-                required: false,
+                type: Object as PropType<UserToken>,
+                required: true,
             },
         },
         data() {
@@ -20,9 +20,9 @@
             }
         },
         methods: {
-            async getPopularPosts() {
+            async getPosts() {
                 try {
-                    const results: any = await axios.get("/api/popularPosts");
+                    const results: any = await axios.get(`/api/posts/user/${this.user.user_id}`);
                     this.posts = results.data;
                 } catch (e: any) {
                     console.error(e);
@@ -36,24 +36,23 @@
             }
         },
         created() {
-            this.getPopularPosts(); 
+            this.getPosts(); 
         }
     });
 </script>
 
 <template>
     <!--<img src="path_to_profile_image.jpg" alt="Immagine Profilo" class="profile-img">-->
-    <h2 class="username">Username</h2>
-    
+    <h2 class="username">{{user.username}}</h2>
+
     <label class="switch">
         <input type="checkbox" id="theme-toggle">
         <span class="slider"></span>
     </label>
 
-    <section id="popularPosts">
+    <section id="posts">
         <template v-for="post in posts">
             <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
         </template>
     </section>
 </template>
-/
