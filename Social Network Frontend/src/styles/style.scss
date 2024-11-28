@@ -198,6 +198,14 @@ form {
         }
     }
 
+    .InLoginButton {
+        background-color: $main-color;
+        color: $black-color;
+        font: bold 20px $font-secondary;
+        border-radius: 5px;
+        width: 30%;
+        padding: 6px 6px;
+    }
 }
 
 form.light-mode {
@@ -300,20 +308,6 @@ select#visibility {
     }
 }
 
-.NotFound {
-    color: $main-color;
-    font-weight: bolder;
-    text-align: center;
-
-    h3 {
-        font-size: 50px;
-    }
-
-    h2 {
-        font-size: 70px;
-    }
-}
-
 .switch {
     position: relative;
     display: inline-block;
@@ -357,4 +351,19 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
+}
+
+
+.NotFound {
+    color: $main-color;
+    font-weight: bolder;
+    text-align: center;
+
+    h3 {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 70px;
+    }
 }
