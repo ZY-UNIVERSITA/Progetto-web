@@ -87,13 +87,7 @@
     
             <label for="password">Enter your password*: </label>
             <input type="password" name="password" id="password" minlength="16" required v-model="password" />
-            <button type="submit">button</button>
+            <button type="submit" class="InLoginButton">In</button>
         </form>
     </template>
 </template>
-
-<style lang="css" scoped>
-    label {
-        display: block;
-    }
-</style>

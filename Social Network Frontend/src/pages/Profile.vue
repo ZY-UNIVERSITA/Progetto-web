@@ -13,6 +13,14 @@
                 type: Object as PropType<UserToken>,
                 required: true,
             },
+            mode: {
+                type: String as PropType<'dark' | 'light'>,
+                required: true,
+            },
+            toggleTheme: {
+                type: Function as PropType<() => void>,
+                required: true,
+            },
         },
         data() {
             return {
@@ -46,7 +54,7 @@
     <h2 class="username">{{user.username}}</h2>
 
     <label class="switch">
-        <input type="checkbox" id="theme-toggle">
+        <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme"/>
         <span class="slider"></span>
     </label>
 

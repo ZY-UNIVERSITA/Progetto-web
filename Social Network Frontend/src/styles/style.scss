@@ -2,12 +2,18 @@
 @use "./mixins" as *;
 @use "sass:color";
 
-body {
+body.dark-mode {
     @include theme($bg-color-dark, $text-color-dark);
+}
 
-    &.light-mode {
-        @include theme($bg-color-light, $text-color-light);
-    }
+body.light-mode {
+    @include theme($bg-color-light, $text-color-light);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -41,13 +47,16 @@ h1 {
 }
 
 nav {
-    @include theme($bg-color-dark, $text-color-dark);
     box-sizing: border-box;
     width: 100%;
     z-index: 999;
     position: fixed;
     bottom: 0;
-    padding: 15px 0;
+    padding: 10px;
+
+    &.dark-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
 
     &.light-mode {
         @include theme($bg-color-light, $text-color-light);
@@ -86,11 +95,14 @@ nav {
 }
 
 article {
-    @include theme($bg-color-dark, $text-color-dark);
     text-align: left;
     border-radius: 10px;
     margin: 1%;
     padding: 2.5%;
+
+    &.dark-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
 
     &.light-mode {
         @include theme($bg-color-light, $text-color-light);
@@ -160,11 +172,18 @@ article {
 }
 
 form {
-    @include theme($bg-color-dark, $text-color-dark);
     margin: 2em auto;
     padding: 1.5em;
     max-width: 400px;
     border-radius: 10px;
+
+    &.dark-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
+
+    &.light-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
 
     label {
         font-size: 1em;
@@ -198,17 +217,13 @@ form {
         }
     }
 
-}
-
-form.light-mode {
-    @include theme($bg-color-light, $text-color-light);
-
-    input {
-        border: 1px solid color.scale($main-color, $lightness: 10%);
-    }
-
-    input[type="submit"], input[type="button"] {
-        background-color: color.scale($main-color, $lightness: 10%);
+    .InLoginButton {
+        background-color: $main-color;
+        color: $black-color;
+        font: bold 20px $font-secondary;
+        border-radius: 5px;
+        width: 30%;
+        padding: 6px 6px;
     }
 }
 
@@ -223,22 +238,11 @@ textarea {
     margin: 0;
 }
 
-label, select {
-    font: 16px, $font-secondary;
-    color: white;
-    margin-bottom: 8px;
-}
-
 .add-img-btn, label[for="visibility"], #visibility {
   display: inline-flex;
   align-items: center;
   margin-right: 20px;
   gap: 10px;
-}
-
-label[for="visibility"] {
-    margin-bottom: 0;
-    font: bold 16px;
 }
   
 select#visibility {
@@ -300,20 +304,6 @@ select#visibility {
     }
 }
 
-.NotFound {
-    color: $main-color;
-    font-weight: bolder;
-    text-align: center;
-
-    h3 {
-        font-size: 50px;
-    }
-
-    h2 {
-        font-size: 70px;
-    }
-}
-
 .switch {
     position: relative;
     display: inline-block;
@@ -357,4 +347,19 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
+}
+
+
+.NotFound {
+    color: $main-color;
+    font-weight: bolder;
+    text-align: center;
+
+    h3 {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 70px;
+    }
 }
