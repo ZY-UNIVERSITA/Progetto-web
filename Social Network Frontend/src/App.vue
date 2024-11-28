@@ -7,6 +7,7 @@
     data() {
       return {
         user: null as User | null,
+        mode: 'dark', // default theme
       }
     }, 
     methods: {
@@ -17,10 +18,22 @@
         } catch (e: any) {
           console.error("error", e);
         }
-      }
+      },
+      toggleTheme() {
+        this.mode = this.mode === 'dark' ? 'light' : 'dark';
+        document.body.className = `${this.mode}-mode`;
+        localStorage.setItem('theme', this.mode);
+      },
+      initializeTheme() {
+        // Recupera il tema dal localStorage o usa il valore predefinito
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        this.mode = savedTheme;
+        document.body.className = `${this.mode}-mode`;
+      },
     },
     mounted() {
       this.getUserInfo();
+      this.initializeTheme();
     }
   });
 </script>
@@ -38,7 +51,7 @@
     </ul>
   </nav>
   <main>
-    <RouterView :user="user"></RouterView>
+    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
   </main>
 </template>
 
