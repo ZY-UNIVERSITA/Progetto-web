@@ -88,3 +88,28 @@ export const postLikeRemove = async (req: Request, res: Response): Promise<void>
     console.log("Like tolto");
     res.status(201).send("Il like è stato tolto");
 };
+
+
+export const postComments = async (req: Request, res: Response): Promise<void> => {
+    const post_id = req.params.id
+
+    const user: User | null = getUser(req, res);
+
+    if (post_id === null) {
+        console.log("Il post è inesistente");
+        res.status(404).send("Post not found.");
+        return;
+    }
+
+    // Controlla se il like è presente
+    const querySQL: string = 
+    `
+        SELECT pc.created_at, pc.content, u.username, u.full_name, u.profile_picture
+        FROM posts_comments as pc JOIN users as u ON (pc.user_id = u.user_id)
+        WHERE pc.post_id LIKE ?
+    `;
+
+    console.log("Commenti inviati");
+    await executeQuerySQL(req, res, querySQL, true, post_id);    
+};
+

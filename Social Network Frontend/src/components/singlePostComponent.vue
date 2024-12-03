@@ -97,8 +97,9 @@
     </article>
 </template>
 
-<style>
+<style lang="css" scoped>
     img {
         width: 50%
     }
 </style>
+

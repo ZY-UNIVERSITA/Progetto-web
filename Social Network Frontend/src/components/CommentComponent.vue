@@ -1,0 +1,55 @@
+<script lang="ts">
+    import { defineComponent, PropType } from 'vue';
+    import { Comment, Post, UserToken } from '../utils/types';
+    import axios from 'axios';
+
+    export default defineComponent({
+        data() {
+            return {
+                comments: [] as Comment[]
+            }
+        },
+        props: {
+            post: {
+                type: Object as PropType<Post>,
+                required: true
+            },
+            user: {
+                type: Object as PropType<UserToken | null>,
+                required: false,
+            },
+        },
+        methods: {
+            async getComments(): Promise<void> {
+                try {
+                    const result = await axios.get("/api/post/comments/" + this.post.post_id);
+                    this.comments = result.data;
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
+        }, mounted() {
+            this.getComments();
+        }
+    });
+  </script>
+
+<template>
+    <section id="comments">
+        <template v-for="comment in comments">
+            <template v-if="comment.profile_picture">
+                <img class="profilePicture" :src="'/images/profile_photo/' + comment.username + '.jpg'" alt="profileImage" />
+            </template>
+            <template v-else>
+                <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
+            </template>
+            <p>{{ comment.full_name }} @{{ comment.username }}</p>
+            <p>{{ comment.created_at }}</p>
+            <p>{{ comment.content }}</p>
+        </template> 
+    </section>
+</template>
+
+<style>
+@use "./styles/style.scss";
+</style>
