@@ -1,3 +1,8 @@
+export interface UserToken {
+    user_id: string,
+    username: string,
+}
+
 export interface User extends UserToken {
     full_name: string,
     bio: string,
@@ -5,11 +10,6 @@ export interface User extends UserToken {
     profile_picture: string,
     banner_picture: string,
     visibility: string
-}
-
-export interface UserToken {
-    user_id: string,
-    username: string,
 }
 
 export interface Post extends UserToken {
@@ -32,4 +32,12 @@ export interface Post extends UserToken {
 
 export interface PostImages {
     url: string
+}
+
+export interface Comment {
+    username: string,
+    full_name: string,
+    profile_picture: string,
+    created_at: Date,
+    content: string
 }
