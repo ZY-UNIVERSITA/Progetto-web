@@ -38,7 +38,7 @@ import CommentComponent from '../components/CommentComponent.vue';
                 setTimeout(() => {
                     this.loading = false;
                 }, 1000);
-            }
+            },
         },
         // Vue riusa lo stesso componente quindi se si cambia id del post potrebbe non funzionare
         // Si crea un watch sui parametri del link
@@ -65,6 +65,11 @@ import CommentComponent from '../components/CommentComponent.vue';
         <template v-else>
             <template v-if="post">
                 <singlePostComponent :post="post" :user="user"></singlePostComponent>
+                <form action="/api/post/addComment/" method="POST" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="post_id" :value="post.post_id">
+                    <textarea name="post_comment" placeholder="Enter a comment..." required></textarea>
+                    <input type="submit" value="Send the comment">
+                </form>
                 <CommentComponent :post="post" :user="user"></CommentComponent>
             </template>
             <template v-else>

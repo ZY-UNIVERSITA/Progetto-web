@@ -37,15 +37,17 @@
 <template>
     <section id="comments">
         <template v-for="comment in comments">
-            <template v-if="comment.profile_picture">
-                <img class="profilePicture" :src="'/images/profile_photo/' + comment.username + '.jpg'" alt="profileImage" />
-            </template>
-            <template v-else>
-                <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
-            </template>
-            <p>{{ comment.full_name }} @{{ comment.username }}</p>
-            <p>{{ comment.created_at }}</p>
-            <p>{{ comment.content }}</p>
+            <article>
+                <template v-if="comment.profile_picture">
+                    <img class="profilePicture" :src="'/images/profile_photo/' + comment.username + '.jpg'" alt="profileImage" />
+                </template>
+                <template v-else>
+                    <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
+                </template>
+                <p>{{ comment.full_name }} @{{ comment.username }}</p>
+                <p>{{ comment.created_at }}</p>
+                <p>{{ comment.content }}</p>
+            </article>
         </template> 
     </section>
 </template>

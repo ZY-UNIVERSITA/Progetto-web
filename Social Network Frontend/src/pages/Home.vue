@@ -44,10 +44,13 @@
                     name: 'SinglePost', 
                     params: { "id": postID }
                 });
-            }
+            },
         },
         created() {
             this.getPopularPosts(); 
+        },
+        mounted() {
+            
         }
     });
 </script>

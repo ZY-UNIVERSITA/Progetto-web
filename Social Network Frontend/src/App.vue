@@ -50,11 +50,17 @@
       <li><RouterLink to="/profile"><img src="/icons/user.svg" alt="Profile"/></RouterLink></li>
     </ul>
   </nav>
-  <main>
-    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
-  </main>
 </template>
 
 <style lang="scss">
 @use "./styles/style.scss";
+
+body div {
+  display: flex;
+  flex-direction: column
+}
+
+nav {
+  background-color: black;
+}
 </style>

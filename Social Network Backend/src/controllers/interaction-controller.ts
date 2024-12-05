@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
-import { Post, postID_interface, User } from "../utils/types";
+import { Follower, Post, Post_base, postID_interface, User } from "../utils/types";
 import { getUser } from "../utils/auth";
 
 
@@ -90,7 +90,7 @@ export const postLikeRemove = async (req: Request, res: Response): Promise<void>
 };
 
 
-export const postComments = async (req: Request, res: Response): Promise<void> => {
+export const getPostComments = async (req: Request, res: Response): Promise<void> => {
     const post_id = req.params.id
 
     const user: User | null = getUser(req, res);
@@ -113,3 +113,87 @@ export const postComments = async (req: Request, res: Response): Promise<void> =
     await executeQuerySQL(req, res, querySQL, true, post_id);    
 };
 
+
+export const postNewComment = async (req: Request, res: Response): Promise<void> => {
+    const { post_id, post_comment } = req.body;
+
+    const user: User | null = getUser(req, res);
+
+    if (user === null) {
+        console.log("L'utente non è registrato.");
+        res.status(401).send("Don't have authorization to do this action.")
+        return;
+    }
+
+    if (post_id === null) {
+        console.log("Il post è inesistente");
+        res.status(404).send("Post not found.");
+        return;
+    }
+
+    if (post_comment === null) {
+        console.log("Il post è vuoto.");
+        res.status(404).send("The comment is blank");
+        return;
+    }
+
+    // Verifica l'esistenza del post
+    const querySQL: string = 
+    `
+        SELECT
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.created_at, 
+            p.likes, 
+            p.comments, 
+            p.shares, 
+            p.visibility AS post_visibility, 
+            u.username, 
+            u.full_name, 
+            u.visibility AS user_visibility
+        FROM posts as p join users as u ON (p.user_id = u.user_id)
+        WHERE p.post_id LIKE ?
+    `;
+
+    const [ result ]: Post[] = await executeQuerySQL(req, res, querySQL, false, post_id);
+
+    // Post privato: nessuno può commentare tranne il proprietario del post
+    if (result.post_visibility === "private" && result.user_id !== user.user_id ) {
+        console.log("Il post è privato e l'utente non è l'autore del post.");
+        res.status(401).send("Don't have authorization to do this action.");
+        return;
+    }
+
+    // Post pubblico ma account privato: solo il proprietario e gli amici possono commentare
+    if (result.post_visibility === "public" && result.user_visibility === "private" && result.user_id !== user.user_id) {
+        const followeQuerySQL: string = 
+        `
+            SELECT *
+            FROM follower as f
+            WHERE f.follower_user_id LIKE ? AND f.following_user_id LIKE ?
+        `;
+
+        const [ followerResult ]: Follower[] = await executeQuerySQL(req, res, followeQuerySQL, false, user.user_id, result.user_id);
+        
+        if (followerResult === undefined) {
+            console.log("Il post è privato, l'autore è privato e l'utente non è l'autore del post ne un amico.");
+            res.status(401).send("Don't have authorization to do this action.");
+            return;
+        }
+    }
+
+    const insertCommentQuerySQL: string = 
+    `
+        INSERT INTO posts_comments (post_id, user_id, content)
+        VALUES (?, ?, ?)
+    `;
+
+    console.log(post_id, user.user_id, post_comment);
+
+    await executeQuerySQL(req, res, insertCommentQuerySQL, false, post_id, user.user_id, post_comment);
+    res.status(200).send("Tutto ok");
+};
+
+
+// export const postNewComment = async (req: Request, res: Response): Promise<void> => {

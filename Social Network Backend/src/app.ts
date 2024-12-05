@@ -24,7 +24,7 @@ const app: Express = express();
 // crea una variabile port di tipo number
 const port: number = 3000;
 
-
+// permette di leggere i dati di una chiamata POST
 app.use(bodyParser.json());
 
 // permette di usare il cookie-parser
