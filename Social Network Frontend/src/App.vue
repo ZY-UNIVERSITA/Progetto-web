@@ -42,6 +42,9 @@
   <header>
     <h1>DailyDot</h1>
   </header>
+  <main>
+    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
+  </main>
   <nav>
     <ul>
       <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
