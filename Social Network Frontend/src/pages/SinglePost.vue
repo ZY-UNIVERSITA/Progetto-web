@@ -2,7 +2,7 @@
     import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
 import { Post, UserToken } from '../utils/types';
-import singlePostComponent from '../components/singlePostComponent.vue';
+import singlePostComponent from '../components/SinglePostComponent.vue';
 import NotFound from './NotFound.vue';
 import CommentComponent from '../components/CommentComponent.vue';
 
