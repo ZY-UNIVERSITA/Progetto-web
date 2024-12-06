@@ -58,3 +58,9 @@ export interface Follower {
     follower_user_id: string,
     following_user_id: string
 }
+
+export interface userSearch {
+    username: string,
+    full_name: string,
+    profile_picture: string
+}

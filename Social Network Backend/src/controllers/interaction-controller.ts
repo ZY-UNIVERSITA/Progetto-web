@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
-import { Follower, Post, Post_base, postID_interface, User } from "../utils/types";
+import { Follower, Post, User, userSearch } from "../utils/types";
 import { getUser } from "../utils/auth";
 
 
@@ -91,7 +91,7 @@ export const postLikeRemove = async (req: Request, res: Response): Promise<void>
 
 
 export const getPostComments = async (req: Request, res: Response): Promise<void> => {
-    const post_id = req.params.id
+    const post_id = req.params.id;
 
     const user: User | null = getUser(req, res);
 
@@ -196,4 +196,43 @@ export const postNewComment = async (req: Request, res: Response): Promise<void>
 };
 
 
-// export const postNewComment = async (req: Request, res: Response): Promise<void> => {
+export const search = async (req: Request, res: Response): Promise<void> => {
+    const searchQuery: string = "%" + req.params.query + "%";
+
+    console.log(searchQuery);
+
+    let querySQL: string = 
+    `
+        SELECT u.username, u.full_name, u.profile_picture
+        FROM users as u
+        WHERE u.username LIKE ?
+        LIMIT 10
+    `;
+
+    const usersResults: userSearch[] = await executeQuerySQL(req, res, querySQL, false, searchQuery);
+
+    querySQL = 
+    `
+        SELECT
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.created_at, 
+            p.likes, 
+            p.comments, 
+            p.shares, 
+            p.visibility AS post_visibility, 
+            u.username, 
+            u.full_name, 
+            u.visibility AS user_visibility
+        FROM users as u JOIN posts as p ON (u.user_id = p.user_id)
+        WHERE p.content LIKE ?
+        LIMIT 10
+    `;    
+
+    const postsResults: Post[] = await executeQuerySQL(req, res, querySQL, false, searchQuery);
+
+    const combinedResult: (Post[] | userSearch[])[] = [ usersResults, postsResults];
+
+    res.status(200).send(combinedResult);
+};

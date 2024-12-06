@@ -58,9 +58,8 @@
 <style lang="scss">
 @use "./styles/style.scss";
 
-body div {
-  display: flex;
-  flex-direction: column
+main {
+  margin-bottom: 300px;
 }
 
 nav {
