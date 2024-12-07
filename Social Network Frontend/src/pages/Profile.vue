@@ -2,7 +2,7 @@
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
     import { Post, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/singlePostComponent.vue';
+    import singlePostComponent from '../components/SinglePostComponent.vue';
 
     export default defineComponent({
         components: { 
@@ -50,17 +50,23 @@
 </script>
 
 <template>
-    <!--<img src="path_to_profile_image.jpg" alt="Immagine Profilo" class="profile-img">-->
-    <h2 class="username">{{user.username}}</h2>
-
     <label class="switch">
         <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme"/>
         <span class="slider"></span>
     </label>
 
-    <section id="posts">
-        <template v-for="post in posts">
-            <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
-        </template>
-    </section>
+    <template v-if="user">
+        <!--<img src="path_to_profile_image.jpg" alt="Immagine Profilo" class="profile-img">-->
+        <h2 class="username">{{user.username}}</h2>
+    
+
+        <section id="posts">
+            <template v-for="post in posts">
+                <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
+            </template>
+        </section>
+    </template>
+    <template v-else>
+        <p>User personal page. Login to continue.</p>
+    </template>
 </template>

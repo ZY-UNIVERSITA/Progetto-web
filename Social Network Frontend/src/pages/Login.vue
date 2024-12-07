@@ -64,21 +64,12 @@
             <input type="submit" value="Register" />
         </form>
 
-        <form method="POST" action="/api/auth/logout">
-            <input type="submit" value="Logout" />
-        </form>
+        <template v-if="user">
+            <form method="POST" action="/api/auth/logout">
+                <input type="submit" value="Logout" />
+            </form>
+        </template>
     </template>
-    <!-- <template v-else>
-        <form method="POST" action="/api/auth/login">
-            <label for="usernameOrEmail">Enter your username/email: </label>
-            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required />
-    
-            <label for="password">Enter your password*: </label>
-            <input type="password" name="password" id="password" minlength="16" required />
-        
-            <input type="submit" value="Login" />
-        </form>
-    </template> -->
 
     <template v-else>
         <form @submit.prevent="login">
@@ -87,7 +78,7 @@
     
             <label for="password">Enter your password*: </label>
             <input type="password" name="password" id="password" minlength="16" required v-model="password" />
-            <button type="submit" class="InLoginButton">In</button>
+            <input type="submit" class="InLoginButton" value="Login"></input>
         </form>
     </template>
 </template>

@@ -30,7 +30,7 @@ export interface LoginVerify {
     password_hash: string
 }
 
-export interface Post {
+export interface Post_base {
     post_id: string,
     user_id: string,
     content: string,
@@ -38,7 +38,10 @@ export interface Post {
     likes: number,
     comments: number, 
     shares: number, 
-    post_visibility: string, 
+    post_visibility: string,
+}
+
+export interface Post extends Post_base {
     username: string,
     full_name: string,
     user_visibility: string,
@@ -49,4 +52,15 @@ export interface createNewPost {
     postContent: string,
     image?: string,
     visibility: string
+}
+
+export interface Follower {
+    follower_user_id: string,
+    following_user_id: string
+}
+
+export interface userSearch {
+    username: string,
+    full_name: string,
+    profile_picture: string
 }

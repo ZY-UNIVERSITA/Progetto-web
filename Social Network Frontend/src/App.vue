@@ -42,6 +42,9 @@
   <header>
     <h1>DailyDot</h1>
   </header>
+  <main>
+    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
+  </main>
   <nav>
     <ul>
       <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
@@ -50,11 +53,16 @@
       <li><RouterLink to="/profile"><img src="/icons/user.svg" alt="Profile"/></RouterLink></li>
     </ul>
   </nav>
-  <main>
-    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
-  </main>
 </template>
 
 <style lang="scss">
 @use "./styles/style.scss";
+
+main {
+  margin-bottom: 300px;
+}
+
+nav {
+  background-color: black;
+}
 </style>

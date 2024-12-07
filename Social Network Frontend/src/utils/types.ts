@@ -41,3 +41,9 @@ export interface Comment {
     created_at: Date,
     content: string
 }
+
+export interface UserSearch {
+    username: string,
+    full_name: string,
+    profile_pictures: string
+}

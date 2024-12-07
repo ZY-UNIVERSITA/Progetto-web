@@ -2,7 +2,7 @@
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
     import { Post, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/singlePostComponent.vue';
+    import singlePostComponent from '../components/SinglePostComponent.vue';
 
     export default defineComponent({
         components: { 
@@ -44,10 +44,13 @@
                     name: 'SinglePost', 
                     params: { "id": postID }
                 });
-            }
+            },
         },
         created() {
             this.getPopularPosts(); 
+        },
+        mounted() {
+            
         }
     });
 </script>
