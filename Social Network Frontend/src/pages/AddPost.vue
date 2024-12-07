@@ -11,6 +11,7 @@
                 type: Object as PropType<UserToken | null>,
                 required: false,
             },
+            mode: String
         },
     });
 </script>
@@ -20,7 +21,7 @@
         <form action="/api/newPost" method="POST" enctype="multipart/form-data">
             <textarea name="postContent" placeholder="Write here..."></textarea>
             
-            <label for="imageUpload" class="add-img-btn">
+            <label for="imageUpload" :class="`${mode}-mode`">
                 Add img
                 <input type="file" id="imageUpload" name="image" style="display:none;">
             </label>
@@ -31,8 +32,10 @@
                 <option value="private">Private</option>
             </select>
                 
-            <button type="button" class="cancel-btn" onclick="clearForm()">Cancel</button>
-            <button type="submit" class="publish-btn">Publish</button>
+            <div class="cancel-publish">
+            <button type="button" onclick="clearForm()" :class="`${mode}-mode`">Cancel</button>
+            <button type="submit" :class="`${mode}-mode`">Publish</button>
+            </div>
         </form>
     </template>
     <template v-else>

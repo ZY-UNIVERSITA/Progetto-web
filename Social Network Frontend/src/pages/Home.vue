@@ -2,7 +2,7 @@
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
     import { Post, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/SinglePostComponent.vue';
+    import singlePostComponent from '../components/singlePostComponent.vue';
 
     export default defineComponent({
         components: { 
@@ -13,6 +13,7 @@
                 type: Object as PropType<UserToken | null>,
                 required: false,
             },
+            mode: String
         },
         data() {
             return {
@@ -57,8 +58,8 @@
 
 <template>
     <div class="auth-buttons">
-        <button v-if="!user" @click="login">Login</button>
-        <button v-else @click="logout">Logout</button>
+        <button v-if="!user" @click="login" :class="`${mode}-mode`">Login</button>
+        <button v-else @click="logout" :class="`${mode}-mode`">Logout</button>
     </div>
     <section id="popularPosts">
         <template v-for="post in posts">

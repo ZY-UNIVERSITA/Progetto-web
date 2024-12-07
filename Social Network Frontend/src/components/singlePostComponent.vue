@@ -19,6 +19,7 @@
                 type: Object as PropType<UserToken | null>,
                 required: false,
             },
+            mode: String
         },
         methods: {
             async like(/*event: Event*/): Promise<void> {
@@ -64,7 +65,7 @@
   </script>
 
 <template>
-    <article :id="post?.post_id">
+    <article :id="post?.post_id" :class="`${mode}-mode`">
         <header class ='profileHeader'>
             <template v-if="post.profile_picture">
                 <img class="profilePicture" :src="'/images/profile_photo/' + post?.username + '.jpg'" alt="profileImage" />

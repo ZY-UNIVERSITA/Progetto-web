@@ -38,14 +38,15 @@
             }
         },
         props: {
-            user: Object as PropType<User>
+            user: Object as PropType<User>,
+            mode: String
         }
     });
 </script>
 
 <template>
     <form>  
-        <input type="button" v-on:click="loginRegisterButton" v-bind:value="loginRegisterText"></input>
+        <input type="button" v-on:click="loginRegisterButton" v-bind:value="loginRegisterText" :class="`${mode}-mode`"></input>
     </form>
     <template v-if="logged">
         <form method="POST" action="/api/auth/register">
@@ -61,12 +62,12 @@
             <label for="birthDate">Enter your birth date: </label>
             <input type="date" name="birthDate" id="birthDate" required />
         
-            <input type="submit" value="Register" />
+            <input type="submit" value="Register" :class="`${mode}-mode`"/>
         </form>
 
         <template v-if="user">
             <form method="POST" action="/api/auth/logout">
-                <input type="submit" value="Logout" />
+                <input type="submit" value="Logout" :class="`${mode}-mode`"/>
             </form>
         </template>
     </template>
@@ -78,7 +79,7 @@
     
             <label for="password">Enter your password*: </label>
             <input type="password" name="password" id="password" minlength="16" required v-model="password" />
-            <input type="submit" class="InLoginButton" value="Login"></input>
+            <input type="submit" value="Login" :class="`${mode}-mode`"></input>
         </form>
     </template>
 </template>

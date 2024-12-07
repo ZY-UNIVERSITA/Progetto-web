@@ -45,7 +45,7 @@
   <main>
     <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
   </main>
-  <nav>
+  <nav :class="`${mode}-mode`">
     <ul>
       <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
       <li><RouterLink to="/search"><img src="/icons/search.svg" alt="Search"/></RouterLink></li>
@@ -57,12 +57,4 @@
 
 <style lang="scss">
 @use "./styles/style.scss";
-
-main {
-  margin-bottom: 300px;
-}
-
-nav {
-  background-color: black;
-}
 </style>
