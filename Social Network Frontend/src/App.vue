@@ -45,24 +45,16 @@
   <main>
     <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
   </main>
-  <nav>
+  <nav :class="`${mode}-mode`">
     <ul>
-      <li><RouterLink to="/"><img src="/icons/home.svg" alt="Home"/></RouterLink></li>
-      <li><RouterLink to="/search"><img src="/icons/search.svg" alt="Search"/></RouterLink></li>
-      <li><RouterLink to="/post"><img src="/icons/add.svg" alt="Add Post"/></RouterLink></li>
-      <li><RouterLink to="/profile"><img src="/icons/user.svg" alt="Profile"/></RouterLink></li>
+      <li><RouterLink to="/"><img :src="mode === 'dark' ? 'icons/home-l.svg' : 'icons/home-d.svg'" alt="Home"/></RouterLink></li>
+      <li><RouterLink to="/search"><img :src="mode === 'dark' ? 'icons/search-l.svg' : 'icons/search-d.svg'" alt="Search"/></RouterLink></li>
+      <li><RouterLink to="/post"><img :src="mode === 'dark' ? 'icons/add-l.svg' : 'icons/add-d.svg'" alt="Add Post"/></RouterLink></li>
+      <li><RouterLink to="/profile"><img :src="mode === 'dark' ? 'icons/user-l.svg' : 'icons/user-d.svg'" alt="Profile"/></RouterLink></li>
     </ul>
   </nav>
 </template>
 
 <style lang="scss">
 @use "./styles/style.scss";
-
-main {
-  margin-bottom: 300px;
-}
-
-nav {
-  background-color: black;
-}
 </style>
