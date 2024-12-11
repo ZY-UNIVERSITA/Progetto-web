@@ -5,7 +5,6 @@ import { getUser } from "../utils/auth";
 import { upload } from "../utils/upload";
 
 
-
 const publicVisibility: string = "public";
 const privateVisibility: string = "private";
 

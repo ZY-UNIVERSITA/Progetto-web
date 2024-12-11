@@ -2,11 +2,11 @@
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
     import { Post, UserSearch, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/singlePostComponent.vue';
+    import SinglePostComponent from '../components/SinglePostComponent.vue';
 
     export default defineComponent({
         components: { 
-            singlePostComponent
+            SinglePostComponent
         },
         props: {
             user: {
