@@ -401,6 +401,7 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
     }
 }
 
+
 export const newPost = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
 

@@ -47,3 +47,9 @@ export interface UserSearch {
     full_name: string,
     profile_pictures: string
 }
+
+export interface ImageFile {
+    name: string;
+    url: string;
+    file: File;
+}

@@ -41,7 +41,6 @@ export default defineComponent({
     methods: {
         async getPosts() {
             try {
-                console.log(this.user.user_id);
                 const results: any = await axios.get('/api/posts/user/' + this.user.username);
                 this.posts = results.data;
             } catch (e: any) {
@@ -70,14 +69,15 @@ export default defineComponent({
 
     <template v-if="user">
         <section id="user-profile-header">
-            <!--<img src="path_to_profile_image.jpg" alt="Immagine Profilo" class="profile-img">-->
+            <img src="/images/profile_photo/vite.svg" alt="Immagine Profilo" class="profile-img">
             <h2 class="username">{{ user.username }}</h2>
+            <p>{{ }}</p>
         </section>
 
         <section class="profile-tabs">
             <!-- Tab dinavigazione -->
             <section class="tab-navigation">
-                <button v-for="tab in tabs" :key="tab" @click="activeTab = tab" :class="{ active: activeTab === tab }"
+                <button v-for="tab in tabs" @click="activeTab = tab" :class="{ active: activeTab === tab }"
                     class="tab-button">
                     {{ tab }}
                 </button>
