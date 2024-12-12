@@ -39,12 +39,11 @@
 </script>
 
 <template>
+  
   <header>
     <h1>DailyDot</h1>
   </header>
-  <main>
-    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
-  </main>
+  
   <nav :class="`${mode}-mode`">
     <ul>
       <li>
@@ -72,6 +71,11 @@
       </li>
     </ul>
   </nav>
+
+  <main>
+    <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
+  </main>
+
 </template>
 
 <style lang="scss">
