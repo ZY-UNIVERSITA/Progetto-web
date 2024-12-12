@@ -78,3 +78,7 @@ import CommentComponent from '../components/CommentComponent.vue';
         </template>
     </section>
 </template>
+
+<style lang="css" scoped>
+
+</style>
