@@ -14,6 +14,10 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    @include media($breakpoint-large) {
+        margin: 1%;
+    }
 }
 
 h1 {
@@ -58,9 +62,16 @@ nav {
     box-sizing: border-box;
     width: 100%;
     z-index: 999;
-    position: sticky;   // trovare soluzione alternativa perchè la nav bar copre il resto degli elementi se è fixed
+    height: 80px;
+    position: fixed;
+    //position: sticky;   // trovare soluzione alternativa perchè la nav bar copre il resto degli elementi se è fixed
     bottom: 0;
-    padding: 10px;
+    //padding: 10px;
+
+    @include media($breakpoint-medium) {
+        height: 100px;
+        padding: 0% 1%;
+    }
     
     &.dark-mode {
         @include theme($bg-color-dark, $text-color-dark);
@@ -81,7 +92,21 @@ nav {
         display: inline-block;
         box-sizing: border-box;
         width: 25%;
+        height: 80px;
         text-align: center;
+
+        
+        @include media($breakpoint-medium) {
+            border-radius: 40px;
+            width: 23%;
+            margin: 0 1%;
+            &.dark-mode {
+                @include theme($bg-color-light, $text-color-light);
+            }
+            &.light-mode {
+                @include theme($bg-color-dark, $text-color-dark);
+            }
+        }
     }
 
     a {
@@ -90,15 +115,36 @@ nav {
         height: 100%;
         box-sizing: border-box;
         text-decoration: none;
-        border-radius: 40px;
         padding: 5% 2%;
-    }
 
-    img {
-        width: 50%;
-        display: block;
-        margin: 0 auto;
+        .icon {
+          //width: 50%;
+          display: block;
+          margin: 0 auto;
+
+          @include media($breakpoint-medium) {
+            display: none;
+          }
+        }
+
+        .text {
+          display: none;
+
+          @include media($breakpoint-medium) {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        }
     }
+}
+
+footer {
+    margin-top: 15%;
+    margin-bottom: 15%;
+    text-align: center;
+    font-size: 14px;
 }
 
 article {
@@ -204,6 +250,11 @@ form {
         margin: 0.5em 0;
         font-family: $font-primary;
         display: block;
+
+        @include media($breakpoint-large) {
+            margin: 1% 5%;
+            width: 90%;
+        }
     }
 
     input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="submit"], input[type="button"] {
@@ -214,6 +265,11 @@ form {
         border: 1px solid;
         font-size: 1em;
         box-sizing: border-box;
+
+        @include media($breakpoint-large) {
+            margin: 1% 5%;
+            width: 90%;
+        }
     }
 
     input[type="submit"], input[type="button"] {
@@ -251,6 +307,11 @@ textarea {
     padding: 15px 0;
     line-height: 1.5;
     margin: 0;
+
+    @include media($breakpoint-large) {
+        margin: 1% 5%;
+        width: 90%;
+    }
 }
 
 label [for="imageUpload"], label[for="visibility"], #visibility {
