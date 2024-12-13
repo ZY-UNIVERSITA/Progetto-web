@@ -62,6 +62,8 @@ export default defineComponent({
 
 <template>
 
+    <div :class="`${mode}-mode`">
+
     <label class="switch">
         <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
         <span class="slider"></span>
@@ -123,52 +125,6 @@ export default defineComponent({
         <p>User personal page. Login to continue.</p>
     </template>
 
+    </div>
 
 </template>
-
-<style lang="css" scoped>
-/* LIGHT-MODE */
-.profile-tabs {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-.tab-navigation {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.tab-button {
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    color: #555;
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s, border-bottom 0.3s;
-}
-
-.tab-button.active {
-    color: #000;
-    border-bottom: 2px solid #000;
-}
-
-.tab-content {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #f9f9f9;
-}
-
-.post,
-.comment,
-.shared-post {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fff;
-}
-</style>

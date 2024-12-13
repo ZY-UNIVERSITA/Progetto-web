@@ -49,6 +49,7 @@ h1 {
     }
 }
 
+/* Home page */
 .auth-buttons {
     position: absolute;
     right: 0;
@@ -207,8 +208,6 @@ article {
     }
 }
 
-
-
 .heart {
     fill: white;
     stroke: black;
@@ -244,6 +243,7 @@ article {
     }
 }
 
+/* Login page */
 form {
     margin: 2em auto;
     padding: 1.5em;
@@ -311,6 +311,7 @@ form {
     }
 }
 
+/* Add Post page */
 textarea {
     border: 2px solid;
     border-radius: 5px;
@@ -402,6 +403,7 @@ label [for="imageUpload"] {
     }
 }
 
+/* Search page */
 input[type="search"] {
     display: flex;
     width: 90%;
@@ -412,6 +414,59 @@ input[type="search"] {
     padding: 10px 20px;
     border-radius: 8px;
 }
+
+/* Profile page */
+.profile-tabs {
+    font-family: $font-secondary;
+    margin: 20px;
+}
+
+.tab-navigation {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    color: $black-color; // ! PREDISPORRE CAMBIO THEME
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+
+    /*
+    &.dark-mode {
+        color: $text-color-dark;
+    }
+    &.light-mode {
+        color: $text-color-light;
+    }*/
+}
+
+// ! PREDISPORRE CAMBIO THEME
+.tab-button.active {
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
+    border-radius: 5px;
+    background: #f9f9f9; // ! PREDISPORRE CAMBIO THEME
+}
+
+.post, .comment, .shared-post {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
+    border-radius: 5px;
+    background: #fff; // ! PREDISPORRE CAMBIO THEME
+}
+// Fine
 
 .switch {
     position: relative;
@@ -458,7 +513,7 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-
+/* Not found page */
 .NotFound {
     font-weight: bolder;
     text-align: center;
