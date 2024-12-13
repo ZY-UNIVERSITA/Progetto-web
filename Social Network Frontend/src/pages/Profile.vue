@@ -1,72 +1,174 @@
 <script lang="ts">
-    import { defineComponent, PropType } from 'vue';
-    import axios from 'axios';
-    import { Post, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/SinglePostComponent.vue';
+import { defineComponent, PropType } from 'vue';
+import axios from 'axios';
+import { Post, UserToken } from '../utils/types';
+import singlePostComponent from '../components/SinglePostComponent.vue';
 
-    export default defineComponent({
-        components: { 
-            singlePostComponent
+export default defineComponent({
+    components: {
+        singlePostComponent
+    },
+    props: {
+        user: {
+            type: Object as PropType<UserToken>,
+            required: true,
         },
-        props: {
-            user: {
-                type: Object as PropType<UserToken>,
-                required: true,
-            },
-            mode: {
-                type: String as PropType<'dark' | 'light'>,
-                required: true,
-            },
-            toggleTheme: {
-                type: Function as PropType<() => void>,
-                required: true,
-            },
+        mode: {
+            type: String as PropType<'dark' | 'light'>,
+            required: true,
         },
-        data() {
-            return {
-                posts: [] as Post[],
-            }
+        toggleTheme: {
+            type: Function as PropType<() => void>,
+            required: true,
         },
-        methods: {
-            async getPosts() {
-                try {
-                    const results: any = await axios.get(`/api/posts/user/${this.user.user_id}`);
-                    this.posts = results.data;
-                } catch (e: any) {
-                    console.error(e);
-                }
-            },
-            goToPost(postID: string) {
-                this.$router.push({ 
-                    name: 'SinglePost', 
-                    params: { "id": postID }
-                });
-            }
-        },
-        created() {
-            this.getPosts(); 
+    },
+    data() {
+        return {
+            posts: [] as Post[],
+            tabs: ["Posts", "Comments", "Shared Posts"],
+            activeTab: "Posts",
+
+            comments: [
+                { id: 1, text: "prova 1" },
+                { id: 2, text: "prova 2." },
+            ],
+            sharedPosts: [
+                { id: 1, content: "prova prova 1" },
+                { id: 2, content: "prova prova 2." },
+            ],
         }
-    });
+    },
+    methods: {
+        async getPosts() {
+            try {
+                const results: any = await axios.get('/api/posts/user/' + this.user.username);
+                this.posts = results.data;
+            } catch (e: any) {
+                console.error(e);
+            }
+        },
+        goToPost(postID: string) {
+            this.$router.push({
+                name: 'SinglePost',
+                params: { "id": postID }
+            });
+        }
+    },
+    created() {
+        this.getPosts();
+    }
+});
 </script>
 
 <template>
+
     <label class="switch">
-        <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme"/>
+        <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
         <span class="slider"></span>
     </label>
 
     <template v-if="user">
-        <!--<img src="path_to_profile_image.jpg" alt="Immagine Profilo" class="profile-img">-->
-        <h2 class="username">{{user.username}}</h2>
-    
-
-        <section id="posts">
-            <template v-for="post in posts">
-                <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
-            </template>
+        <section id="user-profile-header">
+            <img src="/images/profile_photo/vite.svg" alt="Immagine Profilo" class="profile-img">
+            <h2 class="username">{{ user.username }}</h2>
+            <p>{{ }}</p>
         </section>
+
+        <section class="profile-tabs">
+            <!-- Tab dinavigazione -->
+            <section class="tab-navigation">
+                <button v-for="tab in tabs" @click="activeTab = tab" :class="{ active: activeTab === tab }"
+                    class="tab-button">
+                    {{ tab }}
+                </button>
+            </section>
+
+            <section class="tab-content">
+                <template v-if="activeTab === 'Posts'">
+                    <h2>Posts</h2>
+                    <section id="posts">
+                        <template v-for="post in posts">
+                            <singlePostComponent class="post" :post="post" :user="user"
+                                v-on:click="goToPost(post.post_id)"></singlePostComponent>
+                        </template>
+                    </section>
+                </template>
+
+                <template v-if="activeTab === 'Comments'">
+                    <section id="comments">
+                        <h2>Comments</h2>
+                        <template v-for="comment in comments">
+                            <article class="comment">
+                                <p>{{ comment.text }}</p>
+                            </article>
+                        </template>
+                    </section>
+                </template>
+
+                <template v-if="activeTab === 'Shared Posts'">
+                    <section id="shared_posts">
+                        <h2>Shared Posts</h2>
+                        <template v-for="sharedPost in sharedPosts">
+                            <article class="shared-post">
+                                <p>{{ sharedPost.content }}</p>
+                        </article>
+                        </template>
+                    </section>
+                </template>
+            </section>
+        </section>
+
     </template>
     <template v-else>
         <p>User personal page. Login to continue.</p>
     </template>
+
+
 </template>
+
+<style lang="css" scoped>
+/* LIGHT-MODE */
+.profile-tabs {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.tab-navigation {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab-button.active {
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.post,
+.comment,
+.shared-post {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+}
+</style>

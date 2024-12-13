@@ -5,7 +5,6 @@ import { getUser } from "../utils/auth";
 import { upload } from "../utils/upload";
 
 
-
 const publicVisibility: string = "public";
 const privateVisibility: string = "private";
 
@@ -401,6 +400,7 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
                                                         privateVisibility, privateVisibility, user.user_id)
     }
 }
+
 
 export const newPost = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);

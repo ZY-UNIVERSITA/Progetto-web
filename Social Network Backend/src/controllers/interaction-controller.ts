@@ -196,6 +196,7 @@ export const postNewComment = async (req: Request, res: Response): Promise<void>
 };
 
 
+// da migliorare. aggiungere i controlli per utenti/post pubblici e private
 export const search = async (req: Request, res: Response): Promise<void> => {
     const searchQuery: string = "%" + req.params.query + "%";
 

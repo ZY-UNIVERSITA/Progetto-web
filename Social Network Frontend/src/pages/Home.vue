@@ -2,11 +2,11 @@
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
     import { Post, UserToken     } from '../utils/types';
-    import singlePostComponent from '../components/singlePostComponent.vue';
+    import SinglePostComponent from '../components/SinglePostComponent.vue';
 
     export default defineComponent({
         components: { 
-            singlePostComponent
+            SinglePostComponent
         },
         props: {
             user: {
@@ -63,7 +63,7 @@
     </div>
     <section id="popularPosts">
         <template v-for="post in posts">
-            <singlePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></singlePostComponent>
+            <SinglePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
         </template>
     </section>
 </template>
