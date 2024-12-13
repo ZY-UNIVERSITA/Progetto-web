@@ -79,7 +79,7 @@
   <footer>
         <p>Progetto realizzato da: Skybun Nataliia e Zhu Yuhang</p>
         <p>A.A. 2024/2025</p>
-    </footer>
+  </footer>
 
 </template>
 
