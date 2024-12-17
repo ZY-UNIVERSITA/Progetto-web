@@ -62,18 +62,21 @@ export default defineComponent({
 
 <template>
 
-    <div :class="`${mode}-mode`">
-
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
-        <span class="slider"></span>
-    </label>
-
     <template v-if="user">
         <section id="user-profile-header">
             <img src="/images/profile_photo/vite.svg" alt="Immagine Profilo" class="profile-img">
-            <h2 class="username">{{ user.username }}</h2>
-            <p>{{ }}</p>
+            <div class="user-info">
+                <h2 class="username">{{ user.username }}</h2>
+                <p>{{ }}</p>
+            </div>
+        </section>
+
+        <section class="theme-toggle-container">
+            <label for="theme-toggle" class="theme-label">Change Theme</label>
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
+                <span class="slider"></span>
+            </label>
         </section>
 
         <section class="profile-tabs">
@@ -124,7 +127,5 @@ export default defineComponent({
     <template v-else>
         <p>User personal page. Login to continue.</p>
     </template>
-
-    </div>
 
 </template>
