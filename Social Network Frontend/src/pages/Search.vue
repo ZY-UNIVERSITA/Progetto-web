@@ -61,8 +61,7 @@
 
 <template>
     <section class="search-container">
-        <!-- Casella di ricerca -->
-        <!-- <input type="text" v-model="searchQuery" @input="handleSearch" placeholder="Search..."/> -->
+
         <form @submit.prevent="">  
             <input type="search" v-model="searchQuery" placeholder="Search..."/>
         </form>
@@ -78,8 +77,8 @@
         </section>
         
         <section id="contentResults">
-            <template v-if="posts[0] !== undefined" v-for="posts in posts">
-                <p>{{ posts.content }}</p>
+            <template v-if="posts[0] !== undefined" v-for="post in posts">
+                <p>{{ post.content }}</p>
             </template>
         
             <template v-else>
