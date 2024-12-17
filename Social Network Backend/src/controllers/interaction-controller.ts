@@ -227,7 +227,10 @@ export const search = async (req: Request, res: Response): Promise<void> => {
             u.full_name, 
             u.visibility AS user_visibility
         FROM users as u JOIN posts as p ON (u.user_id = p.user_id)
-        WHERE p.content LIKE ?
+        WHERE p.content LIKE ? AND (
+        p.visibility = 'public' OR 
+        (p.visibility = 'private' AND u.user_id = ?)
+        )
         LIMIT 10
     `;    
 
