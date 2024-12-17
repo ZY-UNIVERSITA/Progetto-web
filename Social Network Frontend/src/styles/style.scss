@@ -510,37 +510,47 @@ input[type="search"] {
 .profile-tabs {
     font-family: $font-secondary;
     margin: 20px;
-}
 
-.tab-navigation {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
+    .tab-navigation {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
 
-.tab-button {
-    background: none;
-    border: none;
-    color: $black-color; // ! PREDISPORRE CAMBIO THEME
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s, border-bottom 0.3s;
+        &.dark-mode {
+            color: $text-color-dark;
+        }
+    
+        &.light-mode {
+            color: $text-color-light;
+        }
 
-    /*
-    &.dark-mode {
-        color: $text-color-dark;
+        button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom 0.3s;
+
+            &.dark-mode {
+                color: $text-color-dark;
+            }
+        
+            &.light-mode {
+                color: $text-color-light;
+            }
+
+            &.active-dark {
+                border-bottom: 2px solid $text-color-dark;
+            }
+
+            &.active-light {
+                border-bottom: 2px solid $text-color-light;
+            }
+        }
     }
-    &.light-mode {
-        color: $text-color-light;
-    }*/
-}
 
-// ! PREDISPORRE CAMBIO THEME
-.tab-button.active {
-    color: #000;
-    border-bottom: 2px solid #000;
 }
 
 .tab-content {
