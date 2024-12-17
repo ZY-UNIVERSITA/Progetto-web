@@ -81,7 +81,7 @@ export default defineComponent({
 
         <section class="profile-tabs">
             <!-- Tab dinavigazione -->
-            <section class="tab-navigation" :class="`${mode}-mode`">
+            <section class="tab-navigation">
                 <button v-for="tab in tabs" @click="activeTab = tab"
                 :class="[
                     `${mode}-mode`,

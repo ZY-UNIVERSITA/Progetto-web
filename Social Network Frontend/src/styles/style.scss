@@ -516,14 +516,6 @@ input[type="search"] {
         justify-content: space-around;
         margin-bottom: 20px;
 
-        &.dark-mode {
-            color: $text-color-dark;
-        }
-    
-        &.light-mode {
-            color: $text-color-light;
-        }
-
         button {
             background: none;
             border: none;
