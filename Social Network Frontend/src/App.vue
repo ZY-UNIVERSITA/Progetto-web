@@ -39,20 +39,48 @@
 </script>
 
 <template>
+  
   <header>
     <h1>DailyDot</h1>
   </header>
+  
+  <nav :class="`${mode}-mode`">
+    <ul>
+      <li>
+        <RouterLink to="/">
+          <img class="icon" :src="mode === 'dark' ? 'icons/home-l.svg' : 'icons/home-d.svg'" alt="Home"/>
+          <span class="text">Home</span>
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/search">
+          <img class="icon" :src="mode === 'dark' ? 'icons/search-l.svg' : 'icons/search-d.svg'" alt="Search"/>
+          <span class="text">Search</span>
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/post">
+          <img class="icon" :src="mode === 'dark' ? 'icons/add-l.svg' : 'icons/add-d.svg'" alt="Add Post"/>
+          <span class="text">Add Post</span>
+        </RouterLink></li>
+      <li>
+        <RouterLink to="/profile">
+          <img class="icon" :src="mode === 'dark' ? 'icons/user-l.svg' : 'icons/user-d.svg'" alt="Profile"/>
+          <span class="text">Profile</span>
+        </RouterLink>
+      </li>
+    </ul>
+  </nav>
+
   <main>
     <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
   </main>
-  <nav :class="`${mode}-mode`">
-    <ul>
-      <li><RouterLink to="/"><img :src="mode === 'dark' ? 'icons/home-l.svg' : 'icons/home-d.svg'" alt="Home"/></RouterLink></li>
-      <li><RouterLink to="/search"><img :src="mode === 'dark' ? 'icons/search-l.svg' : 'icons/search-d.svg'" alt="Search"/></RouterLink></li>
-      <li><RouterLink to="/post"><img :src="mode === 'dark' ? 'icons/add-l.svg' : 'icons/add-d.svg'" alt="Add Post"/></RouterLink></li>
-      <li><RouterLink to="/profile"><img :src="mode === 'dark' ? 'icons/user-l.svg' : 'icons/user-d.svg'" alt="Profile"/></RouterLink></li>
-    </ul>
-  </nav>
+
+  <footer>
+        <p>Progetto realizzato da: Skybun Nataliia e Zhu Yuhang</p>
+        <p>A.A. 2024/2025</p>
+  </footer>
+
 </template>
 
 <style lang="scss">

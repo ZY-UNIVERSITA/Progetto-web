@@ -5,3 +5,9 @@
     color: $text-color;
     transition: background-color 0.3s, color 0.3s;
 }
+
+@mixin media($breakpoint) {
+    @media (min-width: #{$breakpoint}) {
+      @content;
+    }
+}

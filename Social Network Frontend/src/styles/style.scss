@@ -2,18 +2,35 @@
 @use "./mixins" as *;
 @use "sass:color";
 
-body.dark-mode {
-    @include theme($bg-color-dark, $text-color-dark);
+html, body {
+    height: 100%;
+    margin: 0;
 }
 
-body.light-mode {
-    @include theme($bg-color-light, $text-color-light);
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+  
+main {
+    flex: 1;
 }
 
 body {
-    margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    &.dark-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
+    &.light-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
+
+    @include media($breakpoint-large) {
+        margin: 1%;
+    }
 }
 
 h1 {
@@ -32,6 +49,7 @@ h1 {
     }
 }
 
+/* Home page */
 .auth-buttons {
     position: absolute;
     right: 0;
@@ -58,9 +76,16 @@ nav {
     box-sizing: border-box;
     width: 100%;
     z-index: 999;
-    position: sticky;   // trovare soluzione alternativa perchè la nav bar copre il resto degli elementi se è fixed
+    height: 80px;
+    position: fixed;
+    //position: sticky;
     bottom: 0;
-    padding: 10px;
+    //padding: 10px;
+
+    @include media($breakpoint-medium) {
+        height: 100px;
+        padding: 0% 1%;
+    }
     
     &.dark-mode {
         @include theme($bg-color-dark, $text-color-dark);
@@ -81,7 +106,21 @@ nav {
         display: inline-block;
         box-sizing: border-box;
         width: 25%;
+        height: 80px;
         text-align: center;
+
+        
+        @include media($breakpoint-medium) {
+            border-radius: 40px;
+            width: 23%;
+            margin: 0 1%;
+            &.dark-mode {
+                @include theme($bg-color-light, $text-color-light);
+            }
+            &.light-mode {
+                @include theme($bg-color-dark, $text-color-dark);
+            }
+        }
     }
 
     a {
@@ -90,15 +129,36 @@ nav {
         height: 100%;
         box-sizing: border-box;
         text-decoration: none;
-        border-radius: 40px;
         padding: 5% 2%;
-    }
 
-    img {
-        width: 50%;
-        display: block;
-        margin: 0 auto;
+        .icon {
+          //width: 50%;
+          display: block;
+          margin: 0 auto;
+
+          @include media($breakpoint-medium) {
+            display: none;
+          }
+        }
+
+        .text {
+          display: none;
+
+          @include media($breakpoint-medium) {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        }
     }
+}
+
+footer {
+    padding: 20px;
+    margin-bottom: 80px;
+    text-align: center;
+    font-size: 14px;
 }
 
 article {
@@ -148,8 +208,6 @@ article {
     }
 }
 
-
-
 .heart {
     fill: white;
     stroke: black;
@@ -185,6 +243,7 @@ article {
     }
 }
 
+/* Login page */
 form {
     margin: 2em auto;
     padding: 1.5em;
@@ -204,6 +263,11 @@ form {
         margin: 0.5em 0;
         font-family: $font-primary;
         display: block;
+
+        @include media($breakpoint-large) {
+            margin: 1% 5%;
+            width: 90%;
+        }
     }
 
     input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="submit"], input[type="button"] {
@@ -214,6 +278,11 @@ form {
         border: 1px solid;
         font-size: 1em;
         box-sizing: border-box;
+
+        @include media($breakpoint-large) {
+            margin: 1% 5%;
+            width: 90%;
+        }
     }
 
     input[type="submit"], input[type="button"] {
@@ -242,6 +311,7 @@ form {
     }
 }
 
+/* Add Post page */
 textarea {
     border: 2px solid;
     border-radius: 5px;
@@ -251,6 +321,11 @@ textarea {
     padding: 15px 0;
     line-height: 1.5;
     margin: 0;
+
+    @include media($breakpoint-large) {
+        margin: 1% 5%;
+        width: 90%;
+    }
 }
 
 label [for="imageUpload"], label[for="visibility"], #visibility {
@@ -328,6 +403,7 @@ label [for="imageUpload"] {
     }
 }
 
+/* Search page */
 input[type="search"] {
     display: flex;
     width: 90%;
@@ -339,52 +415,152 @@ input[type="search"] {
     border-radius: 8px;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+/* Profile page */
+#user-profile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20%;
+    padding: 15px;
 
-    & input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+    .profile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .username {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        p {
+            font-family: $font-primary;
+            font-size: 15px;
+            margin: 5px 0 0;
+        }
     }
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: $bg-color-light;
-    transition: 0.4s;
-    border-radius: 34px;
+.theme-toggle-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding-left: 20px;
+    margin-top: 20px;
+
+    .theme-label {
+        font-size: 16px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: $bg-color-light;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: $orange;
+            transition: 0.4s;
+        }
+        
+        input:checked + .slider {
+            background-color: $bg-color-dark;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    }
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    border-radius: 50%;
-    left: 4px;
-    bottom: 4px;
-    background-color: $orange;
-    transition: 0.4s;
+.profile-tabs {
+    font-family: $font-secondary;
+    margin: 20px;
+
+    .tab-navigation {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+
+        button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom 0.3s;
+
+            &.dark-mode {
+                color: $text-color-dark;
+            }
+        
+            &.light-mode {
+                color: $text-color-light;
+            }
+
+            &.active-dark {
+                border-bottom: 2px solid $text-color-dark;
+            }
+
+            &.active-light {
+                border-bottom: 2px solid $text-color-light;
+            }
+        }
+    }
+
 }
 
-input:checked + .slider {
-    background-color: $bg-color-dark;
+.tab-content {
+    padding: 20px;
+    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
+    border-radius: 5px;
+    background: #f9f9f9; // ! PREDISPORRE CAMBIO THEME
 }
 
-input:checked + .slider:before {
-    transform: translateX(26px);
+.post, .comment, .shared-post {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
+    border-radius: 5px;
+    background: #fff; // ! PREDISPORRE CAMBIO THEME
 }
 
-
+/* Not found page */
 .NotFound {
     font-weight: bolder;
     text-align: center;
