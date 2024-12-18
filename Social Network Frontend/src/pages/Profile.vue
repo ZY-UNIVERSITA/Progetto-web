@@ -1,12 +1,14 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
-import { Post, UserToken } from '../utils/types';
-import singlePostComponent from '../components/SinglePostComponent.vue';
+import { Post, User, UserToken } from '../utils/types';
+import SinglePostComponent from '../components/SinglePostComponent.vue';
+import ProfileBanner from '../components/ProfileBanner.vue';
 
 export default defineComponent({
     components: {
-        singlePostComponent
+        SinglePostComponent,
+        ProfileBanner
     },
     props: {
         user: {
@@ -36,6 +38,7 @@ export default defineComponent({
                 { id: 1, content: "prova prova 1" },
                 { id: 2, content: "prova prova 2." },
             ],
+            userProfile: null as User | null
         }
     },
     methods: {
@@ -47,6 +50,16 @@ export default defineComponent({
                 console.error(e);
             }
         },
+        async getUserProfile() {
+            if (this.user !== null) {
+                try {
+                    const profile: any = await axios.get("api/user/" + this.user.username);
+                    this.userProfile = profile.data[0];
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
+        },
         goToPost(postID: string) {
             this.$router.push({
                 name: 'SinglePost',
@@ -55,21 +68,17 @@ export default defineComponent({
         }
     },
     created() {
-        this.getPosts();
+        if (this.user !== null) {
+            this.getUserProfile();
+            this.getPosts();
+        }
     }
 });
 </script>
 
 <template>
-
-    <template v-if="user">
-        <section id="user-profile-header">
-            <img src="/images/profile_photo/vite.svg" alt="Immagine Profilo" class="profile-img">
-            <div class="user-info">
-                <h2 class="username">{{ user.username }}</h2>
-                <p>{{ }}</p>
-            </div>
-        </section>
+    <template v-if="userProfile">
+        <ProfileBanner :user="user" :userProfile="userProfile" :toggleTheme="toggleTheme" :mode="mode"></ProfileBanner>
 
         <section class="theme-toggle-container">
             <label for="theme-toggle" class="theme-label">Change Theme</label>
@@ -82,12 +91,11 @@ export default defineComponent({
         <section class="profile-tabs">
             <!-- Tab dinavigazione -->
             <section class="tab-navigation">
-                <button v-for="tab in tabs" @click="activeTab = tab"
-                :class="[
+                <button v-for="tab in tabs" @click="activeTab = tab" :class="[
                     `${mode}-mode`,
                     { 'active-light': mode === 'light' && activeTab === tab },
-                    { 'active-dark' : mode === 'dark' && activeTab === tab }
-                    ]">
+                    { 'active-dark': mode === 'dark' && activeTab === tab }
+                ]">
                     {{ tab }}
                 </button>
             </section>
@@ -97,8 +105,8 @@ export default defineComponent({
                     <h2>Posts</h2>
                     <section id="posts">
                         <template v-for="post in posts">
-                            <singlePostComponent class="post" :post="post" :user="user"
-                                v-on:click="goToPost(post.post_id)"></singlePostComponent>
+                            <SinglePostComponent class="post" :post="post" :user="user"
+                                v-on:click="goToPost(post.post_id)"></SinglePostComponent>
                         </template>
                     </section>
                 </template>
@@ -120,7 +128,7 @@ export default defineComponent({
                         <template v-for="sharedPost in sharedPosts">
                             <article class="shared-post">
                                 <p>{{ sharedPost.content }}</p>
-                        </article>
+                            </article>
                         </template>
                     </section>
                 </template>

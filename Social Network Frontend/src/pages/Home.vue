@@ -1,7 +1,7 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import axios from 'axios';
-    import { Post, UserToken     } from '../utils/types';
+    import { Post, UserToken } from '../utils/types';
     import SinglePostComponent from '../components/SinglePostComponent.vue';
 
     export default defineComponent({
