@@ -4,11 +4,13 @@
     import { Post, User, UserToken } from '../utils/types';
     import singlePostComponent from '../components/SinglePostComponent.vue';
     import NotFound from './NotFound.vue';
+import ProfileBanner from '../components/ProfileBanner.vue';
 
     export default defineComponent({
         components: { 
             singlePostComponent,
             NotFound,
+            ProfileBanner
         },
         props: {
             user: {
@@ -20,7 +22,6 @@
             return {
                 posts: [] as Post[],
                 userProfile: null as User | null,
-                contatore: 0 as number,
             }
         },
         methods: {
@@ -33,7 +34,6 @@
                         console.log("io entro", this.userProfile);
                         const results: any = await axios.get("/api/posts/user/" + this.userProfile.username);
                         this.posts = results.data;
-                        console.log(results.data);
                     }
                 } catch (e: any) {
                     console.log(e);
@@ -51,6 +51,7 @@
                 handler() {
                     // resetta il post
                     this.posts = [];
+                    this.userProfile = null;
                     // Fai una nuova fetch
                     this.fetchUserPosts();
                     console.log("faccio chiamata api");
@@ -64,28 +65,10 @@
 <template>
     <section id="user_profile">
         <template v-if="userProfile">   
-
-            <header>
-                <template v-if="userProfile.profile_picture">
-                    <img class="profilePicture" :src="'/images/profile_photo/' + userProfile.username + '.jpg'" alt="profileImage" />
-                </template>
-                <template v-else>
-                    <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
-                </template>
-
-                <p class="full-name">
-                    {{ userProfile.full_name }}
-                </p>
-                <p>
-                    {{ "@" + userProfile.username }}
-                </p>
-                <p> 
-                    {{ userProfile.bio }}
-                </p>
-            </header>
+            <ProfileBanner :user="userProfile"></ProfileBanner>
 
             <section>
-                <template v-if="userProfile.visibility === 'private' &&  user === null">
+                <template v-if="userProfile.visibility === 'private' && user === null">
                     <p>L'utente cercato è privato. Effettua il login oppure registrati per continuare.</p>
                 </template>
                 <template v-else v-for="post in posts">
