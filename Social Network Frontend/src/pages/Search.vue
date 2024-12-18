@@ -68,19 +68,23 @@ export default defineComponent({
         </section>
 
         <section id="userResults" class="results-section">
-            <h2 v-if="users[0] !== undefined">Utenti Trovati</h2>
-            <ul v-if="users[0] !== undefined" class="user-list">
-                <li v-for="user in users" :key="user.username" class="user-card">
-                    <figure class="user-avatar">
-                        <img :src="'profileImage.png'" alt="Avatar" class="avatar-image" />
-                    </figure>
-                    <article class="user-info">
-                        <p class="user-name">{{ user.full_name }}</p>
-                        <p class="user-username">@{{ user.username }}</p>
-                    </article>
-                </li>
-            </ul>
-            <p v-else class="no-results">Nessun utente trovato.</p>
+            <template v-if="users[0] !== undefined">
+                <h2 >Utenti Trovati</h2>
+                <ul class="user-list">
+                    <li v-for="user in users" :key="user.username" class="user-card">
+                        <figure class="user-avatar">
+                            <img :src="'profileImage.png'" alt="Avatar" class="avatar-image" />
+                        </figure>
+                        <article class="user-info">
+                            <p class="user-name">{{ user.full_name }}</p>
+                            <p class="user-username">@{{ user.username }}</p>
+                        </article>
+                    </li>
+                </ul>
+            </template>
+            <template v-else>
+               <p class="no-results">Nessun utente trovato.</p>
+        </template>
         </section>
 
         <section id="contentResults" class="results-section">
@@ -154,11 +158,8 @@ export default defineComponent({
     flex-direction: column;
     gap: 10px;
     padding: 0;
-    /* Rimuovi il padding predefinito delle liste */
     margin: 0;
-    /* Rimuovi il margin predefinito delle liste */
     list-style: none;
-    /* Rimuovi i puntini predefiniti delle liste */
 }
 
 .user-card,

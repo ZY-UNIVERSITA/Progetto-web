@@ -317,9 +317,17 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 
+export const prova = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+
+    console.log("Il log utente è: " + user?.user_id);
+}
+
 /* GET POPULAR POST */ 
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
+
+    prova(req, res);
 
     let userId: string = "NULL";
 
@@ -420,10 +428,10 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
         visibility = publicVisibility;
     }
 
-    console.log(user.user_id);
-    console.log(postContent);
-    console.log(visibility);
-    console.log(files);
+    // console.log(user.user_id);
+    // console.log(postContent);
+    // console.log(visibility);
+    // console.log(files);
 
     const querySQL: string = 
     `
