@@ -78,7 +78,7 @@ export default defineComponent({
 
 <template>
     <template v-if="userProfile">
-        <ProfileBanner :user="user" :toggleTheme="toggleTheme" :mode="mode"></ProfileBanner>
+        <ProfileBanner :user="user" :userProfile="userProfile" :toggleTheme="toggleTheme" :mode="mode"></ProfileBanner>
 
         <section class="theme-toggle-container">
             <label for="theme-toggle" class="theme-label">Change Theme</label>

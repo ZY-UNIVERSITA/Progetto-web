@@ -65,7 +65,7 @@ import ProfileBanner from '../components/ProfileBanner.vue';
 <template>
     <section id="user_profile">
         <template v-if="userProfile">   
-            <ProfileBanner :user="userProfile"></ProfileBanner>
+            <ProfileBanner :user="user"></ProfileBanner>
 
             <section>
                 <template v-if="userProfile.visibility === 'private' && user === null">

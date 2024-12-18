@@ -9,5 +9,4 @@ router.get("/api/post/comments/:id", interactionController.getPostComments);
 router.post("/api/post/addComment/", interactionController.postNewComment);
 router.get("/api/search/:query", interactionController.search);
 
-
 export default router;

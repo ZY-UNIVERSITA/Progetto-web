@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import executeQuerySQL from "../utils/querySQL";
+import { User } from "../utils/types";
+import { getUser } from "../utils/auth";
 
 
 const publicVisibility: string = "public";
@@ -19,4 +21,35 @@ export const userProfile = async (req: Request, res: Response): Promise<void> =>
     `;
 
     await executeQuerySQL(req, res, querySQL, true, username);
+}
+
+export const isFriend = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+    
+    const username: string = req.params.username;
+
+    console.log(username, user);
+
+    const userIDQuerySQL: string =
+        `
+        SELECT u.user_id
+        FROM users AS u
+        WHERE u.username = ?
+        `;
+
+    let [ userid ]: any = await executeQuerySQL(req, res, userIDQuerySQL, false, username);
+
+    if (user !== null && userid !== undefined) {
+        const querySQL: string =
+        `
+        SELECT follower_user_id
+        FROM follower AS f
+        WHERE f.follower_user_id = ? AND f.following_user_id = ?
+        `;
+
+        await executeQuerySQL(req, res, querySQL, true, user.user_id, userid.user_id);
+    } else {
+        res.status(404).send("Not found.");
+    }
+    
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
-import { Post, User, UserToken } from '../utils/types';
+import { User, UserToken } from '../utils/types';
 import SinglePostComponent from '../components/SinglePostComponent.vue';
 
 export default defineComponent({
@@ -11,30 +11,53 @@ export default defineComponent({
     props: {
         user: {
             type: Object as PropType<UserToken | null>,
-            required: true,
+            required: false,
         },
+        userProfile: {
+            type: Object as PropType<User | null>,
+            required: false
+        }
     },
     data() {
         return {
-            userProfile: null as User | null
+            userProfile: null as User | null,
+            isFriend: "undefined" as string
         }
     },
     methods: {
         async getUserProfile() {
-            if (this.user !== null) {
-                try {
-                    const profile: any = await axios.get("api/user/" + this.user.username);
-                    this.userProfile = profile.data[0];
-                } catch (e: any) {
-                    console.error(e);
-                }
+            console.log(this.$route.params.username)
+            try {
+                const username = this.$route.params.username !== undefined ? this.$route.params.username : this.user?.username;
+                const profile: any = await axios.get("api/user/" + username);
+                this.userProfile = profile.data[0];
+            } catch (e: any) {
+                console.error(e);
             }
         },
+        async getIsFriend() {
+            const username = this.$route.params.username !== undefined ? this.$route.params.username : this.user?.username;
+            
+            if (this.user !== undefined && this.user !== null && username !== undefined) {
+                if (this.user.username !== username) {
+                    try {
+                        const isFriendQuery: any = await axios.get("api/friend/search/" + username);
+
+                        if (isFriendQuery.data.length === 0) {
+                            this.isFriend = "no";
+                        } else {
+                            this.isFriend = "si";
+                        }
+                    } catch (e: any) {
+                        console.error(e);
+                    }
+                }
+            }
+        }
     },
     created() {
-        if (this.user !== null) {
-            this.getUserProfile();
-        }
+        this.getUserProfile();
+        this.getIsFriend();
     }
 });
 </script>
@@ -76,6 +99,10 @@ export default defineComponent({
                             <span class="stat-label">Following:</span>
                             <span class="stat-value">Following count</span>
                         </p>
+                    </section>
+                    <section>
+                        <button v-if="isFriend === 'no'">Follow</button>
+                        <button v-else-if="isFriend === 'si'">Unfollow</button>
                     </section>
                 </section>
             </main>
