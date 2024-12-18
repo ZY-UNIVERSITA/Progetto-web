@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
 import { Follower, Post, User, userSearch } from "../utils/types";
 import { getUser } from "../utils/auth";
+import { isFriend, isPostOwner } from "../utils/utils";
 
-
-const publicVisibility: string = "public";
-const privateVisibility: string = "private";
+const PUBLIC_VISIBILITY: string = "public";
+const PRIVATE_VISIBILITY: string = "private";
 
 // First class function con funzione anonima di ts che ritorna una promise di tipo void
 export const postLikeAdd = async (req: Request, res: Response): Promise<void> => {
@@ -196,49 +196,82 @@ export const postNewComment = async (req: Request, res: Response): Promise<void>
 };
 
 
-// da migliorare. aggiungere i controlli per utenti/post pubblici e private
+// Funzione di ricerca di utenti e post
 export const search = async (req: Request, res: Response): Promise<void> => {
-    const searchQuery: string = "%" + req.params.query + "%";
+    try {
+        const searchQuery: string = `%${req.params.query}%`;
+        const user: User | null = getUser(req, res);
 
-    console.log(searchQuery);
+        console.log("Search query: ", searchQuery);
 
-    let querySQL: string = 
-    `
-        SELECT u.username, u.full_name, u.profile_picture
-        FROM users as u
-        WHERE u.username LIKE ?
-        LIMIT 10
-    `;
+        // Ricerca utenti: non ha bisogno di controlli, l'username degli utenti sono pubblici di natura
+        const userQuerySQL: string = `
+            SELECT u.username, u.full_name, u.profile_picture
+            FROM users AS u
+            WHERE u.username LIKE ?
+            LIMIT 10;
+        `;
+        const usersResults: userSearch[] = await executeQuerySQL(req, res, userQuerySQL, false, searchQuery);
 
-    const usersResults: userSearch[] = await executeQuerySQL(req, res, querySQL, false, searchQuery);
+        // Ricerca dei post: ci sono dei controlli sulla privatezza del post e dell'autore del post
+        // Provo a fare un unica query in base a tutti questi parametri
+        // Da testare il suo funzionamento
+        const postQuerySQL = `
+            SELECT DISTINCT 
+                p.post_id, 
+                p.user_id, 
+                p.content, 
+                p.created_at, 
+                p.likes, 
+                p.comments, 
+                p.shares, 
+                p.visibility AS post_visibility, 
+                u.username, 
+                u.full_name, 
+                u.visibility AS user_visibility
+            FROM posts AS p
+            JOIN users AS u ON p.user_id = u.user_id
+            LEFT JOIN follower AS f ON f.follower_user_id = ? AND f.following_user_id = u.user_id
+            WHERE p.content LIKE ?
+            AND (
+                -- Caso 1: Post pubblico e autore pubblico
+                (p.visibility = ? AND u.visibility = ?)
+                
+                -- Caso 2: Post pubblico e autore privato, visibile solo agli amici o all'autore
+                OR (p.visibility = ? AND u.visibility = ? AND (p.user_id = ? OR f.following_user_id IS NOT NULL))
+                
+                -- Caso 3: Post privato, visibile solo all'autore
+                OR (p.visibility = ? AND p.user_id = ?)
+            )
+            LIMIT 10;
+        `;
 
-    querySQL = 
-    `
-        SELECT
-            p.post_id, 
-            p.user_id, 
-            p.content, 
-            p.created_at, 
-            p.likes, 
-            p.comments, 
-            p.shares, 
-            p.visibility AS post_visibility, 
-            u.username, 
-            u.full_name, 
-            u.visibility AS user_visibility
-        FROM users as u JOIN posts as p ON (u.user_id = p.user_id)
-        WHERE p.content LIKE ?
-        LIMIT 10
-    `;    
+        // Parametri della query
+        const queryParams = [
+            user ? user.user_id : "",       // Per LEFT JOIN amici
+            searchQuery,                    // Contenuto del post
+            
+            PUBLIC_VISIBILITY,              // Caso 1: Post pubblico 
+            PUBLIC_VISIBILITY,              // e autore pubblico
+            PUBLIC_VISIBILITY,              // Caso 2: Post pubblico
+            PRIVATE_VISIBILITY,             //  e autore privato
+            user ? user.user_id : "",       // Utente loggato (per verificarne se è l'autore)
 
-    // AND (
-    //     p.visibility = 'public' OR 
-    //     (p.visibility = 'private' AND u.user_id = ?)
-    //     )
+            PRIVATE_VISIBILITY,             // Caso 3: Post privato
+            user ? user.user_id : ""        // Utente loggato (per verificare se è l'autore del post)
+        ];
 
-    const postsResults: Post[] = await executeQuerySQL(req, res, querySQL, false, searchQuery);
+        const postsResults: Post[] = await executeQuerySQL(req, res, postQuerySQL, false, ...queryParams);
 
-    const combinedResult: (Post[] | userSearch[])[] = [ usersResults, postsResults];
+        console.log(postsResults)
 
-    res.status(200).send(combinedResult);
+        // Combina i risultati
+        const combinedResult: (userSearch[] | Post[] )[] = 
+            [ usersResults, postsResults,] ;
+
+        res.status(200).send(combinedResult);
+    } catch (error) {
+        console.error("C'è qualcosa che non va. Ricontrollare: ", error);
+        res.status(500).send("Server error.");
+    }
 };

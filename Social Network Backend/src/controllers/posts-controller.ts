@@ -2,42 +2,10 @@ import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
 import { createNewPost, Post, User, UserVisibility } from "../utils/types";
 import { getUser } from "../utils/auth";
-
+import { isFriend, isPostOwner } from "../utils/utils";
 
 const publicVisibility: string = "public";
 const privateVisibility: string = "private";
-
-// Funzione per verificare se l'utente è l'autore del post
-const isClientOwner = (user: User | null, postUserId: string): boolean => {
-    return user !== null && user.user_id === postUserId;
-};
-
-// Funzione per verificare se un utente è un amico
-const isFriend = async (
-        req: Request,
-        res: Response,
-        userId: string,
-        postUserId: string
-    ): Promise<boolean> => {
-
-    const confirmIfFriendQuerySQL: string = `
-        SELECT 1
-        FROM follower AS f
-        WHERE f.follower_user_id = ? AND f.following_user_id = ?;
-    `;
-
-    const resultFriend: any[] = await executeQuerySQL(
-        req,
-        res,
-        confirmIfFriendQuerySQL,
-        false,
-        userId,
-        postUserId
-    );
-
-    return resultFriend.length > 0;
-};
-
 
 // Funzione per trovare i dati di un singolo post, dato l'ID del post
 export const postID = async (req: Request, res: Response): Promise<void> => {
@@ -71,7 +39,7 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
         FROM posts AS p
         JOIN users AS u ON p.user_id = u.user_id
         LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-        WHERE p.post_id = ?;
+        WHERE p.post_id = ?
     `;
 
     // Esecuzione query: teoricamente dovrebbe ritornare un array di post con 1 singolo risultato. L'unico risultato viene inserito in una variabile
@@ -94,7 +62,7 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
 
     const postIsPublic: boolean = result.post_visibility === publicVisibility;
     const userIsPublic: boolean = result.user_visibility === publicVisibility;
-    const clientOwnsPost: boolean = isClientOwner(user, result.user_id);
+    const clientOwnsPost: boolean = isPostOwner(user, result.user_id);
 
     // Post privato: solo l'utente può vederlo
     if (!postIsPublic) {
@@ -170,7 +138,7 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     const searchedUserIsPublic: boolean = searchedUserResult.visibility === publicVisibility;
-    const clientIsOwner: boolean = isClientOwner(user, searchedUserResult.user_id);
+    const clientIsOwner: boolean = isPostOwner(user, searchedUserResult.user_id);
 
     const baseQuery = `
         SELECT DISTINCT 
