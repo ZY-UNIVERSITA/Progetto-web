@@ -3,7 +3,7 @@ export interface User {
     username: string
 }
 
-export interface postID_interface extends User {
+export interface UserVisibility extends User {
     visibility: string
 }
 

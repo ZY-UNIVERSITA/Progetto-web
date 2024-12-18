@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
-import { createNewPost, Post, postID_interface, User } from "../utils/types";
+import { createNewPost, Post, User, UserVisibility } from "../utils/types";
 import { getUser } from "../utils/auth";
-import { upload } from "../utils/upload";
 
 
 const publicVisibility: string = "public";
@@ -38,6 +37,7 @@ const isFriend = async (
 
     return resultFriend.length > 0;
 };
+
 
 // Funzione per trovare i dati di un singolo post, dato l'ID del post
 export const postID = async (req: Request, res: Response): Promise<void> => {
@@ -147,185 +147,118 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
 };
 
 
+// Funzione principale per ottenere i post di un utente
 export const postsUser = async (req: Request, res: Response): Promise<void> => {
     const username: string = req.params.username;
 
     const user: User | null = getUser(req, res);
 
-    const userQuerySQL: string =
-        `
+    // Query per ottenere l'utente cercato
+    const userQuerySQL = `
         SELECT u.username, u.user_id, u.visibility
-        FROM users as u
+        FROM users AS u
         WHERE u.username LIKE ?
     `;
 
-    const [searchedUserResult]: postID_interface[] = await executeQuerySQL(req, res, userQuerySQL, false, username);
+    const [ searchedUserResult ]: UserVisibility[] = await executeQuerySQL(req, res, userQuerySQL, false, username);
 
     // Controlla che l'utente esista
-    if (searchedUserResult === undefined) {
-        console.log("L'utente non esiste.")
+    if (!searchedUserResult) {
+        console.log("L'utente non esiste.");
         res.status(404).send("L'utente non esiste.");
         return;
     }
 
-    let searchedUserIsPublic: boolean = true;
-    let clientIsOwner: boolean = false;
-    let userIsLogged: boolean = false;
+    const searchedUserIsPublic: boolean = searchedUserResult.visibility === publicVisibility;
+    const clientIsOwner: boolean = isClientOwner(user, searchedUserResult.user_id);
 
-    if (searchedUserResult.visibility === privateVisibility) {
-        searchedUserIsPublic = !searchedUserIsPublic;
-    }
-
-    if (user !== null) {
-        if (user.user_id === searchedUserResult.user_id) {
-            clientIsOwner = !clientIsOwner;
-        }
-
-        userIsLogged = true;
-    }
-
-    const orderBy =
-        `
-        ORDER BY p.created_at DESC
+    const baseQuery = `
+        SELECT DISTINCT 
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.created_at, 
+            p.likes, 
+            p.comments, 
+            p.shares, 
+            p.visibility AS post_visibility, 
+            u.username, 
+            u.full_name, 
+            u.visibility AS user_visibility,
+            CASE
+                WHEN ? IS NULL THEN 0
+                WHEN pl.user_id IS NOT NULL THEN 1 
+                ELSE 0
+            END AS post_liked
+        FROM posts AS p
+        JOIN users AS u ON p.user_id = u.user_id
+        LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
     `;
 
+    const orderBy = `ORDER BY p.created_at DESC`;
 
-    // UTENTE NON LOGGATO
-    if (!userIsLogged) {
-        // UTENTE NON LOGGATO MA ACCOUNT PUBBLICO
+    // Caso 1: Utente non loggato
+    if (!user) {
+        // Profilo pubblico
         if (searchedUserIsPublic) {
             console.log("L'utente non è registrato però l'utente cercato è pubblico.");
 
-            let querySQL: string =
-                `
-                SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
-                FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
-                WHERE u.username LIKE ? AND p.visibility LIKE ? 
-            `;
+            const query = `${baseQuery} 
+                            WHERE u.username LIKE ? AND p.visibility LIKE ? 
+                            ${orderBy}`;
 
-            querySQL += orderBy;
+            await executeQuerySQL(req, res, query, true, "", "", username, publicVisibility);
 
-            await executeQuerySQL(req, res, querySQL, true, username, publicVisibility);
-            return;
-
-            // UTENTE NON LOGGATO MA ACCOUNT PRIVATO
+        // Profilo privato
         } else {
-            console.log("L'utente non è registrato e l'utente cercato non è pubblico");
+            console.log("L'utente non è registrato e l'utente cercato è privato.");
+            res.status(401).send("Searched user is private. You must login to continue.");
+        }
+        return;
+    }
+
+    // Caso 2: Utente loggato
+    let queryParams: any[] = [user.user_id, user.user_id, username];
+    let queryConditions: string = "";
+
+    // Utente e profilo coincidono
+    if (clientIsOwner) {
+        console.log("L'utente è loggato ed è il proprietario dell'account.");
+        queryConditions = `WHERE u.username LIKE ?`;
+    
+    // Il profilo è pubblico
+    } else if (searchedUserIsPublic) {
+        console.log("L'utente è loggato e l'utente cercato è pubblico.");
+        queryConditions = `WHERE u.username LIKE ? AND p.visibility LIKE ?`;
+        queryParams.push(publicVisibility);
+    } else {
+        // Il profilo è privato quindi si verifica se l'utente è amico con il profilo
+        const friend: boolean = await isFriend(req, res, user.user_id, searchedUserResult.user_id);
+
+        // Sono amici
+        if (friend) {
+            console.log("L'utente è loggato e amico con il proprietario del profilo privato.");
+            queryConditions = `WHERE u.username LIKE ? AND p.visibility LIKE ?`;
+            queryParams.push(publicVisibility);
+
+        // Non sono amici
+        } else {
+            console.log("L'utente è loggato ma il profilo è privato e non sono amici.");
             res.status(401).send("Searched user is private. You must login to continue.");
             return;
         }
     }
 
+    const finalQuery = `${baseQuery} ${queryConditions} ${orderBy}`;
 
-    // UTENTE LOGGATO
-    if (user !== null) {
-        let querySQL: string =
-            `SELECT DISTINCT 
-                    p.post_id, 
-                    p.user_id, 
-                    p.content, 
-                    p.created_at, 
-                    p.likes, 
-                    p.comments, 
-                    p.shares, 
-                    p.visibility AS post_visibility, 
-                    u.username, 
-                    u.full_name, 
-                    u.visibility AS user_visibility,
-                    CASE
-                        -- Se l'utente non è loggato, post_liked = 0
-                        WHEN ? IS NULL THEN 0
-                        -- Se c'è un like da parte dell'utente loggato, post_liked = 1
-                        WHEN pl.user_id IS NOT NULL THEN 1 
-                        -- Se l'utente è loggato ma non ha messo like, post_liked = 0
-                        ELSE 0
-                    END AS post_liked
-                FROM 
-                    posts AS p
-                JOIN 
-                    users AS u ON (p.user_id = u.user_id)
-                LEFT JOIN 
-                    posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-            `;
-
-
-        // UTENTE LOGGATO E PROPRIETARIO DELL'ACCOUNT
-        if (user.user_id === searchedUserResult.user_id) {
-            console.log("L'utente è loggato ed è il proprietario dell'account");
-
-            querySQL += `
-                WHERE u.username LIKE ?
-            `;
-
-            querySQL += orderBy;
-
-            await executeQuerySQL(req, res, querySQL, true, searchedUserResult.user_id, searchedUserResult.user_id, username);
-            return;
-        }
-
-        // UTENTE LOGGATO E PROFILO PUBBLICO
-        if (searchedUserIsPublic) {
-            console.log("L'utente è loggato e l'utente cercato è pubblico.");
-
-            querySQL +=
-                `
-                WHERE u.username LIKE ? AND p.visibility LIKE ?
-            `;
-
-            querySQL += orderBy;
-
-            await executeQuerySQL(req, res, querySQL, true, searchedUserResult.user_id, searchedUserResult.user_id, username, publicVisibility);
-            return;
-        }
-
-        // UTENTE LOGGATO E PROFILE PRIVATO
-        if (!searchedUserIsPublic) {
-
-            // CONTROLLA SE CLIENT E UTENTE SONO AMICI
-            const confirmIfFriendQuerySQL: string =
-                `
-                SELECT *
-                FROM follower as f
-                WHERE f.follower_user_id = ? AND f.following_user_id = ?
-            `;
-
-            const resultFriend: any[] = await executeQuerySQL(req, res, confirmIfFriendQuerySQL, false, user.user_id, searchedUserResult.user_id);
-
-            // UTENTE LOGGATO E AMICO DEL PROFILO PRIVATO
-            if (resultFriend.length > 0) {
-
-                console.log("L'utente è loggato e l'utente cercato è privato ma i 2 utenti sono amici.");
-
-                querySQL +=
-                    `
-                    WHERE u.username LIKE ? AND p.visibility LIKE ?
-                `;
-
-                querySQL += orderBy;
-
-                await executeQuerySQL(req, res, querySQL, true, searchedUserResult.user_id, searchedUserResult.user_id, username, publicVisibility);
-                return;
-            } else {
-                console.log("L'utente non è registrato e l'utente cercato non è pubblico");
-                res.status(401).send("Searched user is private. You must login to continue.");
-                return;
-            }
-        }
-    }
+    // Operatore spread di js che permette di espandere l'array da passare come singoli elementi
+    // esempioArray = [ a, b, c ] -> funzione(...esempioArray) -> funzione(a , b, c)
+    await executeQuerySQL(req, res, finalQuery, true, ...queryParams);
 };
-
-
-export const prova = async (req: Request, res: Response): Promise<void> => {
-    const user: User | null = getUser(req, res);
-
-    console.log("Il log utente è: " + user?.user_id);
-}
 
 /* GET POPULAR POST */
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
-
-    prova(req, res);
 
     let userId: string = "NULL";
 
@@ -469,7 +402,7 @@ export const postImages = async (req: Request, res: Response): Promise<void> => 
     const result = await executeQuerySQL(req, res, querySQL, false, post_id);
 
     if (result.length === 0) {
-        console.log("vuoto");
+        console.log("Non ci sono immagini.");
     } else {
         console.log(result);
     }
