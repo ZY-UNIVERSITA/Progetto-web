@@ -152,7 +152,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 };
 
 
-/* DECODIFICA IL TOKEN E INVIA IL DATO AL CLIENT*/
+/* DECODIFICA IL TOKEN E INVIA UNA RISPOSTA*/
 export const profile =  async (req: Request, res: Response): Promise<void> => {
     // Decodifica i valori user_id e username dal token
     const user: User | null = getUser(req, res);

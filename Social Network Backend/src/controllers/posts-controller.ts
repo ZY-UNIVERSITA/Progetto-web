@@ -8,12 +8,45 @@ import { upload } from "../utils/upload";
 const publicVisibility: string = "public";
 const privateVisibility: string = "private";
 
-// First class function con funzione anonima di ts che ritorna una promise di tipo void
+// Funzione per verificare se l'utente è l'autore del post
+const isClientOwner = (user: User | null, postUserId: string): boolean => {
+    return user !== null && user.user_id === postUserId;
+};
+
+// Funzione per verificare se un utente è un amico
+const isFriend = async (
+        req: Request,
+        res: Response,
+        userId: string,
+        postUserId: string
+    ): Promise<boolean> => {
+
+    const confirmIfFriendQuerySQL: string = `
+        SELECT 1
+        FROM follower AS f
+        WHERE f.follower_user_id = ? AND f.following_user_id = ?;
+    `;
+
+    const resultFriend: any[] = await executeQuerySQL(
+        req,
+        res,
+        confirmIfFriendQuerySQL,
+        false,
+        userId,
+        postUserId
+    );
+
+    return resultFriend.length > 0;
+};
+
+// Funzione per trovare i dati di un singolo post, dato l'ID del post
 export const postID = async (req: Request, res: Response): Promise<void> => {
-    const post_id = req.params.id;
+    const post_id: string = req.params.id;
 
-    const user: User | null = getUser(req, res);
+    const user: User | null = getUser(req, res); // Funzione per ottenere l'utente loggato
+    const userId: string = user ? user.user_id : "NULL";
 
+    // Query SQL per ottenere il post
     const querySQL: string = `
         SELECT DISTINCT 
             p.post_id, 
@@ -28,123 +61,88 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
             u.full_name, 
             u.visibility AS user_visibility,
             CASE
-                 -- Se l'utente non è loggato, post_liked = 0
+                -- Se l'utente non è loggato, post_liked = 0
                 WHEN ? IS NULL THEN 0
                 -- Se c'è un like da parte dell'utente loggato, post_liked = 1
                 WHEN pl.user_id IS NOT NULL THEN 1 
                 -- Se l'utente è loggato ma non ha messo like, post_liked = 0
                 ELSE 0
             END AS post_liked
-        FROM 
-            posts AS p
-        JOIN 
-            users AS u ON (p.user_id = u.user_id)
-        LEFT JOIN 
-            posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
-        WHERE 
-            p.post_id = ?;
+        FROM posts AS p
+        JOIN users AS u ON p.user_id = u.user_id
+        LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
+        WHERE p.post_id = ?;
     `;
 
-    let userId: string = "NULL";
+    // Esecuzione query: teoricamente dovrebbe ritornare un array di post con 1 singolo risultato. L'unico risultato viene inserito in una variabile
+    const [ result ]: Post[] = await executeQuerySQL(
+        req,
+        res,
+        querySQL,
+        false,
+        userId,
+        userId,
+        post_id
+    );
 
-    if (user !== null) {
-        userId = user.user_id;
-    }
-
-    const [ result ]: Post[] = await executeQuerySQL(req, res, querySQL, false, userId, userId, post_id);
-
-    // Controlla se il post esiste
-    if (result === undefined) {
-        console.log("Il post con id: " + post_id + " non esiste.");
+    // Controllaa se il post esiste
+    if (!result) {
+        console.log(`Il post con id: ${post_id} non esiste.`);
         res.status(404).send("Not found or this user is not in your friends list.");
         return;
     }
 
-    let postIsPublic: boolean = true;
-    let userIsPublic: boolean = true;
-    let clientIsOwner: boolean = false;
+    const postIsPublic: boolean = result.post_visibility === publicVisibility;
+    const userIsPublic: boolean = result.user_visibility === publicVisibility;
+    const clientOwnsPost: boolean = isClientOwner(user, result.user_id);
 
-    if (result.post_visibility === privateVisibility) {
-        postIsPublic = !postIsPublic;
-    }
-
-    if (user !== null) {
-        if (user.user_id === result.user_id) {
-            clientIsOwner = !clientIsOwner;
-        }
-    }
-
-    // IL POST è NASCOSTO A TUTTI TRANNE AL PROPRIETARIO
+    // Post privato: solo l'utente può vederlo
     if (!postIsPublic) {
-
-        // L'UTENTE NON è LOGGATO
-        if (user === null) {
+        // L'utente non è registrato
+        if (!user) {
             console.log("Il post è privato e l'utente non è registrato.");
-            res.status(404).send("Errore");
-            return;
+            res.status(404).send("Error trying to get the post.");
+            // l'utente è il proprietario del post
+        } else if (!clientOwnsPost) {
+            console.log("Il post è privato e l'utente non è l'autore del post.");
+            res.status(404).send("Error trying to get the post.");
+            // l'utente è il proprietario del post
         } else {
-            
-            // L'UTENTE LOGGATO è L'AUTORE DEL POST NASCOSTO
-            if (clientIsOwner) {
-                console.log("Il post è privato e l'utente ne è l'autore.");
+            console.log("Il post è privato e l'utente ne è l'autore.");
+            res.send(result);
+        }
+        return;
+    }
+
+    // Post pubblico ma profilo privato: solo l'autore e gli amici possono vederlo
+    if (!userIsPublic) {
+        // L'utente non è registrato
+        if (!user) {
+            console.log("Il profilo è privato e l'utente non è registrato.");
+            res.status(404).send("Error trying to get the post.");
+        // L'utente è l'autore del post
+        } else if (clientOwnsPost) {
+            console.log("Il profilo è privato e l'utente ne è il proprietario.");
+            res.send(result);
+        // Controlla se l'utente è amico o meno dell'autore
+        } else {
+            const userIsFriend: boolean = await isFriend(req, res, user.user_id, result.user_id);
+
+            // Amico dell'autore del post
+            if (userIsFriend) {
+                console.log("Il profilo è privato e l'utente è amico con il proprietario.");
                 res.send(result);
-                return;
 
-            // L'UTENTE LOGATO NON è L'AUTORE DEL POST NASCOSTO
+            // Non amico con l'autore del post
             } else {
-                console.log("Il post è privato e l'utente non è l'autore del post.")
+                console.log("Il profilo è privato e l'utente non è amico con il proprietario.");
                 res.status(404).send("Errore");
-                return;
             }
         }
+        return;
     }
 
-    // IL POST NON è NASCOSTO
-    if (postIsPublic) {
-
-        // IL POST NON NASCOSTO MA L'AUTORE è PRIVATO
-        if (!userIsPublic) {
-
-            // CONTROLLA CHE L'UTENTE SIA LOGGATO
-            if (user === null) {
-                console.log("Il profilo è privato e l'utente non è registrato.");
-                res.status(404).send("Errore");
-                return;
-            } else {
-
-                // CONTROLLA CHE IL CLIENT SIA ANCHE L'AUTORE DEL POST
-                if (clientIsOwner) {
-                    console.log("Il profilo è privato e l'utente ne è il proprietario.");
-                    res.send(result);
-                    return;
-                } else {
-                    const confirmIfFriendQuerySQL: string = 
-                    `
-                        SELECT *
-                        FROM follower as f
-                        WHERE f.follower_user_id = ? AND f.following_user_id = ?
-                    `;
-                
-                    const resultFriend: any[] = await executeQuerySQL(req, res, confirmIfFriendQuerySQL, false, user.user_id, result.user_id);
-
-                    // CONTROLLA CHE IL CLIENT SIA UN AMICO DELL'UTENTE PRIVATO
-                    if (resultFriend.length > 0) {
-                        console.log("Il profilo è privato e l'utente è amico con il proprietario.");
-                        res.send(result);
-                        return;
-
-                    // SE L'UTENTE è PRIVATO E IL CLIENT NON è SUO AMICO
-                    } else {
-                        console.log("Il profilo è privato e l'utente non è amico con il proprietario.");
-                        res.status(404).send("Errore");
-                        return;
-                    }
-                 }
-            }
-        }
-    }
-
-    // SE IL POST è PUBBLICO E IL PROFILO è PUBBLICO
+    // Post pubblico e profilo pubblico
     res.send(result);
 };
 
@@ -154,14 +152,14 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
 
     const user: User | null = getUser(req, res);
 
-    const userQuerySQL: string = 
-    `
+    const userQuerySQL: string =
+        `
         SELECT u.username, u.user_id, u.visibility
         FROM users as u
         WHERE u.username LIKE ?
     `;
 
-    const [ searchedUserResult ]: postID_interface[] = await executeQuerySQL(req, res, userQuerySQL, false, username);
+    const [searchedUserResult]: postID_interface[] = await executeQuerySQL(req, res, userQuerySQL, false, username);
 
     // Controlla che l'utente esista
     if (searchedUserResult === undefined) {
@@ -182,12 +180,12 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
         if (user.user_id === searchedUserResult.user_id) {
             clientIsOwner = !clientIsOwner;
         }
-        
+
         userIsLogged = true;
     }
 
-    const orderBy = 
-    `
+    const orderBy =
+        `
         ORDER BY p.created_at DESC
     `;
 
@@ -198,19 +196,19 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
         if (searchedUserIsPublic) {
             console.log("L'utente non è registrato però l'utente cercato è pubblico.");
 
-            let querySQL: string = 
-            `
+            let querySQL: string =
+                `
                 SELECT p.post_id, p.user_id, p.content, p.created_at, p.likes, p.comments, p.shares, p.visibility as post_visibility, u.username, u.full_name, u.visibility as user_visibility
                 FROM posts as p JOIN users as u ON (p.user_id = u.user_id)
                 WHERE u.username LIKE ? AND p.visibility LIKE ? 
             `;
 
             querySQL += orderBy;
-            
+
             await executeQuerySQL(req, res, querySQL, true, username, publicVisibility);
             return;
-        
-        // UTENTE NON LOGGATO MA ACCOUNT PRIVATO
+
+            // UTENTE NON LOGGATO MA ACCOUNT PRIVATO
         } else {
             console.log("L'utente non è registrato e l'utente cercato non è pubblico");
             res.status(401).send("Searched user is private. You must login to continue.");
@@ -221,8 +219,8 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
 
     // UTENTE LOGGATO
     if (user !== null) {
-        let querySQL: string = 
-                `SELECT DISTINCT 
+        let querySQL: string =
+            `SELECT DISTINCT 
                     p.post_id, 
                     p.user_id, 
                     p.content, 
@@ -269,8 +267,8 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
         if (searchedUserIsPublic) {
             console.log("L'utente è loggato e l'utente cercato è pubblico.");
 
-            querySQL += 
-            `
+            querySQL +=
+                `
                 WHERE u.username LIKE ? AND p.visibility LIKE ?
             `;
 
@@ -284,22 +282,22 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
         if (!searchedUserIsPublic) {
 
             // CONTROLLA SE CLIENT E UTENTE SONO AMICI
-            const confirmIfFriendQuerySQL: string = 
-            `
+            const confirmIfFriendQuerySQL: string =
+                `
                 SELECT *
                 FROM follower as f
                 WHERE f.follower_user_id = ? AND f.following_user_id = ?
             `;
-                
+
             const resultFriend: any[] = await executeQuerySQL(req, res, confirmIfFriendQuerySQL, false, user.user_id, searchedUserResult.user_id);
-            
+
             // UTENTE LOGGATO E AMICO DEL PROFILO PRIVATO
             if (resultFriend.length > 0) {
-                    
+
                 console.log("L'utente è loggato e l'utente cercato è privato ma i 2 utenti sono amici.");
 
-                querySQL += 
-                `
+                querySQL +=
+                    `
                     WHERE u.username LIKE ? AND p.visibility LIKE ?
                 `;
 
@@ -323,7 +321,7 @@ export const prova = async (req: Request, res: Response): Promise<void> => {
     console.log("Il log utente è: " + user?.user_id);
 }
 
-/* GET POPULAR POST */ 
+/* GET POPULAR POST */
 export const popularPosts = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
 
@@ -356,10 +354,10 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
                 -- Se l'utente è loggato ma non ha messo like, post_liked = 0
                 ELSE 0
             END AS post_liked
-    `;          
+    `;
 
-    const orderingQuerySQL: string = 
-    `
+    const orderingQuerySQL: string =
+        `
         -- Permette di ordinare i valori tramite un algoritmo di ranking basato su un punteggio ponderato
         -- Il numero di likes, commenti e shares permette di ottenere un punteggio elevato
         -- Il punteggio di un post diminuisce nel tempo
@@ -370,8 +368,8 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
     // L'UTENTE NON è REGISTRATO
     if (!user) {
         console.log("Post popolari: l'utente non è registrato");
-        querySQL += 
-        `
+        querySQL +=
+            `
             FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
 
             -- Permette di selezionare solo i post non più vecchi di 30 giorni rispetto al momento in cui si effettua la query
@@ -383,12 +381,12 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
 
         await executeQuerySQL(req, res, querySQL, true, userId, userId, publicVisibility, publicVisibility);
 
-    // L'UTENTE è REGISTRATO
+        // L'UTENTE è REGISTRATO
     } else {
         console.log("Post popolari: l'utente è registrato");
-        
-        querySQL += 
-        `
+
+        querySQL +=
+            `
             FROM posts as p JOIN users as u ON (p.user_id = u.user_id) LEFT JOIN follower as f ON p.user_id = f.following_user_id LEFT JOIN posts_likes AS pl ON (p.post_id = pl.post_id AND pl.user_id = ?)
 
             -- Permette di selezionare solo i post non più vecchi di 30 giorni rispetto al momento in cui si effettua la query
@@ -398,14 +396,14 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
             OR (p.visibility LIKE ? AND u.visibility LIKE ? AND p.user_id LIKE ?))
             AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         `;
-        
+
         querySQL += orderingQuerySQL;
 
         await executeQuerySQL(req, res, querySQL, true, userId, userId,
-                                                        publicVisibility, publicVisibility, 
-                                                        publicVisibility, privateVisibility, user.user_id, user.user_id,
-                                                        privateVisibility, publicVisibility, user.user_id,
-                                                        privateVisibility, privateVisibility, user.user_id)
+            publicVisibility, publicVisibility,
+            publicVisibility, privateVisibility, user.user_id, user.user_id,
+            privateVisibility, publicVisibility, user.user_id,
+            privateVisibility, privateVisibility, user.user_id)
     }
 }
 
@@ -433,16 +431,16 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
     // console.log(visibility);
     // console.log(files);
 
-    const querySQL: string = 
-    `
+    const querySQL: string =
+        `
         INSERT INTO posts (user_id, content, visibility)
         VALUES (?, ?, ?)
     `;
 
     const result = await executeQuerySQL(req, res, querySQL, false, user.user_id, postContent, visibility);
 
-    const insertImageIntoDatabase: string = 
-    `
+    const insertImageIntoDatabase: string =
+        `
         INSERT INTO posts_images (post_id, url)
         VALUES (?, ?)
     `;
@@ -461,8 +459,8 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
 export const postImages = async (req: Request, res: Response): Promise<void> => {
     const post_id = req.query.post_id as string;
 
-    const querySQL: string = 
-    `
+    const querySQL: string =
+        `
         SELECT pi.url
         FROM posts_images as pi
         WHERE pi.post_id LIKE ?
