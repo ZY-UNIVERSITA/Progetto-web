@@ -588,21 +588,50 @@ input[type="search"] {
         }
     }
 
-}
+    .tab-content {
+        padding: 20px;
+        border: 1px solid;
+        border-radius: 5px;
+        
+        &.dark-mode {
+            background: lighten($bg-color-dark, 3%);
+        }
+    
+        &.light-mode {
+            background: darken($bg-color-light, 3%);
+        }
 
-.tab-content {
-    padding: 20px;
-    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
-    border-radius: 5px;
-    background: #f9f9f9; // ! PREDISPORRE CAMBIO THEME
-}
+        &.post {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid;
+            border-radius: 5px;
+            
+            &.dark-mode {
+                background: lighten($bg-color-dark, 5%);
+            }
+        
+            &.light-mode {
+                background: darken($bg-color-light, 5%);
+            }
+        }
 
-.post, .comment, .shared-post {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd; // ! PREDISPORRE CAMBIO THEME
-    border-radius: 5px;
-    background: #fff; // ! PREDISPORRE CAMBIO THEME
+        &.comment, &.shared-post {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid;
+            border-radius: 5px;
+            
+            &.dark-mode {
+                background: lighten($bg-color-dark, 5%);
+            }
+        
+            &.light-mode {
+                background: darken($bg-color-light, 5%);
+            }
+        }
+    }
+
 }
 
 /* Not found page */
