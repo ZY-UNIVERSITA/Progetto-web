@@ -100,12 +100,12 @@ export default defineComponent({
                 </button>
             </section>
 
-            <section class="tab-content">
+            <section class="tab-content" :class="`${mode}-mode`">
                 <template v-if="activeTab === 'Posts'">
                     <h2>Posts</h2>
                     <section id="posts">
                         <template v-for="post in posts">
-                            <SinglePostComponent class="post" :post="post" :user="user"
+                            <SinglePostComponent class="post" :post="post" :user="user" :class="`${mode}-mode`"
                                 v-on:click="goToPost(post.post_id)"></SinglePostComponent>
                         </template>
                     </section>
@@ -115,7 +115,7 @@ export default defineComponent({
                     <section id="comments">
                         <h2>Comments</h2>
                         <template v-for="comment in comments">
-                            <article class="comment">
+                            <article class="comment" :class="`${mode}-mode`">
                                 <p>{{ comment.text }}</p>
                             </article>
                         </template>
@@ -126,7 +126,7 @@ export default defineComponent({
                     <section id="shared_posts">
                         <h2>Shared Posts</h2>
                         <template v-for="sharedPost in sharedPosts">
-                            <article class="shared-post">
+                            <article class="shared-post" :class="`${mode}-mode`">
                                 <p>{{ sharedPost.content }}</p>
                             </article>
                         </template>
