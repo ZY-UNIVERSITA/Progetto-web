@@ -72,19 +72,24 @@ h1 {
     }
 }
 
+// !!!! DA CORREGGERE LA NAVBAR CHE COPRE H1 E NON SI FISSA !!!!!
 nav {
     box-sizing: border-box;
     width: 100%;
     z-index: 999;
     height: 80px;
     position: fixed;
-    //position: sticky;
     bottom: 0;
-    //padding: 10px;
 
     @include media($breakpoint-medium) {
+        position: fixed;
+        bottom: unset;
+        top: 80px;
         height: 100px;
         padding: 0% 1%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     &.dark-mode {
@@ -98,6 +103,9 @@ nav {
         list-style-type: none;
         padding: 0;
         margin: 0;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
     }
 
     li {
@@ -112,8 +120,9 @@ nav {
         
         @include media($breakpoint-medium) {
             border-radius: 40px;
-            width: 23%;
-            margin: 0 1%;
+            width: auto;
+            margin: 0 5px;
+            padding: 0 15px;
             &.dark-mode {
                 @include theme($bg-color-light, $text-color-light);
             }
@@ -132,7 +141,6 @@ nav {
         padding: 5% 2%;
 
         .icon {
-          //width: 50%;
           display: block;
           margin: 0 auto;
 
