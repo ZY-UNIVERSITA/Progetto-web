@@ -357,6 +357,8 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
     res.status(200).send("Tutto ok");
 }
 
+
+// Postare immagine
 export const postImages = async (req: Request, res: Response): Promise<void> => {
     const post_id = req.query.post_id as string;
 
@@ -376,4 +378,34 @@ export const postImages = async (req: Request, res: Response): Promise<void> => 
     }
 
     res.send(result);
+}
+
+
+// Eliminare post
+export const deletePost = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+    const post_id = req.query.post_id as string;
+
+    if (user === null) {
+        console.error("Non può eliminare.");
+        res.status(401).send("You don't have the permissions to do that.");
+        return;
+    } else {
+        const querySQL: string =
+        `
+        DELETE FROM posts
+        WHERE posts.post_id = ? AND posts.user_id = ?
+        `;
+
+        const result = await executeQuerySQL(req, res, querySQL, false, post_id, user?.user_id);
+
+        if (result.affectedRows > 0) {
+            console.log("Il file è stato eliminato con successo.");
+            res.status(200).send("Tutto ok");
+            return;
+        }
+
+        console.error("Errore nell'eliminazione dell'account.");
+        res.status(404).send("Post not found.")
+    }    
 }
