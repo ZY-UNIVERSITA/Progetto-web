@@ -36,7 +36,7 @@
 
 <template>
     <section id="comments">
-        <template v-for="comment in comments">
+        <template v-for="comment in comments" v-bind:key="comment.comment_id">
             <article>
                 <template v-if="comment.profile_picture">
                     <img class="profilePicture" :src="'/images/profile_photo/' + comment.username + '.jpg'" alt="profileImage" />

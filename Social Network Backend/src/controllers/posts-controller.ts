@@ -391,21 +391,21 @@ export const deletePost = async (req: Request, res: Response): Promise<void> => 
         res.status(401).send("You don't have the permissions to do that.");
         return;
     } else {
-        const querySQL: string =
-        `
+        const querySQL: string =`
         DELETE FROM posts
         WHERE posts.post_id = ? AND posts.user_id = ?
         `;
 
-        const result = await executeQuerySQL(req, res, querySQL, false, post_id, user?.user_id);
+        const result = await executeQuerySQL(req, res, querySQL, false, post_id, user.user_id);
 
+        // Conta il numero di righe eliminate.
         if (result.affectedRows > 0) {
-            console.log("Il file è stato eliminato con successo.");
+            console.log("Il commento è stato eliminato con successo.");
             res.status(200).send("Tutto ok");
             return;
         }
 
-        console.error("Errore nell'eliminazione dell'account.");
+        console.error("Errore nell'eliminazione del post.");
         res.status(404).send("Post not found.")
     }    
 }
