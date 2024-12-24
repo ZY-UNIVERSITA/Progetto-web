@@ -279,7 +279,7 @@ export const search = async (req: Request, res: Response): Promise<void> => {
 export const deleteComment = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: User | null = getUser(req, res);
-        const comment_id = req.query.comment_id as string;
+        const comment_id = req.params.comment_id as string;
 
         if (user === null) {
             console.error("Non può eliminare.");
@@ -304,7 +304,7 @@ export const deleteComment = async (req: Request, res: Response): Promise<void> 
             res.status(404).send("Post not found.")
         }    
     } catch (error: any) {
-        console.error(`Errore nell'eliminazione del post ${req.query.post_id}`, error);
+        console.error(`Errore nell'eliminazione del commento ${req.params.post_id}`, error);
         res.status(500).send("Server error.");
     }
 };

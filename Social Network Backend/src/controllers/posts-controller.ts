@@ -384,10 +384,10 @@ export const postImages = async (req: Request, res: Response): Promise<void> => 
 // Eliminare post
 export const deletePost = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
-    const post_id = req.query.post_id as string;
+    const post_id = req.params.post_id as string;
 
     if (user === null) {
-        console.error("Non può eliminare.");
+        console.error("Non si può eliminare il post.");
         res.status(401).send("You don't have the permissions to do that.");
         return;
     } else {
