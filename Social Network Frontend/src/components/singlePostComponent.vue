@@ -144,14 +144,3 @@ export default defineComponent({
         </section>
     </article>
 </template>
-
-<style lang="css" scoped>
-img {
-    width: 50%
-}
-
-#comment {
-    fill: white;
-    stroke: black;
-}
-</style>
