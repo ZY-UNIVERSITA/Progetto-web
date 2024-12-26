@@ -147,6 +147,12 @@ footer {
     margin-bottom: 80px;
     text-align: center;
     font-size: 14px;
+
+    @include media($breakpoint-medium) {
+        font-size: 15px;
+        padding: 0;
+        margin-bottom: 10px;
+    }
 }
 
 /* Home page */
@@ -162,7 +168,14 @@ footer {
     button {
         border-radius: 40px;
         padding: 0.6em 1.2em;
-        font: bold 1em $font-secondary;
+        font-family: $font-secondary;
+        font-weight: bold;
+        font-size: 16px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
+
         &.light-mode {
             @include theme($bg-color-dark, $text-color-dark);
         }
@@ -172,33 +185,45 @@ footer {
     }
 }
 
-article {
-    text-align: left;
-    border-radius: 10px;
-    margin: 1%;
-    padding: 2.5%;
+#popularPosts {
 
-    &.dark-mode {
-        @include theme($bg-color-dark, $text-color-dark);
+    @include media($breakpoint-medium) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 35px;
     }
 
-    &.light-mode {
-        @include theme($bg-color-light, $text-color-light);
-    }
-
-    header {
-        display: flex;
-        align-items: center;
-
-        .profilePicture {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 5px;
+    article {
+        text-align: left;
+        border-radius: 10px;
+        margin: 1%;
+        padding: 2.5%;
+    
+        &.dark-mode {
+            @include theme($bg-color-dark, $text-color-dark);
         }
-
-        p {
-            &.full-name {
+    
+        &.light-mode {
+            @include theme($bg-color-light, $text-color-light);
+        }
+    
+        header {
+            display: flex;
+            align-items: center;
+    
+            .profilePicture {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 5px;
+    
+                @include media($breakpoint-medium) {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+    
+            .full-name {
                 margin: 0;
                 font-weight: bold;
                 display: flex;
@@ -206,15 +231,22 @@ article {
 
                 a {
                     text-decoration: none;
+                    color: inherit;
                 }
             }
+        }
 
-            &.dark-mode {
-                color: $text-color-dark;
+        p {
+            font-size: 18px;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
             }
-            &.light-mode {
-                color: $text-color-light;
-            }
+        }
+
+        #comment {
+            fill: white;
+            stroke: black;
         }
     }
 }
