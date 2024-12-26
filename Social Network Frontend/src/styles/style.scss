@@ -446,6 +446,17 @@ label [for="imageUpload"] {
         max-width: 600px;
         margin-bottom: 20px;
 
+        @include media($breakpoint-medium) {
+            max-width: 1000px;
+        }
+
+        h2 {
+            font-size: 36px;
+            @include media($breakpoint-medium) {
+                font-size: 40px;
+            }
+        }
+
         .user-list {
             display: flex;
             flex-direction: column;
@@ -454,6 +465,12 @@ label [for="imageUpload"] {
             margin: 0;
             list-style: none;
 
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 35px;
+            }
+
             .user-card {
                 display: flex;
                 align-items: center;
@@ -461,6 +478,10 @@ label [for="imageUpload"] {
                 border: 1px solid #eee;
                 border-radius: 5px;
                 padding: 10px;
+
+                @include media($breakpoint-medium) {
+                    padding: 30px;
+                }
 
                 .user-avatar {
                     margin-right: 10px;
@@ -475,12 +496,13 @@ label [for="imageUpload"] {
                 .user-name {
                     color: $black-color;
                     font-weight: bold;
+                    font-size: 18px;
                     margin-bottom: 5px;
                 }
                 
                 .user-username {
                     color: $dark-grey;
-                    font-size: 0.9em;
+                    font-size: 16px;
                 }
             }
         }
@@ -492,6 +514,12 @@ label [for="imageUpload"] {
             padding: 0;
             margin: 0;
             list-style: none;
+
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
         
             .post-card {
                 display: flex;
@@ -501,12 +529,20 @@ label [for="imageUpload"] {
                 border-radius: 5px;
                 padding: 10px;
 
+                @include media($breakpoint-medium) {
+                    padding: 20px;
+                }
+
                 .post-content-container {
                     width: 100%;
                 
                     .post-content {
                         color: $black-color;
-                        font-size: 16px;
+                        font-size: 18px;
+
+                        @include media($breakpoint-medium) {
+                            font-size: 20px;
+                        }
                     }
                 }
             }
