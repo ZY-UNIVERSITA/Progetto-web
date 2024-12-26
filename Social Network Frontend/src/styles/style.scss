@@ -412,15 +412,111 @@ label [for="imageUpload"] {
 }
 
 /* Search page */
-input[type="search"] {
+.search-container {
     display: flex;
-    width: 90%;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin: 0 auto;
-    padding: 10px 20px;
-    border-radius: 8px;
+    align-items: center;
+    padding: 20px;
+
+    .search-form {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #fff;
+
+            .search-input {
+                flex: 1;
+                border: none;
+                outline: none;
+                padding: 10px;
+                font-size: 16px;
+            }
+        }
+    }
+
+    .results-section {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
+
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            .user-card {
+                display: flex;
+                align-items: center;
+                background-color: #f9f9f9;
+                border: 1px solid #eee;
+                border-radius: 5px;
+                padding: 10px;
+
+                .user-avatar {
+                    margin-right: 10px;
+                
+                    .avatar-image {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                    }
+                }
+
+                .user-name {
+                    color: $black-color;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+                
+                .user-username {
+                    color: $dark-grey;
+                    font-size: 0.9em;
+                }
+            }
+        }
+
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        
+            .post-card {
+                display: flex;
+                align-items: center;
+                background-color: #f9f9f9;
+                border: 1px solid #eee;
+                border-radius: 5px;
+                padding: 10px;
+
+                .post-content-container {
+                    width: 100%;
+                
+                    .post-content {
+                        color: $black-color;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+
+        .no-results {
+            color: inherit;
+            text-align: center;
+        }
+    }
 }
 
 /* Profile page */
