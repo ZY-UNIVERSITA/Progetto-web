@@ -12,10 +12,6 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
-  
-main {
-    flex: 1;
-}
 
 body {
     padding: 0;
@@ -49,30 +45,6 @@ h1 {
     }
 }
 
-/* Home page */
-.auth-buttons {
-    position: absolute;
-    right: 0;
-    top: 7%;
-    transform: translateY(-50%);
-    align-items: center;
-    margin-left: auto;
-    width: auto;
-
-    button {
-        border-radius: 40px;
-        padding: 0.6em 1.2em;
-        font: bold 1em $font-secondary;
-        &.light-mode {
-            @include theme($bg-color-dark, $text-color-dark);
-        }
-        &.dark-mode {
-            @include theme($bg-color-light, $text-color-light);
-        }
-    }
-}
-
-// !!!! DA CORREGGERE LA NAVBAR CHE COPRE H1 E NON SI FISSA !!!!!
 nav {
     box-sizing: border-box;
     width: 100%;
@@ -80,12 +52,13 @@ nav {
     height: 80px;
     position: fixed;
     bottom: 0;
+    top: auto;
 
     @include media($breakpoint-medium) {
-        position: fixed;
+        position: relative;
         bottom: unset;
-        top: 80px;
-        height: 100px;
+        top: 30px;
+        margin-bottom: 45px;
         padding: 0% 1%;
         display: flex;
         justify-content: center;
@@ -119,10 +92,10 @@ nav {
 
         
         @include media($breakpoint-medium) {
-            border-radius: 40px;
-            width: auto;
-            margin: 0 5px;
-            padding: 0 15px;
+            border-radius: 15px;
+            width: 23%;
+            margin: 0 1%;
+
             &.dark-mode {
                 @include theme($bg-color-light, $text-color-light);
             }
@@ -157,6 +130,13 @@ nav {
             font-size: 20px;
             font-weight: bold;
             text-transform: uppercase;
+
+            &.dark-mode {
+                color: $text-color-light;
+            }
+            &.light-mode {
+                color: $text-color-dark;
+            }
           }
         }
     }
@@ -167,6 +147,29 @@ footer {
     margin-bottom: 80px;
     text-align: center;
     font-size: 14px;
+}
+
+/* Home page */
+.auth-buttons {
+    position: absolute;
+    right: 0;
+    top: 7%;
+    transform: translateY(-50%);
+    align-items: center;
+    margin-left: auto;
+    width: auto;
+
+    button {
+        border-radius: 40px;
+        padding: 0.6em 1.2em;
+        font: bold 1em $font-secondary;
+        &.light-mode {
+            @include theme($bg-color-dark, $text-color-dark);
+        }
+        &.dark-mode {
+            @include theme($bg-color-light, $text-color-light);
+        }
+    }
 }
 
 article {
