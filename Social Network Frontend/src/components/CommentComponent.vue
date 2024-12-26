@@ -53,5 +53,5 @@
 </template>
 
 <style lang="scss">
-@use "./styles/style.scss";
+@use "../styles/style.scss";
 </style>
