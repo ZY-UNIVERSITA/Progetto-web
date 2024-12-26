@@ -458,6 +458,10 @@ label [for="imageUpload"] {
         max-width: 600px;
         margin-bottom: 20px;
 
+        @include media($breakpoint-medium) {
+            max-width: 1000px;
+        }
+
         .search-input-wrapper {
             display: flex;
             align-items: center;
@@ -584,8 +588,13 @@ label [for="imageUpload"] {
         }
 
         .no-results {
+            font-size: 18px;
             color: inherit;
             text-align: center;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
+            }
         }
     }
 }
