@@ -2,7 +2,7 @@
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
 import { Post, User, UserToken } from '../utils/types';
-import SinglePostComponent from '../components/SinglePostComponent.vue';
+import SinglePostComponent from '../components/singlePostComponent.vue';
 import ProfileBanner from '../components/ProfileBanner.vue';
 
 export default defineComponent({
