@@ -302,12 +302,13 @@ form {
     }
 
     label {
-        font-size: 1em;
+        font-size: 18px;
         margin: 0.5em 0;
         font-family: $font-primary;
         display: block;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
@@ -319,18 +320,24 @@ form {
         margin: 0.5em 0;
         border-radius: 5px;
         border: 1px solid;
-        font-size: 1em;
+        font-size: 18px;
         box-sizing: border-box;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
     }
 
     input[type="submit"], input[type="button"] {
+        font-size: 18px;
         font-weight: bold;
         border: none;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
 
         &.light-mode {
             @include theme($bg-color-dark, $text-color-dark);
