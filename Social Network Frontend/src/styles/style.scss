@@ -302,12 +302,13 @@ form {
     }
 
     label {
-        font-size: 1em;
+        font-size: 18px;
         margin: 0.5em 0;
         font-family: $font-primary;
         display: block;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
@@ -319,18 +320,24 @@ form {
         margin: 0.5em 0;
         border-radius: 5px;
         border: 1px solid;
-        font-size: 1em;
+        font-size: 18px;
         box-sizing: border-box;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
     }
 
     input[type="submit"], input[type="button"] {
+        font-size: 18px;
         font-weight: bold;
         border: none;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
 
         &.light-mode {
             @include theme($bg-color-dark, $text-color-dark);
@@ -691,6 +698,11 @@ form {
             z-index: 1;
             flex-shrink: 0;
 
+            @include media($breakpoint-medium) {
+                width: 150px;
+                height: 150px;
+            }
+
             .profile-picture {
                 width: 100%;
                 height: 100%;
@@ -735,7 +747,11 @@ form {
     margin-top: 20px;
 
     .theme-label {
-        font-size: 16px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
     }
 
     .switch {
@@ -798,9 +814,13 @@ form {
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             border-bottom: 2px solid transparent;
             transition: color 0.3s, border-bottom 0.3s;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
+            }
 
             &.dark-mode {
                 color: $text-color-dark;
@@ -833,11 +853,17 @@ form {
             background: color.scale($bg-color-light, $lightness: -3%);
         }
 
-        &.post {
+        .post {
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
             border-radius: 5px;
+
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 35px;
+            }
             
             &.dark-mode {
                 background: color.scale($bg-color-dark, $lightness: 5%);;
@@ -848,11 +874,22 @@ form {
             }
         }
 
-        &.comment, &.shared-post {
+        .comment, .shared-post {
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
             border-radius: 5px;
+
+            p {
+                font-size: 16px;
+
+                @include media($breakpoint-medium) {
+                    font-size: 18px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 35px;
+                }
+            }
             
             &.dark-mode {
                 background: color.scale($bg-color-dark, $lightness: 5%);

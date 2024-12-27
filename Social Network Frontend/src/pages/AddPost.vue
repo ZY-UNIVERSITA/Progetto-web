@@ -90,6 +90,43 @@ export default defineComponent({
                 imageInput.value = ''; 
             }
         },
+        async publishPost(event: Event) {
+            event.preventDefault();
+
+            if (!this.form.postContent.trim()) {
+                alert('Content cannot be empty!');
+                return;
+            }
+
+            try {
+                // Crea FormData con i dati del form
+                const formData = new FormData();
+                formData.append('postContent', this.form.postContent);
+                formData.append('visibility', this.form.visibility);
+
+                // Aggiungi le immagini al FormData
+                this.form.images.forEach((image, index) => {
+                    formData.append(`image_${index}`, image.file);
+                });
+
+                // Effettua la richiesta HTTP al server
+                const response = await fetch('/api/newPost', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert('Post published!');
+                    window.location.href = '/'; // Reindirizza alla homepage
+                } else {
+                    const errorText = await response.text();
+                    alert(`Failed to publish post: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Error while publishing post:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
+        },
     },
 });
 </script>
@@ -102,7 +139,7 @@ export default defineComponent({
             </header>
 
             <!-- form -->
-            <form class="new-post-form" action="/api/newPost" method="POST" enctype="multipart/form-data">
+            <form class="new-post-form" action="/api/newPost" method="POST" enctype="multipart/form-data" @submit.prevent="publishPost">
 
                 <!-- Textarea -->
                 <fieldset class="form-group">
