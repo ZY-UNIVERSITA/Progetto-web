@@ -12,10 +12,6 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
-  
-main {
-    flex: 1;
-}
 
 body {
     padding: 0;
@@ -49,30 +45,6 @@ h1 {
     }
 }
 
-/* Home page */
-.auth-buttons {
-    position: absolute;
-    right: 0;
-    top: 7%;
-    transform: translateY(-50%);
-    align-items: center;
-    margin-left: auto;
-    width: auto;
-
-    button {
-        border-radius: 40px;
-        padding: 0.6em 1.2em;
-        font: bold 1em $font-secondary;
-        &.light-mode {
-            @include theme($bg-color-dark, $text-color-dark);
-        }
-        &.dark-mode {
-            @include theme($bg-color-light, $text-color-light);
-        }
-    }
-}
-
-// !!!! DA CORREGGERE LA NAVBAR CHE COPRE H1 E NON SI FISSA !!!!!
 nav {
     box-sizing: border-box;
     width: 100%;
@@ -80,12 +52,13 @@ nav {
     height: 80px;
     position: fixed;
     bottom: 0;
+    top: auto;
 
     @include media($breakpoint-medium) {
-        position: fixed;
+        position: relative;
         bottom: unset;
-        top: 80px;
-        height: 100px;
+        top: 30px;
+        margin-bottom: 45px;
         padding: 0% 1%;
         display: flex;
         justify-content: center;
@@ -119,10 +92,10 @@ nav {
 
         
         @include media($breakpoint-medium) {
-            border-radius: 40px;
-            width: auto;
-            margin: 0 5px;
-            padding: 0 15px;
+            border-radius: 15px;
+            width: 23%;
+            margin: 0 1%;
+
             &.dark-mode {
                 @include theme($bg-color-light, $text-color-light);
             }
@@ -157,6 +130,13 @@ nav {
             font-size: 20px;
             font-weight: bold;
             text-transform: uppercase;
+
+            &.dark-mode {
+                color: $text-color-light;
+            }
+            &.light-mode {
+                color: $text-color-dark;
+            }
           }
         }
     }
@@ -167,35 +147,83 @@ footer {
     margin-bottom: 80px;
     text-align: center;
     font-size: 14px;
+
+    @include media($breakpoint-medium) {
+        font-size: 15px;
+        padding: 0;
+        margin-bottom: 10px;
+    }
 }
 
-article {
-    text-align: left;
-    border-radius: 10px;
-    margin: 1%;
-    padding: 2.5%;
+/* Home page */
+.auth-buttons {
+    position: absolute;
+    right: 0;
+    top: 7%;
+    transform: translateY(-50%);
+    align-items: center;
+    margin-left: auto;
+    width: auto;
 
-    &.dark-mode {
-        @include theme($bg-color-dark, $text-color-dark);
-    }
+    button {
+        border-radius: 40px;
+        padding: 0.6em 1.2em;
+        font-family: $font-secondary;
+        font-weight: bold;
+        font-size: 16px;
 
-    &.light-mode {
-        @include theme($bg-color-light, $text-color-light);
-    }
-
-    header {
-        display: flex;
-        align-items: center;
-
-        .profilePicture {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 5px;
+        @include media($breakpoint-medium) {
+            font-size: 20px;
         }
 
-        p {
-            &.full-name {
+        &.light-mode {
+            @include theme($bg-color-dark, $text-color-dark);
+        }
+        &.dark-mode {
+            @include theme($bg-color-light, $text-color-light);
+        }
+    }
+}
+
+#popularPosts {
+
+    @include media($breakpoint-medium) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 35px;
+    }
+
+    article {
+        text-align: left;
+        border-radius: 10px;
+        margin: 1%;
+        padding: 2.5%;
+    
+        &.dark-mode {
+            @include theme($bg-color-dark, $text-color-dark);
+        }
+    
+        &.light-mode {
+            @include theme($bg-color-light, $text-color-light);
+        }
+    
+        header {
+            display: flex;
+            align-items: center;
+    
+            .profilePicture {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 5px;
+    
+                @include media($breakpoint-medium) {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+    
+            .full-name {
                 margin: 0;
                 font-weight: bold;
                 display: flex;
@@ -203,15 +231,22 @@ article {
 
                 a {
                     text-decoration: none;
+                    color: inherit;
                 }
             }
+        }
 
-            &.dark-mode {
-                color: $text-color-dark;
+        p {
+            font-size: 18px;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
             }
-            &.light-mode {
-                color: $text-color-light;
-            }
+        }
+
+        #comment {
+            fill: white;
+            stroke: black;
         }
     }
 }
@@ -267,12 +302,13 @@ form {
     }
 
     label {
-        font-size: 1em;
+        font-size: 18px;
         margin: 0.5em 0;
         font-family: $font-primary;
         display: block;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
@@ -284,18 +320,24 @@ form {
         margin: 0.5em 0;
         border-radius: 5px;
         border: 1px solid;
-        font-size: 1em;
+        font-size: 18px;
         box-sizing: border-box;
 
         @include media($breakpoint-large) {
+            font-size: 20px;
             margin: 1% 5%;
             width: 90%;
         }
     }
 
     input[type="submit"], input[type="button"] {
+        font-size: 18px;
         font-weight: bold;
         border: none;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
 
         &.light-mode {
             @include theme($bg-color-dark, $text-color-dark);
@@ -320,107 +362,296 @@ form {
 }
 
 /* Add Post page */
-textarea {
-    border: 2px solid;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
-    height: 200px;
-    padding: 15px 0;
-    line-height: 1.5;
-    margin: 0;
-
-    @include media($breakpoint-large) {
-        margin: 1% 5%;
-        width: 90%;
-    }
-}
-
-label [for="imageUpload"], label[for="visibility"], #visibility {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 20px;
-  gap: 10px;
-}
-  
-select#visibility {
-    border-radius: 5px;
-    font-size: 16px;
-    padding: 10px;
-    width: 30%;
-    background-color: white;
-    color: $black-color;
-    font-family: $font-secondary;
-    outline: none;
-}
-
-.cancel-publish button {
-    font-weight: bold;
-    font-size: 16px;
-    border: none;
+.new-post {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    margin-right: 20px;
-    padding: 10px 20px;
-    width: 30%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
     &.light-mode {
-        @include theme($bg-color-dark, $text-color-dark);
-
-        &:hover {
-            background-color: color.scale($bg-color-dark, $lightness: +15%);
-        }
+        background-color: #f9f9f9;
     }
 
     &.dark-mode {
-        @include theme($bg-color-light, $text-color-light);
+        background-color: #333;
+        color: #fff;
+    }
 
-        &:hover {
-            background-color: color.scale($bg-color-light, $lightness: -15%);
+    .new-post-title {
+        text-align: center;
+        font-size: 25px;
+        margin-bottom: 15px;
+
+        @include media($breakpoint-medium) {
+            font-size: 30px;
         }
     }
 
-    &:active {
-        transform: scale(0.98);
+    .new-post-form {
+        display: flex;
+        flex-direction: column;
     }
-}
 
-label [for="imageUpload"] {
-    border-radius: 40px;
-    padding: 10px 20px;
-    width: 20%;
-    font: bold 1em $font-secondary;
-
-    &.light-mode {
-        @include theme($bg-color-dark, $text-color-dark);
-
-        &:hover {
-            background-color: color.scale($bg-color-dark, $lightness: +15%);
+    fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    legend {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    
+        @include media($breakpoint-medium) {
+            font-size: 20px;
         }
     }
 
-    &.dark-mode {
-        @include theme($bg-color-light, $text-color-light);
+    textarea, select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
 
-        &:hover {
-            background-color: color.scale($bg-color-light, $lightness: -15%);
+        &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
         }
     }
 
-    &:active {
-        transform: scale(0.98);
+    select#visibility {
+        border-radius: 5px;
+        font-size: 18px;
+        padding: 10px;
+        width: 30%;
+        background-color: white;
+        color: $black-color;
+        font-family: $font-secondary;
+        outline: none;
+    }
+
+    .image-upload-label {
+        display: inline-block;
+        border-radius: 40px;
+        width: 20%;
+        background-color: #007bff;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+    
+    .file-feedback {
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .form-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
+            }
+        }
+
+        .cancel-btn {
+            background-color: #dc3545;
+            color: #fff;
+        
+            &:hover {
+                background-color: #c82333;
+            }
+        }
+        
+        .publish-btn {
+            background-color: #28a745;
+            color: #fff;
+        
+            &:hover {
+                background-color: #218838;
+            }
+        }
+    }
+
+    .error-message {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 1rem;
     }
 }
 
 /* Search page */
-input[type="search"] {
+.search-container {
     display: flex;
-    width: 90%;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin: 0 auto;
-    padding: 10px 20px;
-    border-radius: 8px;
+    align-items: center;
+    padding: 20px;
+
+    .search-form {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
+
+        @include media($breakpoint-medium) {
+            max-width: 1000px;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #fff;
+
+            .search-input {
+                flex: 1;
+                border: none;
+                outline: none;
+                padding: 10px;
+                font-size: 16px;
+            }
+        }
+    }
+
+    .results-section {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
+
+        @include media($breakpoint-medium) {
+            max-width: 1000px;
+        }
+
+        h2 {
+            font-size: 36px;
+            @include media($breakpoint-medium) {
+                font-size: 40px;
+            }
+        }
+
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 35px;
+            }
+
+            .user-card {
+                display: flex;
+                align-items: center;
+                background-color: #f9f9f9;
+                border: 1px solid #eee;
+                border-radius: 5px;
+                padding: 10px;
+
+                @include media($breakpoint-medium) {
+                    padding: 30px;
+                }
+
+                .user-avatar {
+                    margin-right: 10px;
+                
+                    .avatar-image {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                    }
+                }
+
+                .user-name {
+                    color: $black-color;
+                    font-weight: bold;
+                    font-size: 18px;
+                    margin-bottom: 5px;
+                }
+                
+                .user-username {
+                    color: $dark-grey;
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        
+            .post-card {
+                display: flex;
+                align-items: center;
+                background-color: #f9f9f9;
+                border: 1px solid #eee;
+                border-radius: 5px;
+                padding: 10px;
+
+                @include media($breakpoint-medium) {
+                    padding: 20px;
+                }
+
+                .post-content-container {
+                    width: 100%;
+                
+                    .post-content {
+                        color: $black-color;
+                        font-size: 18px;
+
+                        @include media($breakpoint-medium) {
+                            font-size: 20px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .no-results {
+            font-size: 18px;
+            color: inherit;
+            text-align: center;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
+            }
+        }
+    }
 }
 
 /* Profile page */
@@ -467,6 +698,11 @@ input[type="search"] {
             z-index: 1;
             flex-shrink: 0;
 
+            @include media($breakpoint-medium) {
+                width: 150px;
+                height: 150px;
+            }
+
             .profile-picture {
                 width: 100%;
                 height: 100%;
@@ -511,7 +747,11 @@ input[type="search"] {
     margin-top: 20px;
 
     .theme-label {
-        font-size: 16px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
     }
 
     .switch {
@@ -574,9 +814,13 @@ input[type="search"] {
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             border-bottom: 2px solid transparent;
             transition: color 0.3s, border-bottom 0.3s;
+
+            @include media($breakpoint-medium) {
+                font-size: 20px;
+            }
 
             &.dark-mode {
                 color: $text-color-dark;
@@ -602,40 +846,57 @@ input[type="search"] {
         border-radius: 5px;
         
         &.dark-mode {
-            background: lighten($bg-color-dark, 3%);
+            background: color.scale($bg-color-dark, $lightness: 3%);
         }
     
         &.light-mode {
-            background: darken($bg-color-light, 3%);
+            background: color.scale($bg-color-light, $lightness: -3%);
         }
 
-        &.post {
+        .post {
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
             border-radius: 5px;
+
+            @include media($breakpoint-medium) {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 35px;
+            }
             
             &.dark-mode {
-                background: lighten($bg-color-dark, 5%);
+                background: color.scale($bg-color-dark, $lightness: 5%);;
             }
         
             &.light-mode {
-                background: darken($bg-color-light, 5%);
+                background: color.scale($bg-color-light, $lightness: -5%);
             }
         }
 
-        &.comment, &.shared-post {
+        .comment, .shared-post {
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
             border-radius: 5px;
+
+            p {
+                font-size: 16px;
+
+                @include media($breakpoint-medium) {
+                    font-size: 18px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 35px;
+                }
+            }
             
             &.dark-mode {
-                background: lighten($bg-color-dark, 5%);
+                background: color.scale($bg-color-dark, $lightness: 5%);
             }
         
             &.light-mode {
-                background: darken($bg-color-light, 5%);
+                background: color.scale($bg-color-light, $lightness: -5%);
             }
         }
     }

@@ -46,27 +46,27 @@
   
   <nav :class="`${mode}-mode`">
     <ul>
-      <li>
+      <li :class="`${mode}-mode`">
         <RouterLink to="/">
           <img class="icon" :src="mode === 'dark' ? 'icons/home-l.svg' : 'icons/home-d.svg'" alt="Home"/>
-          <span class="text">Home</span>
+          <span class="text" :class="`${mode}-mode`">Home</span>
         </RouterLink>
       </li>
-      <li>
+      <li :class="`${mode}-mode`">
         <RouterLink to="/search">
           <img class="icon" :src="mode === 'dark' ? 'icons/search-l.svg' : 'icons/search-d.svg'" alt="Search"/>
-          <span class="text">Search</span>
+          <span class="text" :class="`${mode}-mode`">Search</span>
         </RouterLink>
       </li>
-      <li>
+      <li :class="`${mode}-mode`">
         <RouterLink to="/post">
           <img class="icon" :src="mode === 'dark' ? 'icons/add-l.svg' : 'icons/add-d.svg'" alt="Add Post"/>
-          <span class="text">Add Post</span>
+          <span class="text" :class="`${mode}-mode`">Add Post</span>
         </RouterLink></li>
-      <li>
+      <li :class="`${mode}-mode`">
         <RouterLink to="/profile">
           <img class="icon" :src="mode === 'dark' ? 'icons/user-l.svg' : 'icons/user-d.svg'" alt="Profile"/>
-          <span class="text">Profile</span>
+          <span class="text" :class="`${mode}-mode`">Profile</span>
         </RouterLink>
       </li>
     </ul>

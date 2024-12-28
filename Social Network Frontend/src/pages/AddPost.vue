@@ -90,6 +90,43 @@ export default defineComponent({
                 imageInput.value = ''; 
             }
         },
+        async publishPost(event: Event) {
+            event.preventDefault();
+
+            if (!this.form.postContent.trim()) {
+                alert('Content cannot be empty!');
+                return;
+            }
+
+            try {
+                // Crea FormData con i dati del form
+                const formData = new FormData();
+                formData.append('postContent', this.form.postContent);
+                formData.append('visibility', this.form.visibility);
+
+                // Aggiungi le immagini al FormData
+                this.form.images.forEach((image, index) => {
+                    formData.append(`image_${index}`, image.file);
+                });
+
+                // Effettua la richiesta HTTP al server
+                const response = await fetch('/api/newPost', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert('Post published!');
+                    window.location.href = '/'; // Reindirizza alla homepage
+                } else {
+                    const errorText = await response.text();
+                    alert(`Failed to publish post: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Error while publishing post:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
+        },
     },
 });
 </script>
@@ -102,7 +139,7 @@ export default defineComponent({
             </header>
 
             <!-- form -->
-            <form class="new-post-form" action="/api/newPost" method="POST" enctype="multipart/form-data">
+            <form class="new-post-form" action="/api/newPost" method="POST" enctype="multipart/form-data" @submit.prevent="publishPost">
 
                 <!-- Textarea -->
                 <fieldset class="form-group">
@@ -116,7 +153,6 @@ export default defineComponent({
                     <legend>Upload an image</legend>
                     <label for="imageUpload" class="image-upload-label" :class="`${mode}-mode`"
                         v-show="form.images.length === 0">
-                        Add an image
                         <input type="file" id="imageUpload" name="image" @change="uploadImages" hidden ref="imageInput"
                             multiple />
                         {{ form.images.length }}
@@ -140,7 +176,6 @@ export default defineComponent({
                 <!-- decidi la visibilitità -->
                 <fieldset class="form-group">
                     <legend>Post visibility</legend>
-                    <label for="visibility">Visibility</label>
                     <select id="visibility" v-model="form.visibility" name="visibility">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
@@ -163,126 +198,3 @@ export default defineComponent({
         </template>
     </section>
 </template>
-
-
-<style scoped>
-img {
-    width: 50%
-}
-
-.new-post {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.new-post.light-mode {
-    background-color: #f9f9f9;
-}
-
-.new-post.dark-mode {
-    background-color: #333;
-    color: #fff;
-}
-
-.new-post-title {
-    text-align: center;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-}
-
-.new-post-form {
-    display: flex;
-    flex-direction: column;
-}
-
-fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-}
-
-legend {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-textarea,
-select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
-}
-
-.image-upload-label {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.image-upload-label:hover {
-    background-color: #0056b3;
-}
-
-.file-feedback {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* Buttons */
-.form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-}
-
-.btn {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-.cancel-btn:hover {
-    background-color: #c82333;
-}
-
-.publish-btn {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.publish-btn:hover {
-    background-color: #218838;
-}
-
-.error-message {
-    text-align: center;
-    font-weight: bold;
-    margin-top: 1rem;
-}
-</style>
