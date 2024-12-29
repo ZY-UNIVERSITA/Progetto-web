@@ -188,12 +188,17 @@ footer {
 #popularPosts {
 
     @include media($breakpoint-medium) {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 35px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin: 0 auto;
+        max-width: 900px;
+        padding: 20px;
     }
 
     article {
+        width: 100%;
         text-align: left;
         border-radius: 10px;
         margin: 1%;
@@ -240,7 +245,7 @@ footer {
             font-size: 18px;
 
             @include media($breakpoint-medium) {
-                font-size: 20px;
+                font-size: 25px;
             }
         }
 
@@ -252,6 +257,7 @@ footer {
 }
 
 .heart {
+    margin-right: 10px;
     fill: white;
     stroke: black;
     stroke-width: 2;
