@@ -519,10 +519,6 @@ form {
         max-width: 600px;
         margin-bottom: 20px;
 
-        @include media($breakpoint-medium) {
-            max-width: 1000px;
-        }
-
         .search-input-wrapper {
             display: flex;
             align-items: center;
@@ -546,10 +542,6 @@ form {
         max-width: 600px;
         margin-bottom: 20px;
 
-        @include media($breakpoint-medium) {
-            max-width: 1000px;
-        }
-
         h2 {
             font-size: 36px;
             @include media($breakpoint-medium) {
@@ -564,12 +556,6 @@ form {
             padding: 0;
             margin: 0;
             list-style: none;
-
-            @include media($breakpoint-medium) {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 35px;
-            }
 
             .user-card {
                 display: flex;
@@ -598,11 +584,19 @@ form {
                     font-weight: bold;
                     font-size: 18px;
                     margin-bottom: 5px;
+
+                    @include media($breakpoint-medium) {
+                        font-size: 25px;
+                    }
                 }
                 
                 .user-username {
                     color: $dark-grey;
                     font-size: 16px;
+
+                    @include media($breakpoint-medium) {
+                        font-size: 20px;
+                    }
                 }
             }
         }
@@ -614,12 +608,6 @@ form {
             padding: 0;
             margin: 0;
             list-style: none;
-
-            @include media($breakpoint-medium) {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
-            }
         
             .post-card {
                 display: flex;
@@ -639,9 +627,10 @@ form {
                     .post-content {
                         color: $black-color;
                         font-size: 18px;
+                        line-height: 1.5;
 
                         @include media($breakpoint-medium) {
-                            font-size: 20px;
+                            font-size: 25px;
                         }
                     }
                 }
