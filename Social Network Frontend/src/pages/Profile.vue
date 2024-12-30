@@ -60,6 +60,22 @@ export default defineComponent({
                 }
             }
         },
+        async deletePost(postID: string) {
+            try {
+                await axios.delete(`/api/posts/${postID}`);
+                this.posts = this.posts.filter(post => post.post_id !== postID); // Rimuovi il post localmente
+            } catch (e: any) {
+                console.error("Error deleting post: ", e);
+            }
+        },
+        async deleteComment(commentID: number) {
+            try {
+                await axios.delete(`/api/comments/${commentID}`);
+                this.comments = this.comments.filter(comment => comment.id !== commentID); // Rimuovi il commento localmente
+            } catch (e: any) {
+                console.error("Error deleting comment: ", e);
+            }
+        },
         goToPost(postID: string) {
             this.$router.push({
                 name: 'SinglePost',
@@ -107,6 +123,7 @@ export default defineComponent({
                         <template v-for="post in posts">
                             <SinglePostComponent class="post" :post="post" :user="user" :class="`${mode}-mode`"
                                 v-on:click="goToPost(post.post_id)"></SinglePostComponent>
+                            <button @click="deletePost(post.post_id)" class="delete-btn">Delete</button>
                         </template>
                     </section>
                 </template>
@@ -117,6 +134,7 @@ export default defineComponent({
                         <template v-for="comment in comments">
                             <article class="comment" :class="`${mode}-mode`">
                                 <p>{{ comment.text }}</p>
+                                <button @click="deleteComment(comment.id)" class="delete-btn">Delete</button>
                             </article>
                         </template>
                     </section>
