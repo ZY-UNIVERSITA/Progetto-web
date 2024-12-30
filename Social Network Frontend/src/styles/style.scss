@@ -37,6 +37,7 @@ h1 {
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
+
     &.dark-mode {
         color: $text-color-dark;
     }
@@ -748,14 +749,23 @@ form {
         }
 
         #user-info {
-            font-size: 1.5rem;
+            font-size: 25px;
             font-weight: bold;
             margin-bottom: 10px;
+
+            @include media($breakpoint-medium) {
+                font-size: 35px;
+            }
         }
 
         .username {
+            font-size: 20px;
             color: #555;
             margin-bottom: 10px;
+
+            @include media($breakpoint-medium) {
+                font-size: 30px;
+            }
         }
     }
 
