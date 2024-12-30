@@ -51,7 +51,3 @@
         </template> 
     </section>
 </template>
-
-<style lang="scss">
-@use "../styles/style.scss";
-</style>
