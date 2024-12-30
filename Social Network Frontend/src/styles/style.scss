@@ -981,6 +981,77 @@ form {
 
 }
 
+/* Settings page */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  
+    .settings-section {
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+        font-size: 25px;
+
+        @include media($breakpoint-medium) {
+            font-size: 30px;
+        }
+    }
+  
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
+    }
+  
+    input {
+      display: block;
+      height: 20px;
+      width: 100%;
+      max-width: 250px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  
+    button {
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
+    }
+  
+    .update-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+  
+    .delete-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+}  
+
 /* Not found page */
 .NotFound {
     font-weight: bolder;

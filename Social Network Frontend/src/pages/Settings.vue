@@ -9,8 +9,13 @@
         email: '',
       });
   
-      const updateInfo = () => {
-        alert(`Informazioni aggiornate: ${userInfo.username}, ${userInfo.email}`);
+      const updateName = () => {
+        alert(`Informazioni aggiornate`);
+        // Logica per inviare i dati aggiornati al backend
+      };
+
+      const updateEmail = () => {
+        alert(`Informazioni aggiornate`);
         // Logica per inviare i dati aggiornati al backend
       };
   
@@ -26,7 +31,7 @@
         }
       };
   
-      return { userInfo, updateInfo, changePassword, deleteAccount };
+      return { userInfo, updateName, updateEmail, changePassword, deleteAccount };
     },
   });
 </script>
@@ -41,45 +46,27 @@
           Nome utente:
           <input v-model="userInfo.username" type="text" placeholder="Inserisci nuovo nome utente" />
         </label>
+        <button class="update-button" @click="updateName">Aggiorna nome</button>
         <label>
           Email:
           <input v-model="userInfo.email" type="email" placeholder="Inserisci nuova email" />
         </label>
-        <button @click="updateInfo">Aggiorna Informazioni</button>
+        <button class="update-button" @click="updateEmail">Aggiorna email</button>
     </section>
   
     <!-- Cambia password -->
     <section class="settings-section">
         <h2>Cambia Password</h2>
         <input type="password" placeholder="Inserisci nuova password" minlength="16" />
-        <button @click="changePassword">Cambia Password</button>
+        <button class="update-button" @click="changePassword">Cambia Password</button>
     </section>
   
     <!-- Elimina account -->
-    <div class="settings-section">
+    <section class="settings-section">
         <h2>Elimina Account</h2>
         <button class="delete-button" @click="deleteAccount">Elimina Account</button>
-    </div>
+    </section>
     
     </div>
 </template>
-  
-<style scoped>
-  .settings-container {
-    padding: 20px;
-  }
-  
-  .settings-section {
-    margin-bottom: 20px;
-  }
-  
-  .delete-button {
-    background-color: red;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-</style>
   
