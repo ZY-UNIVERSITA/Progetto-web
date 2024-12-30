@@ -81,6 +81,9 @@ export default defineComponent({
                 name: 'SinglePost',
                 params: { "id": postID }
             });
+        },
+        settings() {
+            this.$router.push({ name: 'Settings' });
         }
     },
     created() {
@@ -96,6 +99,7 @@ export default defineComponent({
     <template v-if="userProfile">
         <ProfileBanner :user="user" :userProfile="userProfile" :toggleTheme="toggleTheme" :mode="mode"></ProfileBanner>
 
+        <div class="buttons-profile">
         <section class="theme-toggle-container">
             <label for="theme-toggle" class="theme-label">Change Theme</label>
             <label class="switch">
@@ -103,6 +107,9 @@ export default defineComponent({
                 <span class="slider"></span>
             </label>
         </section>
+
+        <button @click="settings" class="set-btn">Settings</button>
+        </div>
 
         <section class="profile-tabs">
             <!-- Tab dinavigazione -->
