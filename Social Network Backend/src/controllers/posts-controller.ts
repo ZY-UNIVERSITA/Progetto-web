@@ -384,7 +384,9 @@ export const postImages = async (req: Request, res: Response): Promise<void> => 
 // Eliminare post
 export const deletePost = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
-    const post_id = req.params.post_id as string;
+    const post_id = req.params.id as string;
+
+    console.log(req.params);
 
     if (user === null) {
         console.error("Non si può eliminare il post.");
