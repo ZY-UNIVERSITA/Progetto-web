@@ -9,6 +9,31 @@
         email: '',
       });
   
+
+      /**
+       * api/user/:username per ottenere le info utente:
+       * bio
+       * user birth date
+       * full_name
+       * visibility
+       * 
+       * 
+       */
+
+       /**
+        * /api/account/information/",
+        * per inviare quei 4 dati sopra da aggiornare.
+        */
+
+        /**
+         * api/account/password/"
+         * per poter aggiornare la password
+        */
+       /**
+        * /api/account/delete/",
+        * per poter eliminare l'account
+         */
+        
       const updateName = () => {
         alert(`Informazioni aggiornate`);
         // Logica per inviare i dati aggiornati al backend
