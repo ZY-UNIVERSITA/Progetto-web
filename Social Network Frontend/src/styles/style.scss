@@ -37,6 +37,7 @@ h1 {
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
+
     &.dark-mode {
         color: $text-color-dark;
     }
@@ -748,14 +749,23 @@ form {
         }
 
         #user-info {
-            font-size: 1.5rem;
+            font-size: 25px;
             font-weight: bold;
             margin-bottom: 10px;
+
+            @include media($breakpoint-medium) {
+                font-size: 35px;
+            }
         }
 
         .username {
+            font-size: 20px;
             color: #555;
             margin-bottom: 10px;
+
+            @include media($breakpoint-medium) {
+                font-size: 30px;
+            }
         }
     }
 
@@ -771,6 +781,28 @@ form {
         p {
             display: inline-block;
             margin-right: 1rem;
+        }
+    }
+}
+
+.buttons-profile {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 100px;
+    padding: 10px;
+
+    .set-btn {
+        width: auto;
+        height: 34px;
+        margin-top: 20px;
+        font-size: 18px;
+        background-color: $orange;
+        border-radius: 10%;
+        font-family: $font-primary;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
         }
     }
 }
@@ -895,12 +927,6 @@ form {
             padding: 10px;
             border: 1px solid;
             border-radius: 5px;
-
-            @include media($breakpoint-medium) {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 35px;
-            }
             
             &.dark-mode {
                 background: color.scale($bg-color-dark, $lightness: 5%);;
@@ -910,7 +936,22 @@ form {
                 background: color.scale($bg-color-light, $lightness: -5%);
             }
         }
+        
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
 
+            &:hover {
+                background-color: darkred;
+            }
+        }
+        
         .comment, .shared-post {
             margin-bottom: 10px;
             padding: 10px;
@@ -939,6 +980,77 @@ form {
     }
 
 }
+
+/* Settings page */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  
+    .settings-section {
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+        font-size: 25px;
+
+        @include media($breakpoint-medium) {
+            font-size: 30px;
+        }
+    }
+  
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
+    }
+  
+    input {
+      display: block;
+      height: 20px;
+      width: 100%;
+      max-width: 250px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  
+    button {
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 18px;
+
+        @include media($breakpoint-medium) {
+            font-size: 20px;
+        }
+    }
+  
+    .update-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+  
+    .delete-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+}  
 
 /* Not found page */
 .NotFound {
