@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
-import { Post, User, UserToken } from '../utils/types';
+import { Post, User, UserToken, Comment } from '../utils/types';
 import SinglePostComponent from '../components/singlePostComponent.vue';
 import ProfileBanner from '../components/ProfileBanner.vue';
 
@@ -27,17 +27,11 @@ export default defineComponent({
     data() {
         return {
             posts: [] as Post[],
-            tabs: ["Posts", "Comments", "Shared Posts"],
+            tabs: ["Posts", "Comments" ],
             activeTab: "Posts",
 
-            comments: [
-                { id: 1, text: "prova 1" },
-                { id: 2, text: "prova 2." },
-            ],
-            sharedPosts: [
-                { id: 1, content: "prova prova 1" },
-                { id: 2, content: "prova prova 2." },
-            ],
+            comments: [] as Comment[],
+
             userProfile: null as User | null
         }
     },
@@ -46,6 +40,14 @@ export default defineComponent({
             try {
                 const results: any = await axios.get('/api/posts/user/' + this.user.username);
                 this.posts = results.data;
+            } catch (e: any) {
+                console.error(e);
+            }
+        },
+        async getComments() {
+            try {
+                const results: any = await axios.get('/api/comments/user/' + this.user.username);
+                this.comments = results.data;
             } catch (e: any) {
                 console.error(e);
             }
@@ -62,7 +64,8 @@ export default defineComponent({
         },
         async deletePost(postID: string) {
             try {
-                await axios.delete(`/api/posts/${postID}`);
+                console.log(postID);
+                await axios.delete(`/api/post/${postID}`);
                 this.posts = this.posts.filter(post => post.post_id !== postID); // Rimuovi il post localmente
             } catch (e: any) {
                 console.error("Error deleting post: ", e);
@@ -70,8 +73,9 @@ export default defineComponent({
         },
         async deleteComment(commentID: number) {
             try {
-                await axios.delete(`/api/comments/${commentID}`);
-                this.comments = this.comments.filter(comment => comment.id !== commentID); // Rimuovi il commento localmente
+                console.log(commentID);
+                await axios.delete(`/api/comment/${commentID}`);
+                this.comments = this.comments.filter(comment => comment.comment_id !== commentID); // Rimuovi il commento localmente
             } catch (e: any) {
                 console.error("Error deleting comment: ", e);
             }
@@ -90,6 +94,7 @@ export default defineComponent({
         if (this.user !== null) {
             this.getUserProfile();
             this.getPosts();
+            this.getComments();
         }
     }
 });
@@ -140,19 +145,8 @@ export default defineComponent({
                         <h2>Comments</h2>
                         <template v-for="comment in comments">
                             <article class="comment" :class="`${mode}-mode`">
-                                <p>{{ comment.text }}</p>
-                                <button @click="deleteComment(comment.id)" class="delete-btn">Delete</button>
-                            </article>
-                        </template>
-                    </section>
-                </template>
-
-                <template v-if="activeTab === 'Shared Posts'">
-                    <section id="shared_posts">
-                        <h2>Shared Posts</h2>
-                        <template v-for="sharedPost in sharedPosts">
-                            <article class="shared-post" :class="`${mode}-mode`">
-                                <p>{{ sharedPost.content }}</p>
+                                <p>{{ comment.content }}</p>
+                                <button @click="deleteComment(comment.comment_id)" class="delete-btn">Delete</button>
                             </article>
                         </template>
                     </section>

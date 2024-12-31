@@ -2,12 +2,46 @@ import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
 import { Follower, Post, User, userSearch } from "../utils/types";
 import { getUser } from "../utils/auth";
-import { isFriend, isPostOwner } from "../utils/utils";
 
 const PUBLIC_VISIBILITY: string = "public";
 const PRIVATE_VISIBILITY: string = "private";
 
 // First class function con funzione anonima di ts che ritorna una promise di tipo void
+export const getUsersComments = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+    const username: string = req.params.username;
+
+    if (user == null) {
+        res.status(401).send("You don't have permission to do that.");
+        return;
+    }
+
+    const userQuerySQL = `
+        SELECT u.username, u.user_id
+        FROM users AS u
+        WHERE u.username LIKE ?
+    `;
+
+    const [ searchedUserResult ]: User[] = await executeQuerySQL(req, res, userQuerySQL, false, username);
+
+    console.log(searchedUserResult)
+
+    if (!searchedUserResult) {
+        res.status(404).send("No users found.");
+        return;
+    }
+
+    // controlla se il like è già presente
+    const querySQL: string = `
+        SELECT *
+        FROM posts_comments as pc
+        WHERE pc.user_id = ?
+    `;
+
+    await executeQuerySQL(req, res, querySQL, true, searchedUserResult.user_id);        
+}
+
+
 export const postLikeAdd = async (req: Request, res: Response): Promise<void> => {
     const { post_id } = req.body;
 
@@ -20,8 +54,7 @@ export const postLikeAdd = async (req: Request, res: Response): Promise<void> =>
     }
 
     // controlla se il like è già presente
-    const likeQuerySQL: string = 
-    `
+    const likeQuerySQL: string = `
         SELECT *
         FROM posts_likes as pl
         WHERE pl.post_id LIKE ? AND pl.user_id LIKE ?
@@ -104,7 +137,7 @@ export const getPostComments = async (req: Request, res: Response): Promise<void
     // Controlla se il like è presente
     const querySQL: string = 
     `
-        SELECT pc.created_at, pc.content, u.username, u.full_name, u.profile_picture
+        SELECT pc.comment_id, pc.created_at, pc.content, u.username, u.full_name, u.profile_picture
         FROM posts_comments as pc JOIN users as u ON (pc.user_id = u.user_id)
         WHERE pc.post_id LIKE ?
     `;
@@ -266,12 +299,48 @@ export const search = async (req: Request, res: Response): Promise<void> => {
         console.log(postsResults)
 
         // Combina i risultati
-        const combinedResult: (userSearch[] | Post[] )[] = 
+        const combinedResult: (userSearch[] | Post[])[] = 
             [ usersResults, postsResults,] ;
 
         res.status(200).send(combinedResult);
-    } catch (error) {
+    } catch (error: any) {
         console.error("C'è qualcosa che non va. Ricontrollare: ", error);
+        res.status(500).send("Server error.");
+    }
+};
+
+export const deleteComment = async (req: Request, res: Response): Promise<void> => {
+    
+    try {
+        const user: User | null = getUser(req, res);
+        const comment_id = req.params.id as string;
+
+        console.log("prova" + comment_id + user);
+
+        if (user === null) {
+            console.error("Non può eliminare.");
+            res.status(401).send("You don't have the permissions to do that.");
+            return;
+        } else {
+            const querySQL: string =`
+            DELETE FROM posts_comments
+            WHERE posts_comments.comment_id = ? AND posts_comments.user_id = ?
+            `;
+
+            const result = await executeQuerySQL(req, res, querySQL, false, comment_id, user.user_id);
+
+            // Conta il numero di righe eliminate.
+            if (result.affectedRows > 0) {
+                console.log("Il commento è stato eliminato con successo.");
+                res.status(200).send("Tutto ok");
+                return;
+            }
+
+            console.error("Errore nell'eliminazione del commento.");
+            res.status(404).send("Post not found.")
+        }    
+    } catch (error: any) {
+        console.error(`Errore nell'eliminazione del commento ${req.params.post_id}`, error);
         res.status(500).send("Server error.");
     }
 };

@@ -11,7 +11,15 @@ export interface RegisterRequest {
     username: string,
     email: string,
     password: string,
-    birthDate: string
+    birthDate: string,
+    bio: string,
+    visibility: visibility,
+    full_name: string
+}
+
+enum visibility {
+    PUBLIC = "public",
+    PRIVATE = "private"
 }
 
 export interface UserUsernameEmail {
