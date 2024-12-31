@@ -59,9 +59,20 @@
             <label for="password">Enter your password*: </label>
             <input type="password" name="password" id="password" minlength="16" required />
 
+            <label for="bio">Describe yourself: </label>
+            <textarea id="bio" name="bio" rows="4" cols="50">
+                Default bio
+            </textarea>
+
             <label for="birthDate">Enter your birth date: </label>
             <input type="date" name="birthDate" id="birthDate" required />
         
+            <label for="visibility">Choose Visibility:</label> 
+            <select id="visibility" name="visibility"> 
+                <option value="public">Public</option> 
+                <option value="private">Private</option> 
+            </select>
+
             <input type="submit" value="Register" :class="`${mode}-mode`"/>
         </form>
 
