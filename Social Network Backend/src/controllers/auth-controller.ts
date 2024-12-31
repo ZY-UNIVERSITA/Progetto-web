@@ -18,7 +18,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     /* CONTROLLA SE L'UTENTE E/O EMAIL è GIà PRESENTE */
     // se l'utente non è loggato allora assegna a 2 variabili i valori delle chiavi con lo stesso nome situati nell'oggetto req.body
-    const { username, email, password, birthDate }: RegisterRequest = req.body;
+    const { username, email, password, birthDate, bio, visibility, full_name }: RegisterRequest = req.body;
 
     const querySQL: string = 
     `
@@ -49,11 +49,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const querySQLInsertIntoUser: string =
     `
-        INSERT INTO users (username, birth_date)
-        VALUES (?, ?)
+        INSERT INTO users (username, birth_date, bio, visibility, full_name)
+        VALUES (?, ?, ?, ?, ?)
     `;
 
-    const insertUsername: any = await executeQuerySQL(req, res, querySQLInsertIntoUser, false, username, birthDate);
+    const insertUsername: any = await executeQuerySQL(req, res, querySQLInsertIntoUser, false, username, birthDate, bio, visibility, full_name);
 
     const user_id: string = insertUsername.insertId;
 
