@@ -363,7 +363,7 @@ form {
         }
     }
 
-    input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="submit"], input[type="button"] {
+    input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="submit"], input[type="button"], textarea, select {
         width: 100%;
         padding: 0.8em;
         margin: 0.5em 0;
@@ -380,13 +380,8 @@ form {
     }
 
     input[type="submit"], input[type="button"] {
-        font-size: 18px;
         font-weight: bold;
         border: none;
-
-        @include media($breakpoint-medium) {
-            font-size: 20px;
-        }
 
         &.light-mode {
             @include theme($bg-color-dark, $text-color-dark);
@@ -407,6 +402,10 @@ form {
         &:active {
             transform: scale(0.98);
         }
+    }
+
+    input[value="Register"] {
+        margin-top: 20px;
     }
 }
 
@@ -952,7 +951,7 @@ form {
             }
         }
         
-        .comment, .shared-post {
+        .comment {
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
