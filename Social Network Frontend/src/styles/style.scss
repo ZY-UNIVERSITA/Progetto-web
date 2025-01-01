@@ -921,7 +921,15 @@ form {
             background: color.scale($bg-color-light, $lightness: -3%);
         }
 
+        .post-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
         .post {
+            flex: 1;
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;
@@ -952,6 +960,9 @@ form {
         }
         
         .comment {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid;

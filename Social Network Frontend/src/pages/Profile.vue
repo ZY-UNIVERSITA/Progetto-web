@@ -133,9 +133,11 @@ export default defineComponent({
                     <h2>Posts</h2>
                     <section id="posts">
                         <template v-for="post in posts">
-                            <SinglePostComponent class="post" :post="post" :user="user" :class="`${mode}-mode`"
-                                v-on:click="goToPost(post.post_id)"></SinglePostComponent>
-                            <button @click="deletePost(post.post_id)" class="delete-btn">Delete</button>
+                            <div class="post-container">
+                                <SinglePostComponent class="post" :post="post" :user="user" :class="`${mode}-mode`"
+                                    v-on:click="goToPost(post.post_id)"></SinglePostComponent>
+                                <button @click="deletePost(post.post_id)" class="delete-btn">Delete</button>
+                            </div>
                         </template>
                     </section>
                 </template>
