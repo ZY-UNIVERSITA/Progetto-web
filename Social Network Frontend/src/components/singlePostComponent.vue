@@ -92,6 +92,9 @@ export default defineComponent({
 
             return dateString;
         },
+        clearImages() {
+            this.images = []; // Svuota le immagini localmente
+        },
     }, mounted() {
         this.addedLike = this.post.post_liked == 1 ? true : false;
         this.getPostImages();

@@ -66,9 +66,7 @@ export default defineComponent({
 
 
             <label for="bio">Describe yourself: </label>
-            <textarea id="bio" name="bio" rows="4" cols="50">
-                Default bio
-            </textarea>
+            <textarea id="bio" name="bio" rows="4" cols="50">Default bio </textarea>
 
             <label for="birthDate">Enter your birth date: </label>
             <input type="date" name="birthDate" id="birthDate" required />
