@@ -125,7 +125,7 @@ export default defineComponent({
 
             <template v-if="images.length > 0">
                 <template v-for="image in images">
-                    <img class="" :src="'/usersUploads/' + image.url" alt="postImage" />
+                    <img class="user_uploaded_image" :src="'/usersUploads/' + image.url" alt="postImage" />
                 </template>
             </template>
 
@@ -147,3 +147,9 @@ export default defineComponent({
         </section>
     </article>
 </template>
+
+<style lang="css" scoped>
+.user_uploaded_image {
+    width: 50%;
+}
+</style>
