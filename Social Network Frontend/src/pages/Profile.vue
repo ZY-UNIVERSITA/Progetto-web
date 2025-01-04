@@ -112,15 +112,15 @@ export default defineComponent({
         <ProfileBanner :user="user" :userProfile="userProfile" :toggleTheme="toggleTheme" :mode="mode"></ProfileBanner>
 
         <div class="buttons-profile">
-        <section class="theme-toggle-container">
-            <label for="theme-toggle" class="theme-label">Change Theme</label>
-            <label class="switch">
-                <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
-                <span class="slider"></span>
-            </label>
-        </section>
+            <section class="theme-toggle-container">
+                <label for="theme-toggle" class="theme-label">Change Theme</label>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
+                    <span class="slider"></span>
+                </label>
+            </section>
 
-        <button @click="settings" class="set-btn">Settings</button>
+            <button @click="settings" class="set-btn">Settings</button>
         </div>
 
         <section class="profile-tabs">
