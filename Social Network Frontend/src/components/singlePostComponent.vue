@@ -121,7 +121,7 @@ export default defineComponent({
         </header>
 
         <section>
-            <p class="flex-item">{{ post?.content }}</p>
+            <p class="content" >{{ post?.content }}</p>
 
             <template v-if="images.length > 0">
                 <template v-for="image in images">

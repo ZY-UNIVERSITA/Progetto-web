@@ -239,6 +239,9 @@ footer {
         max-width: 900px;
         padding: 20px;
     }
+}
+
+#popularPosts, #userPosts {
 
     article {
         width: 100%;
@@ -989,6 +992,26 @@ form {
         }
     }
 
+}
+
+/* Profile Banner */
+.follow, .unfollow {
+    border-radius: 40px;
+    padding: 0.6em 1.2em;
+    font-family: $font-secondary;
+    font-weight: bold;
+    font-size: 16px;
+
+    @include media($breakpoint-medium) {
+        font-size: 18px;
+    }
+
+    &.light-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
+    &.dark-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
 }
 
 /* Settings page */

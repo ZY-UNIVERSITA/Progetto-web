@@ -16,7 +16,8 @@ export default defineComponent({
         userProfile: {
             type: Object as PropType<User | null>,
             required: false
-        }
+        },
+        mode: String
     },
     data() {
         return {
@@ -101,8 +102,8 @@ export default defineComponent({
                         </p>
                     </section>
                     <section>
-                        <button v-if="isFriend === 'no'">Follow</button>
-                        <button v-else-if="isFriend === 'si'">Unfollow</button>
+                        <button v-if="isFriend === 'no'" class="follow" :class="`${mode}-mode`">Follow</button>
+                        <button v-else-if="isFriend === 'si'" class="unfollow" :class="`${mode}-mode`">Unfollow</button>
                     </section>
                 </section>
             </main>

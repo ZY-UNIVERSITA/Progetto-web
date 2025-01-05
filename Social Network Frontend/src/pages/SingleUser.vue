@@ -67,7 +67,7 @@ import ProfileBanner from '../components/ProfileBanner.vue';
         <template v-if="userProfile">   
             <ProfileBanner :user="user"></ProfileBanner>
 
-            <section>
+            <section id="userPosts">
                 <template v-if="userProfile.visibility === 'private' && user === null">
                     <p>L'utente cercato è privato. Effettua il login oppure registrati per continuare.</p>
                 </template>
