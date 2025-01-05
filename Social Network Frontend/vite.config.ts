@@ -8,7 +8,8 @@ export default defineConfig({
     proxy: {
       "/api": "http://localhost:3000",
       "/img": "http://localhost:3000",
-      "/usersUploads": "http://localhost:3000"
+      "/usersUploads": "http://localhost:3000",
+      "/siteUpload": "http://localhost:3000"
     }
   },
   css: {
