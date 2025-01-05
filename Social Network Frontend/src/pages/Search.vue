@@ -63,13 +63,14 @@ export default defineComponent({
     <section class="search-container">
         <section class="search-form">
             <form @submit.prevent  class="search-input-wrapper">
-                <input type="search" v-model="searchQuery" placeholder="Cerca..." class="search-input" />
+                <label for="searchInput" class="visually-hidden">Search</label>
+                <input id="searchInput" type="search" v-model="searchQuery" placeholder="Cerca..." class="search-input" />
             </form>
         </section>
 
         <section id="userResults" class="results-section">
             <template v-if="users[0] !== undefined">
-                <h2 >Utenti Trovati</h2>
+                <h2>Utenti Trovati</h2>
                 <ul class="user-list">
                     <li v-for="user in users" :key="user.username" class="user-card">
                         <figure class="user-avatar">
@@ -103,3 +104,26 @@ export default defineComponent({
         </section>
     </section>
 </template>
+
+<style lang="css" scoped>
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#searchInput::placeholder {
+    color: black;
+}
+
+img[alt]::before {
+    content: attr(alt); /* Mostra il testo alternativo come contenuto visibile */
+    color: black;
+}
+</style>

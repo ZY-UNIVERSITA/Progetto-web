@@ -636,7 +636,7 @@ form {
                 }
                 
                 .user-username {
-                    color: $dark-grey;
+                    color: $black-color;
                     font-size: 16px;
 
                     @include media($breakpoint-medium) {
@@ -664,6 +664,10 @@ form {
 
                 @include media($breakpoint-medium) {
                     padding: 20px;
+                }
+
+                .post-author {
+                    color: $black-color;
                 }
 
                 .post-content-container {
