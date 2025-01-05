@@ -149,6 +149,23 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+header {
+    display: flex;
+    align-items: center;
+    
+    .full-name {
+        margin: 0;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+}
+
 .user_uploaded_image {
     width: 50%;
 }

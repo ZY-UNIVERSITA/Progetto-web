@@ -78,3 +78,21 @@ import CommentComponent from '../components/CommentComponent.vue';
         </template>
     </section>
 </template>
+
+<style lang="css" scoped>
+#post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+}
+
+</style>
