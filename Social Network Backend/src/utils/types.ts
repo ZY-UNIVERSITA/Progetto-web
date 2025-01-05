@@ -72,3 +72,14 @@ export interface userSearch {
     full_name: string,
     profile_picture: string
 }
+
+export interface modificableInfo {
+    full_name: string,
+    bio: string,
+    visibility: visibility
+}
+
+export interface newOldPassword {
+    oldPassword: string,
+    newPassword: string,
+}
