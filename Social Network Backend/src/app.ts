@@ -9,13 +9,12 @@ import cookieParser from "cookie-parser"
 
 import bodyParser from "body-parser"
 
-import multer from "multer"
-
 // importazione dei vari router
 import usersRouter from "./routes/users-router"
 import postsRouter from "./routes/posts-router"
 import authRouter from "./routes/auth-router"
 import interactionRouter from "./routes/interaction-router"
+import accountRouter from "./routes/account-router"
 
 
 // crea una variabile app di tipo Express quindi implementa l'intefaccia Express con i relativi campi e metodi
@@ -44,6 +43,7 @@ app.use(usersRouter);
 app.use(postsRouter);
 app.use(authRouter);
 app.use(interactionRouter);
+app.use(accountRouter);
 
 
 /* SOLO PROVA. POI ELEMINARE */

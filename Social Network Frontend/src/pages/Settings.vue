@@ -1,13 +1,19 @@
 <script lang="ts">
 import axios from 'axios';
-import { defineComponent } from 'vue';
-import { User } from '../utils/types';
+import { defineComponent, PropType } from 'vue';
+import { User, UserToken } from '../utils/types';
   
   export default defineComponent({
     name: 'Settings',
+    props: {
+        user: {
+            type: Object as PropType<UserToken>,
+            required: true,
+        },
+    },
     data() {
         return {
-          user: {} as User,
+          userInfo: {} as User,
 
           oldPassword: '',
           newPassword: ''
@@ -17,7 +23,7 @@ import { User } from '../utils/types';
       async loadUserInfo() {
         try {
           const response = await axios.get(`/api/user/${this.user.username}`);
-          this.user = response.data;
+          this.userInfo = response.data[0];
         } catch (error) {
           console.error('Errore nel caricare le informazioni utente:', error);
         }
@@ -25,10 +31,9 @@ import { User } from '../utils/types';
       async updateInfo() {
         try {
           const updatedUser = {
-            full_name: this.user.full_name,
-            birth_date: this.user.birth_date,
-            bio: this.user.bio,
-            visibility: this.user.visibility
+            full_name: this.userInfo.full_name,
+            bio: this.userInfo.bio,
+            visibility: this.userInfo.visibility
           };
 
           await axios.put('/api/account/information/', updatedUser);
@@ -75,9 +80,11 @@ import { User } from '../utils/types';
             alert('Si è verificato un errore durante l\'eliminazione dell\'account.');
           }
         }
-      }
+      },
   },
-  created() { this.loadUserInfo(); }
+  created() { 
+    this.loadUserInfo(); 
+  }
 });
 </script>
 
@@ -85,23 +92,19 @@ import { User } from '../utils/types';
   <div class="settings-container">
 
     <!-- Modifica informazioni -->
-    <section class="settings-section" v-if="user">
+    <section class="settings-section" v-if="userInfo">
       <h2>Modifica Informazioni</h2>
       <label>
         Full name:
-        <input v-model="user.full_name" type="text" placeholder="Inserisci nuovo nome" />
-      </label>
-      <label>
-        Birth date:
-        <input v-model="user.birth_date" type="date" placeholder="Inserisci nuova data di nascita" />
+        <input v-model="userInfo.full_name" type="text" placeholder="Inserisci nuovo nome" />
       </label>
       <label>
         Bio:
-        <input v-model="user.bio" type="text" placeholder="Inserisci nuovo bio" />
+        <input v-model="userInfo.bio" type="text" placeholder="Inserisci nuovo bio" />
       </label>
       <label>
         Visibility:
-        <select v-model="user.visibility" name="visibility">
+        <select v-model="userInfo.visibility" name="visibility">
           <option value="public">Public</option>
           <option value="private">Private</option>
         </select>

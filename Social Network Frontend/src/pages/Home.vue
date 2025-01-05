@@ -62,6 +62,7 @@
         <button v-else @click="logout" :class="`${mode}-mode`">Logout</button>
     </div>
     <section id="popularPosts">
+        <h2>Popular posts</h2>
         <template v-for="post in posts">
             <SinglePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
         </template>

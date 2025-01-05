@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import executeQuerySQL from "../utils/querySQL";
-import { Follower, Post, User, userSearch } from "../utils/types";
+import { Follower, modificableInfo, newOldPassword, Post, User, userSearch } from "../utils/types";
 import { getUser, unsetUser } from "../utils/auth";
 import bcrypt from "bcrypt"
 
@@ -11,10 +11,9 @@ export const changeInformation = async (req: Request, res: Response): Promise<vo
     try {
         const user: User | null = getUser(req, res);
 
-        const full_name = req.query.full_name as string;
-        const bio = req.query.bio as string;
-        const birth_date = req.query.birth_date as string;
-        const visibility = req.query.visibility as string;
+        const { full_name, bio, visibility } = req.body as modificableInfo;
+        
+        console.log(full_name, bio, visibility)
 
         if (user === null) {
             console.error("Non si può modificare l'account.");
@@ -23,11 +22,11 @@ export const changeInformation = async (req: Request, res: Response): Promise<vo
         } else {
             const querySQL: string =`
                 UPDATE users
-                SET full_name = ?, bio = ?, births_date = ?, visibility = ?
+                SET full_name = ?, bio = ?, visibility = ?
                 WHERE users.user_id = ?
             `;
 
-            const result = await executeQuerySQL(req, res, querySQL, false, full_name, bio, birth_date, visibility, user.user_id);
+            const result = await executeQuerySQL(req, res, querySQL, false, full_name, bio, visibility, user.user_id);
 
             // Conta il numero di righe eliminate.
             if (result.affectedRows > 0) {
@@ -56,8 +55,9 @@ export const changeInformation = async (req: Request, res: Response): Promise<vo
 export const changePassword = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: User | null = getUser(req, res);
-        const oldPassword = req.query.oldPassword as string;
-        const newPassword = req.query.newPassword as string;
+        const { oldPassword, newPassword } = req.body as newOldPassword;
+
+        console.log(oldPassword, newPassword);
 
         if (user === null) {
             console.error("Non si può cambiare la password.");
@@ -71,10 +71,12 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
             `;
 
             const result = await executeQuerySQL(req, res, querySQL, false, user.user_id);
+            
+            console.log(result[0]);
 
             // Conta il numero di righe eliminate.
             if (result.length > 0) {
-                const passwordComparison: boolean = await bcrypt.compare(oldPassword, result[0]);
+                const passwordComparison: boolean = await bcrypt.compare(oldPassword, result[0].password_hash);
                 
                 if (passwordComparison) {
                     const passwordHash: string = await bcrypt.hash(newPassword, 10);
@@ -82,7 +84,7 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
                     const querySQL: string =`
                         UPDATE accounts
                         SET password_hash = ?
-                        WHERE users.user_id = ?
+                        WHERE accounts.user_id = ?
                     `;
 
                     const result = await executeQuerySQL(req, res, querySQL, false, passwordHash, user.user_id);
@@ -127,7 +129,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<void> 
         } else {
             const querySQL: string =`
                 DELETE FROM accounts
-                WHERE users.user_id = ?
+                WHERE accounts.user_id = ?
             `;
 
             const result = await executeQuerySQL(req, res, querySQL, false, user.user_id);
