@@ -67,7 +67,8 @@ import CommentComponent from '../components/CommentComponent.vue';
                 <singlePostComponent :post="post" :user="user"></singlePostComponent>
                 <form action="/api/post/addComment/" method="POST" enctype="application/x-www-form-urlencoded">
                     <input type="hidden" name="post_id" :value="post.post_id">
-                    <textarea name="post_comment" placeholder="Enter a comment..." required></textarea>
+                    <label for="postComment" class="visually-hidden">Your comment</label>
+                    <textarea id="postComment" name="post_comment" placeholder="Enter a comment..." required></textarea>
                     <input type="submit" value="Send the comment">
                 </form>
                 <CommentComponent :post="post" :user="user"></CommentComponent>
@@ -78,3 +79,32 @@ import CommentComponent from '../components/CommentComponent.vue';
         </template>
     </section>
 </template>
+
+<style lang="css" scoped>
+#post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    white-space: nowrap;
+}
+</style>

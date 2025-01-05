@@ -144,6 +144,7 @@ export default defineComponent({
                 <!-- Textarea -->
                 <fieldset class="form-group">
                     <legend>Publish a new post</legend>
+                    <label for="postContent" class="visually-hidden">Post Content</label>
                     <textarea id="postContent" v-model="form.postContent" name="postContent" placeholder="Write here..."
                         required></textarea>
                 </fieldset>
@@ -166,16 +167,12 @@ export default defineComponent({
                             </article>
                         </section>
                     </template>
-
                 </fieldset>
-
-                <!-- prova con input piu sempilce per capire perchè non vada
-                <input type="file" name="image" multiple />
-                <input type="submit" value="Invia" /> -->
 
                 <!-- decidi la visibilitità -->
                 <fieldset class="form-group">
                     <legend>Post visibility</legend>
+                    <label for="visibility" class="visually-hidden">Visibility</label>
                     <select id="visibility" v-model="form.visibility" name="visibility">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
@@ -198,3 +195,17 @@ export default defineComponent({
         </template>
     </section>
 </template>
+
+<style lang="css" scoped>
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    white-space: nowrap;
+}
+</style>

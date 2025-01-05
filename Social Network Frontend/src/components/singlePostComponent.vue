@@ -121,7 +121,7 @@ export default defineComponent({
         </header>
 
         <section>
-            <p class="flex-item">{{ post?.content }}</p>
+            <p class="content" >{{ post?.content }}</p>
 
             <template v-if="images.length > 0">
                 <template v-for="image in images">
@@ -149,6 +149,23 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+header {
+    display: flex;
+    align-items: center;
+    
+    .full-name {
+        margin: 0;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+}
+
 .user_uploaded_image {
     width: 50%;
 }

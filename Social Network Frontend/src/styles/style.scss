@@ -239,6 +239,9 @@ footer {
         max-width: 900px;
         padding: 20px;
     }
+}
+
+#popularPosts, #userPosts {
 
     article {
         width: 100%;
@@ -488,7 +491,7 @@ form {
         display: inline-block;
         border-radius: 40px;
         width: 20%;
-        background-color: #007bff;
+        background-color: blue;
         color: #fff;
         padding: 0.5rem 1rem;
         border-radius: 4px;
@@ -496,7 +499,7 @@ form {
         text-align: center;
     
         &:hover {
-            background-color: #0056b3;
+            background-color: darkblue;
         }
     }
     
@@ -633,7 +636,7 @@ form {
                 }
                 
                 .user-username {
-                    color: $dark-grey;
+                    color: $black-color;
                     font-size: 16px;
 
                     @include media($breakpoint-medium) {
@@ -661,6 +664,10 @@ form {
 
                 @include media($breakpoint-medium) {
                     padding: 20px;
+                }
+
+                .post-author {
+                    color: $black-color;
                 }
 
                 .post-content-container {
@@ -759,7 +766,6 @@ form {
 
         .username {
             font-size: 20px;
-            color: #555;
             margin-bottom: 10px;
 
             @include media($breakpoint-medium) {
@@ -770,10 +776,6 @@ form {
 
     .bio {
         margin-bottom: 10px;
-    }
-    
-    .birthdate {
-        color: #777;
     }
 
     .profile-stats {
@@ -945,7 +947,7 @@ form {
         }
         
         .delete-btn {
-            background-color: red;
+            background-color: crimson;
             color: white;
             border: none;
             padding: 5px 10px;
@@ -989,6 +991,26 @@ form {
         }
     }
 
+}
+
+/* Profile Banner */
+.follow, .unfollow {
+    border-radius: 40px;
+    padding: 0.6em 1.2em;
+    font-family: $font-secondary;
+    font-weight: bold;
+    font-size: 16px;
+
+    @include media($breakpoint-medium) {
+        font-size: 18px;
+    }
+
+    &.light-mode {
+        @include theme($bg-color-dark, $text-color-dark);
+    }
+    &.dark-mode {
+        @include theme($bg-color-light, $text-color-light);
+    }
 }
 
 /* Settings page */
@@ -1047,13 +1069,13 @@ form {
     }
   
     .update-button {
-      background-color: #4CAF50;
+      background-color: darkgreen;
       color: white;
       border: none;
     }
   
     .delete-button {
-      background-color: red;
+      background-color: crimson;
       color: white;
       border: none;
       padding: 10px;
