@@ -9,7 +9,9 @@ export interface User extends UserToken {
     birth_date: Date,
     profile_picture: string,
     banner_picture: string,
-    visibility: string
+    visibility: string,
+    follower: number,
+    following: number
 }
 
 export interface Post extends UserToken {

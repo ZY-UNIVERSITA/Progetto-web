@@ -77,14 +77,14 @@ export default defineComponent({
         <section id="user-profile">
             <header id="user-profile-header">
                 <section class="profile-header-bg">
-                    <img src="/images/profile_banner/vue_banner.png" alt="user profile banner" />
+                    <img :src="'siteUpload/profile_banner/banner.jpg'" alt="user profile banner" />
                 </section>
             </header>
 
             <main>
                 <section class="user-info-section">
                     <section class="profile-picture-container">
-                        <img :src="userProfile.profile_picture || '/images/profile_photo/default.svg'"
+                        <img :src="userProfile.profile_picture || 'siteUpload/profile_photo/vite.svg'"
                             :alt="'Profile picture of ' + userProfile.full_name" class="profile-picture" />
                     </section>
                     <section class="user-details">
@@ -102,12 +102,12 @@ export default defineComponent({
                     </p>
                     <section class="profile-stats">
                         <p>
-                            <span class="stat-label">Followers:</span>
-                            <span class="stat-value">Follower count</span>
+                            <span class="stat-label">Followers: </span>
+                            <span class="stat-value">{{ userProfile.follower }}</span>
                         </p>
                         <p>
-                            <span class="stat-label">Following:</span>
-                            <span class="stat-value">Following count</span>
+                            <span class="stat-label">Following: </span>
+                            <span class="stat-value">{{ userProfile.following }}</span>
                         </p>
                     </section>
                     <section v-if="user != null">
