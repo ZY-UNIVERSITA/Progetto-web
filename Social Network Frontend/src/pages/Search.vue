@@ -54,6 +54,12 @@ export default defineComponent({
                 name: 'SinglePost',
                 params: { "id": postID }
             });
+        },
+        goToUser(username: string) {
+            this.$router.push({
+                name: 'SingleProfile',
+                params: { "username": username }
+            })
         }
     },
 });
@@ -76,7 +82,7 @@ export default defineComponent({
                         <figure class="user-avatar">
                             <img :src="'/siteUpload/profile_photo/vite.svg'" alt="Avatar" class="avatar-image" />
                         </figure>
-                        <article class="user-info">
+                        <article class="user-info" @click="goToUser(user.username)">
                             <p class="user-name">{{ user.full_name }}</p>
                             <p class="user-username">@{{ user.username }}</p>
                         </article>
@@ -93,7 +99,7 @@ export default defineComponent({
             <ul v-if="posts[0] !== undefined" class="post-list">
                 <li v-for="post in posts" :key="post.post_id" class="post-card" :class="`${mode}-mode`">
                     <article class="post-content-container" @click="goToPost(post.post_id)">
-                        <p class="post-author">{{ post.username }}</p>
+                        <p class="post-author">@{{ post.username }}</p>
                         <p class="post-content">{{ post.content }}</p>
                     </article>
                 </li>
@@ -106,6 +112,10 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+.post-author {
+    font-size: 25px
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;

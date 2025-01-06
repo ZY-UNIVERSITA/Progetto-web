@@ -17,7 +17,7 @@ const router: Router = createRouter({
     routes: [
         { path: "/", component: Home },
         { path: "/login", name: "Login", component: Login },
-        { path: "/user/:username", component: SingleProfile },
+        { path: "/user/:username", name: "SingleProfile", component: SingleProfile },
         { path: "/search", component: Search },
         { path: "/post", component: AddPost },
         { path: "/post/:id", name: "SinglePost", component: SinglePost },

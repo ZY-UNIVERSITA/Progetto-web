@@ -59,6 +59,7 @@ import CommentComponent from '../components/CommentComponent.vue';
 
 <template>
     <section id="post">
+        <h2>Singolo post</h2>
         <template v-if="loading">
             <p>Page is loading...</p>
         </template>
