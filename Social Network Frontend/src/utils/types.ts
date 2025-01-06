@@ -54,3 +54,13 @@ export interface ImageFile {
     url: string;
     file: File;
 }
+
+export interface loginForm {
+    username: string,
+    email: string,
+    password: string,
+    full_name: string,
+    bio: string,
+    birthDate: Date,
+    visibility: string
+}

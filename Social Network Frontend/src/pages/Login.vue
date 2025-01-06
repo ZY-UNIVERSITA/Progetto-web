@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import axios from "axios"
-import { User } from '../utils/types';
+import { loginForm, User } from '../utils/types';
 
 export default defineComponent({
     name: "Login",
@@ -9,7 +9,16 @@ export default defineComponent({
         return {
             logged: true as boolean,
             username: "" as string,
-            password: "" as string
+            password: "" as string,
+            formData: {
+                username: '',
+                email: '',
+                password: '',
+                full_name: '',
+                bio: '',
+                birthDate: new Date(),
+                visibility: 'public'
+            } as loginForm,
         }
     },
     computed: {
@@ -34,7 +43,15 @@ export default defineComponent({
                 console.error(e.response);
                 console.error(e.request);
             }
-
+        },
+        async register() {
+            const response = await axios.post('/api/auth/register', this.formData);
+            console.log(response.data.message);
+            if (response.data.message == "Registration ok.") {
+                window.location.href = '/';
+            } else {
+                alert("errore nella registrazione");
+            }
         }
     },
     props: {
@@ -50,34 +67,32 @@ export default defineComponent({
             :class="`${mode}-mode`"></input>
     </form>
     <template v-if="logged">
-        <form method="POST" action="/api/auth/register">
+        <form @submit.prevent="register">
             <label for="username">Enter your username*: </label>
-            <input type="text" name="username" id="username" required />
+            <input v-model="formData.username" type="text" id="username" required />
 
             <label for="email">Enter your email*: </label>
-            <input type="email" name="email" id="email" required />
+            <input v-model="formData.email" type="email" id="email" required />
 
             <label for="password">Enter your password*: </label>
-            <input type="password" name="password" id="password" minlength="16" required />
-
+            <input v-model="formData.password" type="password" id="password" minlength="16" required />
 
             <label for="full_name">Enter your full name: </label>
-            <input type="text" name="full_name" id="full_name" />
-
+            <input v-model="formData.full_name" type="text" id="full_name" />
 
             <label for="bio">Describe yourself: </label>
-            <textarea id="bio" name="bio" rows="4" cols="50">Default bio </textarea>
+            <textarea v-model="formData.bio" id="bio" rows="4" cols="50">Default bio</textarea>
 
             <label for="birthDate">Enter your birth date: </label>
-            <input type="date" name="birthDate" id="birthDate" required />
+            <input v-model="formData.birthDate" type="date" id="birthDate" required />
 
             <label for="visibility">Choose Visibility:</label>
-            <select id="visibility" name="visibility">
+            <select v-model="formData.visibility" id="visibility">
                 <option value="public">Public</option>
                 <option value="private">Private</option>
             </select>
 
-            <input type="submit" value="Register" :class="`${mode}-mode`" />
+            <input type="submit" value="Register" :class="`${mode}-mode`"/>
         </form>
 
         <template v-if="user">
