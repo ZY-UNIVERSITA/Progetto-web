@@ -22,7 +22,7 @@ export default defineComponent({
     data() {
         return {
             userProfile: null as User | null,
-            isFriend: "undefined" as string
+            isFriend: false as boolean
         }
     },
     methods: {
@@ -44,15 +44,24 @@ export default defineComponent({
                     try {
                         const isFriendQuery: any = await axios.get("api/friend/search/" + username);
 
+                        console.log(isFriendQuery)
+
                         if (isFriendQuery.data.length === 0) {
-                            this.isFriend = "no";
+                            this.isFriend = false;
                         } else {
-                            this.isFriend = "si";
+                            this.isFriend = true;
                         }
                     } catch (e: any) {
                         console.error(e);
                     }
                 }
+            }
+        },
+        async follow() {
+            const response =  await axios.put("api/follow/" + this.userProfile?.user_id );
+
+            if (response.data === "Tutto ok") {
+                this.isFriend = !this.isFriend;
             }
         }
     },
@@ -101,9 +110,9 @@ export default defineComponent({
                             <span class="stat-value">Following count</span>
                         </p>
                     </section>
-                    <section>
-                        <button v-if="isFriend === 'no'" class="follow" :class="`${mode}-mode`">Follow</button>
-                        <button v-else-if="isFriend === 'si'" class="unfollow" :class="`${mode}-mode`">Unfollow</button>
+                    <section v-if="user != null">
+                        <button v-if="!isFriend" class="follow" :class="`${mode}-mode`" @click="follow">Follow</button>
+                        <button v-else class="unfollow" :class="`${mode}-mode`" @click="follow">Unfollow</button>
                     </section>
                 </section>
             </main>
