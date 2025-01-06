@@ -85,7 +85,8 @@ nav {
     li {
         justify-content: center;
         align-items: center;
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
         box-sizing: border-box;
         width: 25%;
         height: 80px;
@@ -107,7 +108,10 @@ nav {
     }
 
     a {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         height: 100%;
         box-sizing: border-box;
@@ -604,11 +608,19 @@ form {
 
             .user-card {
                 display: flex;
+                color: inherit;
                 align-items: center;
-                background-color: #f9f9f9;
-                border: 1px solid #eee;
+                border: 1px solid;
                 border-radius: 5px;
                 padding: 10px;
+                
+                &.dark-mode {
+                    background: color.scale($bg-color-dark, $lightness: 5%);
+                }
+
+                &.light-mode {
+                    background: color.scale($bg-color-light, $lightness: -2%);
+                }
 
                 @include media($breakpoint-medium) {
                     padding: 30px;
@@ -624,7 +636,6 @@ form {
                 }
 
                 .user-name {
-                    color: $black-color;
                     font-weight: bold;
                     font-size: 18px;
                     margin-bottom: 5px;
@@ -635,7 +646,6 @@ form {
                 }
                 
                 .user-username {
-                    color: $black-color;
                     font-size: 16px;
 
                     @include media($breakpoint-medium) {
@@ -656,24 +666,26 @@ form {
             .post-card {
                 display: flex;
                 align-items: center;
-                background-color: #f9f9f9;
-                border: 1px solid #eee;
+                border: 1px solid;
                 border-radius: 5px;
                 padding: 10px;
 
-                @include media($breakpoint-medium) {
-                    padding: 20px;
+                &.dark-mode {
+                    background: color.scale($bg-color-dark, $lightness: 5%);
                 }
 
-                .post-author {
-                    color: $black-color;
+                &.light-mode {
+                    background: color.scale($bg-color-light, $lightness: -2%);
+                }
+
+                @include media($breakpoint-medium) {
+                    padding: 20px;
                 }
 
                 .post-content-container {
                     width: 100%;
                 
                     .post-content {
-                        color: $black-color;
                         font-size: 18px;
                         line-height: 1.5;
 
