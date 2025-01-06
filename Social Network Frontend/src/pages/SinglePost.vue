@@ -22,6 +22,10 @@ import CommentComponent from '../components/CommentComponent.vue';
             return {
                 post: null as Post | null,
                 loading: true as boolean,
+                comment_data: {
+                    post_comment: "" as string,
+                    post_id: "" as string
+                }
             }
         },
         methods: {
@@ -30,6 +34,10 @@ import CommentComponent from '../components/CommentComponent.vue';
                     this.loading = true;
                     const results: any = await axios.get("/api/post/" + this.$route.params.id);
                     this.post = results.data;
+
+                    if (this.post != null) {
+                        this.comment_data.post_id = this.post?.post_id;
+                    }
                 } catch (e: any) {
                     console.error(e);
                 }
@@ -39,6 +47,15 @@ import CommentComponent from '../components/CommentComponent.vue';
                     this.loading = false;
                 }, 1000);
             },
+            async postComment() {
+                try {
+                    const results: any = await axios.post("/api/post/addComment/", this.comment_data);
+                    this.post = results.data;
+                    this.$router.go(0);
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
         },
         // Vue riusa lo stesso componente quindi se si cambia id del post potrebbe non funzionare
         // Si crea un watch sui parametri del link
@@ -66,13 +83,16 @@ import CommentComponent from '../components/CommentComponent.vue';
         <template v-else>
             <template v-if="post">
                 <singlePostComponent :post="post" :user="user"></singlePostComponent>
-                <form action="/api/post/addComment/" method="POST" enctype="application/x-www-form-urlencoded">
-                    <input type="hidden" name="post_id" :value="post.post_id">
+                <form action="/api/post/addComment/" method="POST" enctype="application/x-www-form-urlencoded" @submit.prevent="postComment">
+                    <!-- <input v-model="comment_data.post_id" type="hidden" name="post_id" :value="post.post_id"> -->
                     <label for="postComment" class="visually-hidden">Your comment</label>
-                    <textarea id="postComment" name="post_comment" placeholder="Enter a comment..." required></textarea>
+                    <textarea v-model="comment_data.post_comment" id="postComment" name="post_comment" placeholder="Enter a comment..." required></textarea>
                     <input type="submit" value="Send the comment">
                 </form>
-                <CommentComponent :post="post" :user="user"></CommentComponent>
+                <section id="comment_section">
+                    <h2>Commenti</h2>
+                    <CommentComponent :post="post" :user="user"></CommentComponent>
+                </section>
             </template>
             <template v-else>
                 <NotFound></NotFound>    
