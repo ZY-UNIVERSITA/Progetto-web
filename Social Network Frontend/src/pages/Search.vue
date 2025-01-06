@@ -78,7 +78,7 @@ export default defineComponent({
             <template v-if="users[0] !== undefined">
                 <h2>Utenti Trovati</h2>
                 <ul class="user-list">
-                    <li v-for="user in users" :key="user.username" class="user-card">
+                    <li v-for="user in users" :key="user.username" class="user-card" :class="`${mode}-mode`">
                         <figure class="user-avatar">
                             <img :src="'/siteUpload/profile_photo/vite.svg'" alt="Avatar" class="avatar-image" />
                         </figure>
@@ -97,7 +97,7 @@ export default defineComponent({
         <section id="contentResults" class="results-section">
             <h2 v-if="posts[0] !== undefined">Post Trovati</h2>
             <ul v-if="posts[0] !== undefined" class="post-list">
-                <li v-for="post in posts" :key="post.post_id" class="post-card">
+                <li v-for="post in posts" :key="post.post_id" class="post-card" :class="`${mode}-mode`">
                     <article class="post-content-container" @click="goToPost(post.post_id)">
                         <p class="post-author">@{{ post.username }}</p>
                         <p class="post-content">{{ post.content }}</p>
@@ -129,11 +129,6 @@ export default defineComponent({
 }
 
 #searchInput::placeholder {
-    color: black;
-}
-
-img[alt]::before {
-    content: attr(alt); /* Mostra il testo alternativo come contenuto visibile */
     color: black;
 }
 </style>
