@@ -344,3 +344,54 @@ export const deleteComment = async (req: Request, res: Response): Promise<void> 
         res.status(500).send("Server error.");
     }
 };
+
+export const follow = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const user: User | null = getUser(req, res);
+        const id = req.params.id as string;
+
+        console.log(id)
+
+        if (user === null) {
+            console.error("Non può followare/unfolloware.");
+            res.status(401).send("You don't have the permissions to do that.");
+            return;
+        } else {
+            const querySQL: string =`
+                SELECT *
+                FROM follower AS f
+                WHERE f.follower_user_id = ? AND f.following_user_id = ?
+            `;
+
+            const [result] = await executeQuerySQL(req, res, querySQL, false, user.user_id, id);
+            
+            console.log(result);
+
+            if (result !== undefined) {
+                const deleteQuerySQL: string =`
+                    DELETE FROM follower
+                    WHERE follower_user_id = ? AND following_user_id = ?
+                `;
+
+                const result = await executeQuerySQL(req, res, deleteQuerySQL, false, user.user_id, id);
+
+            console.log("tutto ok 1?")
+
+            } else {
+                const insertQuerySQL: string = `
+                    INSERT INTO follower (follower_user_id, following_user_id)
+                    VALUES (?, ?)
+                `
+                const result = await executeQuerySQL(req, res, insertQuerySQL, false, user.user_id, id);
+
+            console.log("tutto ok 2?")
+
+            }
+
+            res.status(200).send("Tutto ok");
+        }    
+    } catch (error: any) {
+        console.error("Errore nella funzione di follow", error);
+        res.status(500).send("Server error.");
+    }
+};

@@ -30,21 +30,22 @@ export const isFriend = async (req: Request, res: Response): Promise<void> => {
 
     console.log(username, user);
 
-    const userIDQuerySQL: string =
-        `
+    const userIDQuerySQL: string =`
         SELECT u.user_id
         FROM users AS u
         WHERE u.username = ?
-        `;
+    `;
 
     let [ userid ]: any = await executeQuerySQL(req, res, userIDQuerySQL, false, username);
 
+    console.log(userid)
+
     if (user !== null && userid !== undefined) {
-        const querySQL: string =
-        `
-        SELECT follower_user_id
-        FROM follower AS f
-        WHERE f.follower_user_id = ? AND f.following_user_id = ?
+        console.log("si tutto ok");
+        const querySQL: string =`
+            SELECT follower_user_id
+            FROM follower AS f
+            WHERE f.follower_user_id = ? AND f.following_user_id = ?
         `;
 
         await executeQuerySQL(req, res, querySQL, true, user.user_id, userid.user_id);
