@@ -127,7 +127,7 @@ export const deleteAccount = async (req: Request, res: Response): Promise<void> 
             res.status(401).send("You don't have the permissions to do that.");
             return;
         } else {
-            const querySQL: string =`
+            const querySQL: string = `
                 DELETE FROM accounts
                 WHERE accounts.user_id = ?
             `;
@@ -137,6 +137,14 @@ export const deleteAccount = async (req: Request, res: Response): Promise<void> 
             // Conta il numero di righe eliminate.
             if (result.affectedRows > 0) {
                 unsetUser(req, res);
+
+                const deleteAllPostQuerySQL: string = `
+                    DELETE FROM posts
+                    WHERE posts.user_id = ?
+                `;
+
+                await executeQuerySQL(req, res, deleteAllPostQuerySQL, false, user.user_id);
+
                 console.log("Account eliminato.");
                 res.status(200).send("Tutto ok");
                 return;
