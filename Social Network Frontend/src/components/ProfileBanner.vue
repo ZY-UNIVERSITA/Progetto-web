@@ -102,12 +102,12 @@ export default defineComponent({
                     </p>
                     <section class="profile-stats">
                         <p>
-                            <span class="stat-label">Followers:</span>
-                            <span class="stat-value">Follower count</span>
+                            <span class="stat-label">Followers: </span>
+                            <span class="stat-value">{{ userProfile.follower }}</span>
                         </p>
                         <p>
-                            <span class="stat-label">Following:</span>
-                            <span class="stat-value">Following count</span>
+                            <span class="stat-label">Following: </span>
+                            <span class="stat-value">{{ userProfile.following }}</span>
                         </p>
                     </section>
                     <section v-if="user != null">
