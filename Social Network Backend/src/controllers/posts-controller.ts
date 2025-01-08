@@ -312,6 +312,8 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
 export const newPost = async (req: Request, res: Response): Promise<void> => {
     const user: User | null = getUser(req, res);
 
+    console.log("New post");
+
     if (user === null) {
         console.log("User tried to create a new post but is not logged.");
         res.status(401).send("You must login to continue");
@@ -361,6 +363,9 @@ export const newPost = async (req: Request, res: Response): Promise<void> => {
 // Postare immagine
 export const postImages = async (req: Request, res: Response): Promise<void> => {
     const post_id = req.query.post_id as string;
+
+    console.log("New post with images");
+
 
     const querySQL: string =
         `

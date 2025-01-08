@@ -106,7 +106,7 @@ export default defineComponent({
 
                 // Aggiungi le immagini al FormData
                 this.form.images.forEach((image, index) => {
-                    formData.append(`image_${index}`, image.file);
+                    formData.append(`image`, image.file);
                 });
 
                 // Effettua la richiesta HTTP al server
