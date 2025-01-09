@@ -107,7 +107,7 @@ export default defineComponent({
         <header class='profileHeader'>
             <template v-if="post.profile_picture">
                 <figure>
-                    <img class="profilePicture" :src="'/    /profile_photo' + post?.username + '.png'"
+                    <img class="profilePicture" :src="'/profile_photo' + post?.username + '.png'"
                     alt="profileImage" />
                 </figure>
             </template>
@@ -169,4 +169,5 @@ header {
 .user_uploaded_image {
     width: 50%;
 }
+
 </style>

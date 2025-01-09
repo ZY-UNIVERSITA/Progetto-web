@@ -88,9 +88,9 @@ export default defineComponent({
                             :alt="'Profile picture of ' + userProfile.full_name" class="profile-picture" />
                     </section>
                     <section class="user-details">
-                        <h1 id="user-info">
+                        <h2 id="user-info">
                             {{ userProfile.full_name }}
-                        </h1>
+                        </h2>
                         <p class="username">@{{ userProfile.username }}</p>
                     </section>
                 </section>
@@ -110,7 +110,7 @@ export default defineComponent({
                             <span class="stat-value">{{ userProfile.following }}</span>
                         </p>
                     </section>
-                    <section v-if="user != null">
+                    <section v-if="user != null && user.user_id != userProfile.user_id">
                         <button v-if="!isFriend" class="follow" :class="`${mode}-mode`" @click="follow">Follow</button>
                         <button v-else class="unfollow" :class="`${mode}-mode`" @click="follow">Unfollow</button>
                     </section>

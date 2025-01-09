@@ -64,7 +64,7 @@
     <section id="popularPosts">
         <h2>Popular posts</h2>
         <template v-for="post in posts">
-            <SinglePostComponent :post="post" :user="user" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
+            <SinglePostComponent :post="post" :user="user" :mode="`${mode}`" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
         </template>
     </section>
 </template>

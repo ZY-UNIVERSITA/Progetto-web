@@ -120,7 +120,7 @@ export default defineComponent({
                 </label>
             </section>
 
-            <button @click="settings" class="set-btn">Settings</button>
+            <button @click="settings" class="set-btn" :class="`${mode}-mode`">Settings</button>
         </div>
 
         <section class="profile-tabs">
@@ -137,7 +137,6 @@ export default defineComponent({
 
             <section class="tab-content" :class="`${mode}-mode`">
                 <template v-if="activeTab === 'Posts'">
-                    <h2>Posts</h2>
                     <section id="posts">
                         <template v-for="(post, index) in posts">
                             <div class="post-container">
@@ -151,7 +150,6 @@ export default defineComponent({
 
                 <template v-if="activeTab === 'Comments'">
                     <section id="comments">
-                        <h2>Comments</h2>
                         <template v-for="comment in comments">
                             <article class="comment" :class="`${mode}-mode`">
                                 <p>{{ comment.content }}</p>
