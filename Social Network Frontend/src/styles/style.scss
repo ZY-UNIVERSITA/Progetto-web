@@ -49,7 +49,10 @@ h1 {
     }
 }
 
-text, h2, label, button {
+text,
+h2,
+label,
+button {
     font-family: $font-primary;
 }
 
@@ -58,7 +61,7 @@ text, h2, label, button {
     flex-direction: row;
 }
 
-#app > header {
+#app>header {
     border-bottom: 2.5px solid;
 
     &.dark-mode {
@@ -67,7 +70,7 @@ text, h2, label, button {
 
     &.light-mode {
         border-bottom: $text-color-light;
-    }    
+    }
 }
 
 main {
@@ -75,7 +78,7 @@ main {
 
     @include media($breakpoint-medium) {
         flex-grow: 1;
-        overflow-y: auto;
+        // overflow-y: auto;
     }
 
     h2 {
@@ -112,7 +115,7 @@ aside {
     }
 }
 
-nav {
+.section_main>nav {
     box-sizing: border-box;
     width: 100%;
     z-index: 999;
@@ -130,7 +133,7 @@ nav {
         margin-bottom: 0px;
         padding: 0% 1%;
         display: flex;
-        flex-direction: column; 
+        flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         height: 100vh;
@@ -145,8 +148,8 @@ nav {
         }
     }
 
-    
-    @include media($breakpoint-large){
+
+    @include media($breakpoint-large) {
         width: 25%;
     }
 
@@ -267,7 +270,6 @@ footer {
 
 /* Comment */
 #post {
-
     p {
         font-size: 18px;
 
@@ -349,9 +351,9 @@ footer {
     }
 
     article {
-        padding: 20px; 
+        padding: 20px;
         margin: 20px;
-        
+
         box-shadow: rgba(199, 191, 191, 0.568) 6.4px 6.4px 3.2px;
 
         &.dark-mode {
@@ -361,8 +363,11 @@ footer {
         &.light-mode {
             color: $text-color-light;
         }
+    }
 
-
+    h2 {
+        text-align: center;
+        margin: 1% auto;
     }
 }
 
@@ -373,7 +378,8 @@ footer {
         width: 92%;
         text-align: left;
         border-radius: 10px;
-        margin: 2%;
+        box-sizing: border-box;
+        margin: 5% 4%;
         padding: 2%;
 
         @include media($breakpoint-medium) {
@@ -391,12 +397,24 @@ footer {
         header {
             display: flex;
             align-items: center;
+            font-family: $font-primary;
+            font-size: 30px;
 
             .profilePicture {
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
                 margin-right: 5px;
+                // border-color: green;
+                border-style: solid;
+
+                &.dark-mode {
+                    border-color: $text-color-dark;
+                }
+
+                &.light-mode {
+                    border-color: $text-color-light;
+                }
 
                 @include media($breakpoint-medium) {
                     width: 60px;
@@ -414,6 +432,8 @@ footer {
                     text-decoration: none;
                     color: inherit;
                 }
+
+                
             }
         }
 
@@ -474,7 +494,9 @@ footer {
 form {
     margin: 2em auto;
     padding: 1.5em;
-    max-width: 400px;
+    // max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
     border-radius: 10px;
 
     &.dark-mode {
@@ -554,12 +576,15 @@ form {
 
 /* Add Post page */
 .new-post {
-    max-width: 600px;
+    box-sizing: border-box;
+    width: 95%;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid;
     border-radius: 8px;
     box-shadow: 0 2px 5px;
+
+    font-family: $font-primary;
 
     &.dark-mode {
         background: color.scale($bg-color-dark, $lightness: 5%);
@@ -586,8 +611,10 @@ form {
     }
 
     fieldset {
+        box-sizing: border-box;
+        width: 100%;
         border: none;
-        margin: 0;
+        margin: 0 0 2.5% 0;
         padding: 0;
     }
 
@@ -603,16 +630,20 @@ form {
 
     textarea,
     select {
+        box-sizing: border-box;
         width: 100%;
         padding: 0.8rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 1rem;
+        margin: 0;
+
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
         &:focus {
             outline: none;
             border-color: #007bff;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
         }
     }
 
@@ -631,15 +662,32 @@ form {
         display: inline-block;
         border-radius: 40px;
         width: 20%;
-        background-color: blue;
-        color: #fff;
+        // background-color: blue;
+        // color: #fff;
         padding: 0.5rem 1rem;
         border-radius: 4px;
         cursor: pointer;
         text-align: center;
+        margin: auto 0;
 
-        &:hover {
-            background-color: darkblue;
+        &.dark-mode {
+            background-color: $bg-color-light;
+            color: $text-color-light;
+
+            &:hover {
+                background-color: $bg-color-dark;
+                color: $bg-color-light;
+            }
+        }
+
+        &.light-mode {
+            background-color: $bg-color-dark;
+            color: $text-color-dark;
+
+            &:hover {
+                background-color: $bg-color-light;
+                color: $text-color-light;
+            }
         }
     }
 
@@ -667,20 +715,53 @@ form {
         }
 
         .cancel-btn {
-            background-color: #dc3545;
-            color: #fff;
+            // background-color: #dc3545;
+            // color: #fff;
 
-            &:hover {
-                background-color: #c82333;
+            // Stili base
+            &.dark-mode {
+                background-color: $bg-color-medium-dark;
+                color: $text-color-dark;
+
+                &:hover {
+                    background-color: $bg-color-dark; // Colore per l'hover in dark mode
+                    color: $text-color-dark; // Testo opzionale per l'hover (se diverso)
+                }
             }
+
+            &.light-mode {
+                background-color: $bg-color-medium-light;
+                color: $text-color-light;
+
+                &:hover {
+                    background-color: $bg-color-dark; // Colore per l'hover in light mode
+                    color: $text-color-dark; // Testo opzionale per l'hover (se diverso)
+                }
+            }
+            
+
+            
         }
 
         .publish-btn {
-            background-color: #28a745;
-            color: #fff;
+            
+            &.dark-mode {
+                background-color: $bg-color-light;
+                color: $text-color-light;
 
-            &:hover {
-                background-color: #218838;
+                &:hover {
+                    background-color: $bg-color-medium-light;
+                }
+            }
+
+            &.light-mode {
+                background-color: $bg-color-dark;
+                color: $text-color-dark;
+
+                &:hover {
+                    background-color: $bg-color-medium-light;
+                    color: $text-color-light;
+                }
             }
         }
     }
@@ -690,7 +771,52 @@ form {
         font-weight: bold;
         margin-top: 1rem;
     }
+
+    .image-preview-container {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        width: 100%;
+        height: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        .image-preview {
+            flex: 0 0 auto;
+            // Rendi il contenitore posizionabile
+            position: relative;
+            width: 10%;
+            height: 100%; // Altezza fissa per l’anteprima (adatta alle tue esigenze)
+
+            // Immagine
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 5px;
+                display: block; // Evita spazi indesiderati
+            }
+
+            // Pulsante
+            button {
+                // Posizionamento assoluto all’interno di .image-preview
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                z-index: 10;
+                cursor: pointer;
+                width: 25%;
+            }
+        }
+    }
+
+
+
 }
+
 
 /* Search page */
 .search-container {
@@ -719,6 +845,63 @@ form {
                 padding: 10px;
                 font-size: 16px;
             }
+        }
+    }
+
+    .tab-container {
+        position: relative;
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .tabs-wrapper {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .tab {
+        font-family: $font-primary;
+        font-size: 20px;
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        cursor: pointer;
+        font-weight: 500;
+        transition: color 0.3s;
+        position: relative;
+        z-index: 1;
+    }
+
+    .tab.active {
+        // color: #333;
+        font-weight: 1000;
+
+        &.dark-mode {
+            color: $text-color-dark;
+        }
+
+        &.light-mode {
+            color: $text-color-light;
+        }
+
+    }
+
+    .active-indicator {
+        position: absolute;
+        bottom: 0;
+        height: 3px;
+        width: 50%;
+        // background-color: white;
+        transition: transform 0.3s ease;
+
+        &.dark-mode {
+            background-color: $text-color-dark;
+        }
+
+        &.light-mode {
+            background-color: $text-color-light;
         }
     }
 
@@ -895,11 +1078,19 @@ form {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            border: 4px solid white;
+            border: 4px solid;
             overflow: hidden;
             margin-right: 20px;
             z-index: 1;
             flex-shrink: 0;
+
+            &.dark-mode {
+                border: $bg-color-medium-dark;
+            }
+
+            &.light-mode {
+                border: $bg-color-medium-light;
+            }
 
             @include media($breakpoint-medium) {
                 width: 100px;
@@ -947,18 +1138,22 @@ form {
     }
 
     main {
+        box-sizing: border-box;
         padding: 2.5%;
 
         .user-details {
             display: flex;
             flex-direction: column;
 
-            h2, p {
+            h2,
+            p {
                 margin-top: 0px;
                 margin-bottom: 0px;
             }
         }
     }
+
+
 }
 
 .buttons-profile {
@@ -991,7 +1186,7 @@ form {
             background-color: $bg-color-light;
             color: $text-color-light;
         }
-    
+
         &.light-mode {
             background-color: $bg-color-dark;
             color: $text-color-dark;
@@ -1080,12 +1275,13 @@ form {
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 20px;
             border-bottom: 2px solid transparent;
             transition: color 0.3s, border-bottom 0.3s;
+            font-weight: bolder;
 
             @include media($breakpoint-medium) {
-                font-size: 20px;
+                font-size: 25px;
             }
 
             &.dark-mode {
@@ -1111,19 +1307,102 @@ form {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            // gap: 10px;
         }
 
         .post {
+            box-sizing: border-box;
+            font-size: 30px;
             flex: 1;
             margin-bottom: 10px;
-            padding: 10px;
+            padding: 5%;
             border: 1px solid;
             border-radius: 5px;
 
+            section {
+                font-size: 25px;
+            }
+
+            .profilePicture {
+                width: 50px;
+                border-radius: 50%;
+                border-style: solid;
+            }
+
+            .dropdown {
+                position: relative; // Necessario per posizionare il menu a tendina
+            }
+
+            // Stile del pulsante a tre puntini
+            .dots-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%; // Rende il bottone circolare
+                transition: background 0.2s ease-in-out;
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.1); // Sfondo leggermente scuro al passaggio del mouse
+                }
+            }
+
+            // Stile del menu a tendina
+            .dropdown-menu {
+                position: absolute;
+                top: 20px; // Distanza dal pulsante
+                right: 0;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 8px 0;
+                z-index: 1000;
+                min-width: 200px; // Larghezza minima
+                display: flex;
+                flex-direction: column;
+
+                li {
+                    list-style: none;
+                    padding: 0;
+
+                    button {
+                        width: 100%;
+                        background: none;
+                        border: none;
+                        text-align: left;
+                        padding: 10px 15px;
+                        font-size: 1em;
+                        cursor: pointer;
+                        transition: background 0.2s ease-in-out;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px; // Distanza tra icona e testo
+
+                        &:hover {
+                            background: rgba(0, 0, 0, 0.05); // Effetto hover leggero
+                        }
+
+                        &:active {
+                            background: rgba(0, 0, 0, 0.1); // Effetto click
+                        }
+                    }
+
+                    font-size: 25px;
+                }
+            }
+
+
+            @include media($breakpoint-medium) {
+                padding: 2.5%;
+            }
+
             &.dark-mode {
                 background: color.scale($bg-color-dark, $lightness: 5%);
-                ;
             }
 
             &.light-mode {
@@ -1175,8 +1454,9 @@ form {
             }
         }
     }
-
 }
+
+
 
 /* Profile Banner */
 .follow,
@@ -1284,4 +1564,3 @@ form {
         font-size: 70px;
     }
 }
-
