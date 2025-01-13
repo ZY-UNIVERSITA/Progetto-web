@@ -26,7 +26,21 @@ export default defineComponent({
         return {
             users: [] as UserSearch[],
             posts: [] as Post[],
-            searchQuery: "" as String
+            searchQuery: "" as String,
+            activeTab: 'users' as String,
+        }
+    },
+    computed: {
+        indicatorStyle() {
+            // Calcola la posizione e la larghezza dinamicamente
+            const tabCount = 2;  // Numero di tab (Utenti e Post)
+            const tabWidth = 100 / tabCount;  // Percentuale della larghezza di ogni tab
+            const translateX = this.activeTab === 'users' ? 0 : 100;
+
+            return {
+                width: `${tabWidth}%`,
+                transform: `translateX(${translateX}%)`
+            };
         }
     },
     watch: {
@@ -68,14 +82,29 @@ export default defineComponent({
 <template>
     <section class="search-container">
         <section class="search-form">
-            <form @submit.prevent  class="search-input-wrapper">
+            <form @submit.prevent class="search-input-wrapper">
                 <label for="searchInput" class="visually-hidden">Search</label>
-                <input id="searchInput" type="search" v-model="searchQuery" placeholder="Cerca..." class="search-input" />
+                <input id="searchInput" type="search" v-model="searchQuery" placeholder="Cerca..."
+                    class="search-input" />
             </form>
         </section>
 
-        <section id="userResults" class="results-section">
-            <template v-if="users[0] !== undefined">
+        <!-- Sezione Tab con Stile Integrato -->
+        <div class="tab-container">
+            <div class="tabs-wrapper">
+                <div class="tab" :class="[activeTab === 'users' ? 'active' : '', `${mode}-mode`]" @click="activeTab = 'users'" >
+                    UTENTI
+                </div>
+                <div class="tab" :class="[activeTab === 'users' ? 'active' : '', `${mode}-mode`]" @click="activeTab = 'posts'">
+                    POST
+                </div>
+            </div>
+            <div class="active-indicator" :style="indicatorStyle" :class="`${mode}-mode`"></div>
+        </div>
+
+        <!-- Contenuto dei Tab -->
+        <section v-if="activeTab === 'users'" id="userResults" class="results-section">
+            <template v-if="users.length > 0">
                 <h2>Utenti Trovati</h2>
                 <ul class="user-list">
                     <li v-for="user in users" :key="user.username" class="user-card" :class="`${mode}-mode`">
@@ -89,24 +118,22 @@ export default defineComponent({
                     </li>
                 </ul>
             </template>
-            <template v-else>
-               <p class="no-results">Nessun utente trovato.</p>
-        </template>
+            <p v-else class="no-results">Nessun utente trovato.</p>
         </section>
 
-        <section id="contentResults" class="results-section">
-            <h2 v-if="posts[0] !== undefined">Post Trovati</h2>
-            <ul v-if="posts[0] !== undefined" class="post-list">
-                <li v-for="post in posts" :key="post.post_id" class="post-card" :class="`${mode}-mode`">
-                    <article class="post-content-container" @click="goToPost(post.post_id)">
-                        <p class="post-author">@{{ post.username }}</p>
-                        <p class="post-content">{{ post.content }}</p>
-                    </article>
-                </li>
-            </ul>
-            <template v-else>
-                <p class="no-results">Nessun post trovato.</p>
+        <section v-if="activeTab === 'posts'" id="contentResults" class="results-section">
+            <template v-if="posts.length > 0">
+                <h2>Post Trovati</h2>
+                <ul class="post-list">
+                    <li v-for="post in posts" :key="post.post_id" class="post-card" :class="`${mode}-mode`">
+                        <article class="post-content-container" @click="goToPost(post.post_id)">
+                            <p class="post-author">@{{ post.username }}</p>
+                            <p class="post-content">{{ post.content }}</p>
+                        </article>
+                    </li>
+                </ul>
             </template>
+            <p v-else class="no-results">Nessun post trovato.</p>
         </section>
     </section>
 </template>
