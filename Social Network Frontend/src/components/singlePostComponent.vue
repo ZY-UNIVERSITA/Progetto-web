@@ -7,8 +7,10 @@ export default defineComponent({
     data() {
         return {
             addedLike: false as boolean,
-            images: [] as PostImages[]
-        }
+            images: [] as PostImages[],
+            showMenu: false,
+            url: "" as string,
+        };
     },
     props: {
         post: {
@@ -95,9 +97,46 @@ export default defineComponent({
         clearImages() {
             this.images = []; // Svuota le immagini localmente
         },
+
+
+        toggleMenu() {
+            this.showMenu = !this.showMenu;
+        },
+
+        // Modifica post
+        editPost(postId: string) {
+            console.log('Modifica post:', postId);
+            // Qui puoi aprire una modale o navigare a una pagina di modifica
+        },
+
+        // Elimina post
+        async deletePost(postID: string) {
+            if (confirm('Sei sicuro di voler eliminare questo post?')) {
+                try {
+                    console.log(postID);
+                    await axios.delete(`/api/post/${postID}`);
+                    window.location.reload();
+
+                } catch (e: any) {
+                    console.error("Error deleting post: ", e);
+                }
+            }
+        },
+
+        // Chiude il menu se si clicca fuori
+        closeMenu(event: any) {
+            if (this.showMenu && !event.target.closest('.dropdown')) {
+                this.showMenu = false;
+            }
+        },
+
+        getURL(): void {
+            this.url = this.$route.path;
+        }
     }, mounted() {
         this.addedLike = this.post.post_liked == 1 ? true : false;
         this.getPostImages();
+        this.getURL()
     }
 });
 </script>
@@ -107,21 +146,52 @@ export default defineComponent({
         <header class='profileHeader'>
             <template v-if="post.profile_picture">
                 <figure>
-                    <img class="profilePicture" :src="'/profile_photo' + post?.username + '.png'"
-                    alt="profileImage" />
+                    <img class="profilePicture" :src="'/profile_photo' + post?.username + '.png'" alt="profileImage" />
                 </figure>
             </template>
             <template v-else>
                 <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />
             </template>
+
             <p class="full-name">
-                {{ post.full_name }}
+                {{ post.full_name }} 
                 <RouterLink :to="'/user/' + post?.username">{{ "@" + post?.username }}</RouterLink>
             </p>
+
+            <!-- Dropdown Menu con Pulsante a Tre Punti -->
+            <nav class="dropdown" v-if="url == '/profile'">
+                <button class="dots-btn" @click.stop="toggleMenu">
+                    <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path
+                                d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
+                                stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path
+                                d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
+                                stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path
+                                d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
+                                stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </svg>
+                </button>
+
+                <!-- Menu a tendina con ruoli ARIA -->
+                <menu v-if="showMenu" class="dropdown-menu" >
+                    <li>
+                        <button @click="editPost(post?.post_id)">Modify post</button>
+                    </li>
+                    <li>
+                        <button @click="deletePost(post?.post_id)">Delete post</button>
+                    </li>
+                </menu>
+            </nav>
         </header>
 
         <section>
-            <p class="content" >{{ post?.content }}</p>
+            <p class="content">{{ post?.content }}</p>
 
             <template v-if="images.length > 0">
                 <template v-for="image in images">
@@ -131,7 +201,6 @@ export default defineComponent({
 
             <p>{{ dateFormat() }}</p>
 
-            <!-- click.stop permette di mettere like senza andare al post-->
             <svg v-on:click.stop="like" class="heart" :class="{ 'red pulse': addedLike }" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -149,25 +218,32 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
-header {
+.profileHeader {
     display: flex;
     align-items: center;
-    
-    .full-name {
-        margin: 0;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
+}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+.full-name {
+    box-sizing: border-box;
+    margin: 0 1%;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    a {
+        text-decoration: none;
+        color: inherit;
     }
 }
 
 .user_uploaded_image {
     width: 50%;
 }
+
+.profileHeader>nav {
+    margin-left: auto;
+}
+
+/* Contenitore del menu */
 
 </style>
