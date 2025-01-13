@@ -407,7 +407,7 @@ export const deletePost = async (req: Request, res: Response): Promise<void> => 
 
         // Conta il numero di righe eliminate.
         if (result.affectedRows > 0) {
-            console.log("Il commento è stato eliminato con successo.");
+            console.log("Il post è stato eliminato con successo.");
             res.status(200).send("Tutto ok");
             return;
         }
