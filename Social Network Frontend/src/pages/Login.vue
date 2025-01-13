@@ -19,11 +19,12 @@ export default defineComponent({
                 birthDate: new Date(),
                 visibility: 'public'
             } as loginForm,
+            login_error: false as boolean,
         }
     },
     computed: {
         loginRegisterText() {
-            return this.logged ? "Login" : "Register";
+            return this.logged ? "Register" : "Login";
         }
     },
     methods: {
@@ -42,6 +43,8 @@ export default defineComponent({
 
                 console.error(e.response);
                 console.error(e.request);
+
+                this.login_error = true;
             }
         },
         async register() {
@@ -52,6 +55,9 @@ export default defineComponent({
             } else {
                 alert("errore nella registrazione");
             }
+        },
+        async close() {
+            this.login_error = !this.login_error;
         }
     },
     props: {
@@ -66,7 +72,7 @@ export default defineComponent({
         <input type="button" v-on:click="loginRegisterButton" v-bind:value="loginRegisterText"
             :class="`${mode}-mode`"></input>
     </form>
-    <template v-if="logged">
+    <template v-if="!logged && !login_error">
         <form @submit.prevent="register">
             <label for="username">Enter your username*: </label>
             <input v-model="formData.username" type="text" id="username" required />
@@ -102,7 +108,7 @@ export default defineComponent({
         </template>
     </template>
 
-    <template v-else>
+    <template v-else-if="!login_error">
         <form @submit.prevent="login">
             <label>Enter your username/email: </label>
             <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="username" />
@@ -112,4 +118,11 @@ export default defineComponent({
             <input type="submit" value="Login" :class="`${mode}-mode`"></input>
         </form>
     </template>
+
+    <template v-else>
+        <form @click="close">
+            <p>Errore nell'inserimento della password o dell'username/email.</p>
+            <p>Premi questa schermata per riprovare.</p>
+        </form>
+    </template>    
 </template>

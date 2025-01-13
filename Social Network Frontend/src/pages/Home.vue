@@ -57,10 +57,10 @@
 </script>
 
 <template>
-    <div class="auth-buttons">
+    <!-- <div class="auth-buttons">
         <button v-if="!user" @click="login" :class="`${mode}-mode`">Login</button>
         <button v-else @click="logout" :class="`${mode}-mode`">Logout</button>
-    </div>
+    </div> -->
     <section id="popularPosts">
         <h2>Popular posts</h2>
         <template v-for="post in posts">

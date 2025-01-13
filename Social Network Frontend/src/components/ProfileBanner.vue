@@ -94,7 +94,7 @@ export default defineComponent({
                         <p class="username">@{{ userProfile.username }}</p>
                     </section>
                 </section>
-                <section>
+                <section class="user-info-modifiable">
                     <p v-if="userProfile.bio" class="bio">{{
                         userProfile.bio }}</p>
                     <p v-if="userProfile.birth_date" class="birthdate">
@@ -119,3 +119,13 @@ export default defineComponent({
         </section>
     </template>
 </template>
+
+<style lang="scss" scoped>
+#user-profile section.user-info-modifiable {
+    font-size: 22.5px;
+
+    p.bio {
+        font-size: 22.5px;
+    }
+}
+</style>
