@@ -105,7 +105,7 @@ export default defineComponent({
                 formData.append('visibility', this.form.visibility);
 
                 // Aggiungi le immagini al FormData
-                this.form.images.forEach((image, index) => {
+                this.form.images.forEach(image => {
                     formData.append(`image`, image.file);
                 });
 
@@ -145,7 +145,7 @@ export default defineComponent({
                 <fieldset class="form-group">
                     <legend>Publish a new post</legend>
                     <label for="postContent" class="visually-hidden">Post Content</label>
-                    <textarea id="postContent" v-model="form.postContent" name="postContent" placeholder="Write here..."
+                    <textarea id="postContent" v-model="form.postContent" name="postContent" placeholder="Write here..." rows="5"
                         required></textarea>
                 </fieldset>
 
@@ -156,14 +156,14 @@ export default defineComponent({
                         v-show="form.images.length === 0">
                         <input type="file" id="imageUpload" name="image" @change="uploadImages" hidden ref="imageInput"
                             multiple />
-                        {{ form.images.length }}
+                        Upload
                     </label>
                     <template v-if="form.images.length > 0">
                         <p class="file-feedback">Selected files:</p>
                         <section class="image-preview-container">
                             <article v-for="(image, index) in form.images" :key="index" class="image-preview">
                                 <img :src="image.url" :alt="image.name" />
-                                <button @click.prevent="removeImage(index)">Remove</button>
+                                <button @click.prevent="removeImage(index)">X</button>
                             </article>
                         </section>
                     </template>
@@ -181,8 +181,8 @@ export default defineComponent({
 
                 <!-- invia oppure elimianre il contenntuto da inviare-->
                 <section class="form-buttons">
-                    <input type="button" value="Cancel" class="btn cancel-btn" @click="clearForm" />
-                    <input type="submit" value="Publish" class="btn publish-btn" />
+                    <input type="button" value="Cancel" class="btn cancel-btn" :class="`${mode}-mode`" @click="clearForm" />
+                    <input type="submit" value="Publish" class="btn publish-btn" :class="`${mode}-mode`" />
                 </section>
             </form>
         </template>
@@ -197,6 +197,7 @@ export default defineComponent({
 </template>
 
 <style lang="css" scoped>
+
 .visually-hidden {
     position: absolute;
     width: 1px;
