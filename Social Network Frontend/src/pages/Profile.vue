@@ -28,8 +28,8 @@ export default defineComponent({
     data() {
         return {
             posts: [] as Post[],
-            tabs: ["Posts", "Comments" ],
-            activeTab: "Posts",
+            tabs: ["POSTS", "COMMENTS" ],
+            activeTab: "POSTS",
 
             comments: [] as Comment[],
 
@@ -63,21 +63,21 @@ export default defineComponent({
                 }
             }
         },
-        async deletePost(postID: string, index: number) {
-            try {
-                console.log(postID);
-                await axios.delete(`/api/post/${postID}`);
-                this.posts = this.posts.filter(post => post.post_id !== postID); // Rimuovi il post localmente
+        // async deletePost(postID: string, index: number) {
+        //     try {
+        //         console.log(postID);
+        //         await axios.delete(`/api/post/${postID}`);
+        //         this.posts = this.posts.filter(post => post.post_id !== postID); // Rimuovi il post localmente
 
-                // Notifica al componente figlio di svuotare le immagini
-                const child = (this.$refs.singlePostComponents as unknown as ComponentPublicInstance<typeof SinglePostComponent>[])[index];
-                if (child) {
-                    child.clearImages();
-                }
-            } catch (e: any) {
-                console.error("Error deleting post: ", e);
-            }
-        },
+        //         // Notifica al componente figlio di svuotare le immagini
+        //         const child = (this.$refs.singlePostComponents as unknown as ComponentPublicInstance<typeof SinglePostComponent>[])[index];
+        //         if (child) {
+        //             child.clearImages();
+        //         }
+        //     } catch (e: any) {
+        //         console.error("Error deleting post: ", e);
+        //     }
+        // },
         async deleteComment(commentID: number) {
             try {
                 console.log(commentID);
@@ -136,19 +136,19 @@ export default defineComponent({
             </section>
 
             <section class="tab-content" :class="`${mode}-mode`">
-                <template v-if="activeTab === 'Posts'">
+                <template v-if="activeTab === 'POSTS'">
                     <section id="posts">
                         <template v-for="(post, index) in posts">
                             <div class="post-container">
                                 <SinglePostComponent ref="singlePostComponents" class="post" :post="post" :user="user" :class="`${mode}-mode`"
                                     v-on:click="goToPost(post.post_id)"></SinglePostComponent>
-                                <button @click="deletePost(post.post_id, index)" class="delete-btn">Delete</button>
+                                <!-- <button @click="deletePost(post.post_id, index)" class="delete-btn">Delete</button> -->
                             </div>
                         </template>
                     </section>
                 </template>
 
-                <template v-if="activeTab === 'Comments'">
+                <template v-if="activeTab === 'COMMENTS'">
                     <section id="comments">
                         <template v-for="comment in comments">
                             <article class="comment" :class="`${mode}-mode`">
