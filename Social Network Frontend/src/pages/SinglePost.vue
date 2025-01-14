@@ -17,6 +17,10 @@ import CommentComponent from '../components/CommentComponent.vue';
                 type: Object as PropType<UserToken | null>,
                 required: false,
             },
+            mode: {
+            type: String as PropType<'dark' | 'light'>,
+            required: true,
+        },
         },
         data() {
             return {
@@ -76,7 +80,7 @@ import CommentComponent from '../components/CommentComponent.vue';
 
 <template>
     <section id="post">
-        <h2>Singolo post</h2>
+        <h2>Post details</h2>
         <template v-if="loading">
             <p>Page is loading...</p>
         </template>
@@ -87,7 +91,7 @@ import CommentComponent from '../components/CommentComponent.vue';
                     <!-- <input v-model="comment_data.post_id" type="hidden" name="post_id" :value="post.post_id"> -->
                     <label for="postComment" class="visually-hidden">Your comment</label>
                     <textarea v-model="comment_data.post_comment" id="postComment" name="post_comment" placeholder="Enter a comment..." required></textarea>
-                    <input type="submit" value="Send the comment">
+                    <input type="submit" value="Send the comment" :class="`${mode}-mode`">
                 </form>
                 <section id="comment_section">
                     <h2>Commenti</h2>

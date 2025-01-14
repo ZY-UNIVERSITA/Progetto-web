@@ -48,7 +48,7 @@ export interface Comment {
 export interface UserSearch {
     username: string,
     full_name: string,
-    profile_pictures: string
+    profile_picture: string
 }
 
 export interface ImageFile {
@@ -64,5 +64,7 @@ export interface loginForm {
     full_name: string,
     bio: string,
     birthDate: Date,
-    visibility: string
+    visibility: string,
+    profile_picture: string | null,
+    banner_picture: string | null
 }

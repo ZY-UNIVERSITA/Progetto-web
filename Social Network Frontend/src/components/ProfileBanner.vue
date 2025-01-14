@@ -77,14 +77,20 @@ export default defineComponent({
         <section id="user-profile">
             <header id="user-profile-header">
                 <section class="profile-header-bg">
-                    <img :src="'siteUpload/profile_banner/banner.jpg'" alt="user profile banner" />
+                    <img :src="userProfile.banner_picture ? 'siteUpload/profile_banner/' + userProfile.banner_picture : 'siteUpload/profile_banner/banner.jpg'" alt="user profile banner" />
+                    <!-- <template v-if="userProfile.banner_picture !== null">
+                        <img :src="'siteUpload/profile_banner/' + "  />
+                    </template>
+                    <template v-else>
+                        <img :src="''" alt="user profile banner" />
+                    </template> -->
                 </section>
             </header>
 
             <main>
                 <section class="user-info-section">
                     <section class="profile-picture-container">
-                        <img :src="userProfile.profile_picture || 'siteUpload/profile_photo/vite.svg'"
+                        <img :src="userProfile.profile_picture ? 'siteUpload/profile_photo/' + userProfile.profile_picture : 'siteUpload/profile_photo/vite.svg'"
                             :alt="'Profile picture of ' + userProfile.full_name" class="profile-picture" />
                     </section>
                     <section class="user-details">

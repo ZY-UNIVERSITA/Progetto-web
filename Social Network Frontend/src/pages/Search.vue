@@ -109,7 +109,7 @@ export default defineComponent({
                 <ul class="user-list">
                     <li v-for="user in users" :key="user.username" class="user-card" :class="`${mode}-mode`">
                         <figure class="user-avatar">
-                            <img :src="'/siteUpload/profile_photo/vite.svg'" alt="Avatar" class="avatar-image" />
+                            <img :src="user.profile_picture ? 'siteUpload/profile_photo/' + user.profile_picture : '/siteUpload/profile_photo/vite.svg'" alt="Avatar" class="avatar-image" />
                         </figure>
                         <article class="user-info" @click="goToUser(user.username)">
                             <p class="user-name">{{ user.full_name }}</p>

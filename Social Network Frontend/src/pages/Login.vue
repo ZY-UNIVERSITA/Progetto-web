@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import axios from "axios"
-import { loginForm, User } from '../utils/types';
+import { ImageFile, loginForm, User } from '../utils/types';
 
 export default defineComponent({
     name: "Login",
@@ -17,8 +17,10 @@ export default defineComponent({
                 full_name: '',
                 bio: '',
                 birthDate: new Date(),
-                visibility: 'public'
+                visibility: 'public',
             } as loginForm,
+            profile_picture: null as File | null,
+            banner_picture: null as File | null,
             login_error: false as boolean,
         }
     },
@@ -49,15 +51,46 @@ export default defineComponent({
         },
         async register() {
             const response = await axios.post('/api/auth/register', this.formData);
-            console.log(response.data.message);
+
+            console.log(response.status);
+
             if (response.data.message == "Registration ok.") {
-                window.location.href = '/';
+                const formData = new FormData();
+
+                console.log(this.profile_picture)
+                console.log(this.banner_picture)
+
+                if (this.profile_picture !== null) {
+                    formData.append("profile_picture", this.profile_picture);
+                }
+
+                if (this.banner_picture !== null) {
+                    formData.append("banner_picture", this.banner_picture);
+                }
+
+                const response = await axios.post('/api/upload/profile_banner', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                if (response.status === 200) {
+                    window.location.href = '/';
+                } else {
+                    alert("errore nella registrazione");
+                }
             } else {
                 alert("errore nella registrazione");
             }
         },
         async close() {
             this.login_error = !this.login_error;
+        },
+        handleProfilePicture(event: any) {
+            this.profile_picture = event.target.files[0];
+        },
+        handleBannerPicture(event: any) {
+            this.banner_picture = event.target.files[0];
         }
     },
     props: {
@@ -98,7 +131,13 @@ export default defineComponent({
                 <option value="private">Private</option>
             </select>
 
-            <input type="submit" value="Register" :class="`${mode}-mode`"/>
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" @change="handleProfilePicture" accept="image/*" />
+
+            <label for="banner_picture">Banner Picture:</label>
+            <input type="file" id="banner_picture" @change="handleBannerPicture" accept="image/*" />
+
+            <input type="submit" value="Register" :class="`${mode}-mode`" />
         </form>
 
         <template v-if="user">
@@ -124,5 +163,5 @@ export default defineComponent({
             <p>Errore nell'inserimento della password o dell'username/email.</p>
             <p>Premi questa schermata per riprovare.</p>
         </form>
-    </template>    
+    </template>
 </template>

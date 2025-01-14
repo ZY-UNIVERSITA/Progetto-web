@@ -47,8 +47,10 @@
                     </template>
                     <p>{{ comment.full_name }} @{{ comment.username }}</p>
                 </section>
-                <p>{{ comment.created_at }}</p>
-                <p>{{ comment.content }}</p>
+                <section class="comments_body"> 
+                    <p>{{ comment.content }}</p>
+                    <p>{{ comment.created_at }}</p>
+                </section>
             </article>
         </template> 
     </section>
