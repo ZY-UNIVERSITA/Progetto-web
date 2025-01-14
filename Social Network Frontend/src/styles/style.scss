@@ -270,11 +270,31 @@ footer {
 
 /* Comment */
 #post {
+    font-family: $font-primary;
+
+    img.profilePicture {
+        width: 60px;
+        border-style: solid;
+        border-radius: 50%;
+    }
+
     p {
-        font-size: 18px;
+        font-size: 25px;
 
         @include media($breakpoint-medium) {
-            font-size: 25px;
+            font-size: 30px;
+        }
+    }
+
+    article {
+        align-self: flex-start;
+        width: 90%;
+        box-sizing: border-box;
+        margin: 5%;   
+
+        @include media($breakpoint-medium) {
+            width: 95%;
+            margin: 2.5%;
         }
     }
 
@@ -290,21 +310,125 @@ footer {
     }
 
     input[type="submit"] {
-
+        width: 100%;
+        margin: 0;
         padding: 0.8rem 1.5rem;
         font-size: 18px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        background-color: #28a745;
-        color: #fff;
+
+        // background-color: #28a745;
+        // color: #fff;
+
+        &.dark-mode {
+            background-color: $bg-color-light;
+            color: $text-color-light;
+
+            &:hover {
+                background-color: color.scale($bg-color-light, $lightness: -15%);
+            }
+
+        }
+
+        &.light-mode {
+            background-color: $bg-color-dark;
+            color: $text-color-dark;
+
+            &:hover {
+                background-color: color.scale(#36363f, $lightness: +15%);
+            }
+        }
 
         @include media($breakpoint-medium) {
             font-size: 20px;
         }
 
-        &:hover {
-            background-color: #218838;
+        // &:hover {
+        //     background-color: #218838;
+        // }
+    }
+
+    form {
+        margin: 0;
+    }
+
+            
+    h2 {
+        text-align: center;
+        margin-bottom: 2.5%;
+    }
+
+    #comment_section {
+        width: 100%;
+        // background-color: red;
+
+        h2 {
+            margin-top: 2.5%;
+        }
+
+        #comments, article {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #comments {
+            img {
+                width: 50px; 
+                border-radius: 50%;
+                border-style: solid;
+                margin-right: 10px;
+
+                &.dark-mode {
+                    background-color: $bg-color-light;
+                    color: $text-color-light;
+                }
+        
+                &.light-mode {
+                    background-color: $bg-color-dark;
+                    color: $text-color-dark;
+                }        
+            }
+
+            article {
+                margin-right: 2.5%;
+                margin-left: 2.5%;
+
+                section.header {
+                    p {
+                        font-weight: bold;
+                        margin: 0;
+                        font-size: 30px;
+                    }
+                }
+            }
+
+            article {
+                padding: 2.5%;
+
+                p:last-child {
+                    font-size: 15px;
+                }
+
+                border-bottom-style: solid;
+                &:last-child {
+                    border-bottom-style: none;
+                }
+            }
+
+            article, p {
+                font-size: 25px;
+            }
+
+            .comments_body {
+                
+                p {
+                    box-sizing: border-box;
+                    margin: 0 0px 10px 66px;
+
+                    
+                }                
+            }
         }
     }
 }
@@ -337,6 +461,23 @@ footer {
         &.dark-mode {
             @include theme($bg-color-light, $text-color-light);
         }
+    }
+}
+
+article {
+    header {
+        &.profileHeader {
+            figure {
+                height: 60px;
+                width: 60px;
+                margin: 0 10px 0 0;
+
+                img  {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+        }   
     }
 }
 
@@ -738,9 +879,6 @@ form {
                     color: $text-color-dark; // Testo opzionale per l'hover (se diverso)
                 }
             }
-            
-
-            
         }
 
         .publish-btn {
@@ -943,7 +1081,7 @@ form {
                 }
 
                 @include media($breakpoint-medium) {
-                    padding: 30px;
+                    padding: 20px;
                 }
 
                 .user-avatar {
@@ -1324,7 +1462,7 @@ form {
             }
 
             .profilePicture {
-                width: 50px;
+                width: 60px;
                 border-radius: 50%;
                 border-style: solid;
             }
@@ -1342,8 +1480,8 @@ form {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 32px;
-                height: 32px;
+                width: 48px;
+                height: 48px;
                 border-radius: 50%; // Rende il bottone circolare
                 transition: background 0.2s ease-in-out;
 
