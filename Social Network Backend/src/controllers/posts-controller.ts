@@ -27,6 +27,8 @@ export const postID = async (req: Request, res: Response): Promise<void> => {
             p.visibility AS post_visibility, 
             u.username, 
             u.full_name, 
+            u.profile_picture,
+            u.banner_picture,
             u.visibility AS user_visibility,
             CASE
                 -- Se l'utente non è loggato, post_liked = 0
@@ -151,7 +153,9 @@ export const postsUser = async (req: Request, res: Response): Promise<void> => {
             p.shares, 
             p.visibility AS post_visibility, 
             u.username, 
-            u.full_name, 
+            u.full_name,
+            u.profile_picture,
+            u.banner_picture,
             u.visibility AS user_visibility,
             CASE
                 WHEN ? IS NULL THEN 0
@@ -246,6 +250,8 @@ export const popularPosts = async (req: Request, res: Response): Promise<void> =
             p.visibility AS post_visibility, 
             u.username, 
             u.full_name, 
+            u.profile_picture,
+            u.banner_picture,
             u.visibility AS user_visibility,
             CASE
                 -- Se l'utente non è loggato, post_liked = 0
@@ -365,7 +371,6 @@ export const postImages = async (req: Request, res: Response): Promise<void> => 
     const post_id = req.query.post_id as string;
 
     console.log("New post with images");
-
 
     const querySQL: string =
         `

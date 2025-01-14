@@ -14,6 +14,7 @@ export const authBeforeUpload = async (req: Request, res: Response, next: any): 
     setTimeout(() => {
         if (user != null) {
             // Se l'utente è loggato allora ritorna il prossimo middleware ovveroq quello di caricamento
+            console.log("ok");
             next();
         } else {
             res.status(401).send("Only registered user can upload their file");
@@ -24,8 +25,16 @@ export const authBeforeUpload = async (req: Request, res: Response, next: any): 
 const storage = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb): void => {
         // Cartella di upload
-        const uploadPath = path.join(__dirname, "../../public/usersUploads");
+        let uploadPath = path.join(__dirname, "../../public/usersUploads");
     
+        console.log(file);
+
+        if (file.fieldname === "profile_picture") {
+            uploadPath = path.join(__dirname, "../../public/siteUpload/profile_photo");
+        } else if (file.fieldname === "banner_picture") {
+            uploadPath = path.join(__dirname, "../../public/siteUpload/profile_banner");
+        }
+
         // Se la cartella non esiste, viene creata
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });

@@ -14,7 +14,9 @@ export interface RegisterRequest {
     birthDate: string,
     bio: string,
     visibility: visibility,
-    full_name: string
+    full_name: string,
+    profile_picture: string | null,
+    banner_picture: string | null
 }
 
 enum visibility {
