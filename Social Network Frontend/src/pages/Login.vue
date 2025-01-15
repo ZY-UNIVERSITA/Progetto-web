@@ -122,7 +122,7 @@ export default defineComponent({
             <label for="bio">Describe yourself: </label>
             <textarea v-model="formData.bio" id="bio" rows="4" cols="50">Default bio</textarea>
 
-            <label for="birthDate">Enter your birth date: </label>
+            <label for="birthDate">Enter your birth date*: </label>
             <input v-model="formData.birthDate" type="date" id="birthDate" required />
 
             <label for="visibility">Choose Visibility:</label>
