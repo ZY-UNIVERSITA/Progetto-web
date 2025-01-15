@@ -108,19 +108,19 @@ export default defineComponent({
     <template v-if="!logged && !login_error">
         <form @submit.prevent="register">
             <label for="username">Enter your username*: </label>
-            <input v-model="formData.username" type="text" id="username" required />
+            <input v-model="formData.username" type="text" id="username" required placeholder="Choose an username" />
 
             <label for="email">Enter your email*: </label>
-            <input v-model="formData.email" type="email" id="email" required />
+            <input v-model="formData.email" type="email" id="email" required placeholder="Enter your email" />
 
             <label for="password">Enter your password*: </label>
-            <input v-model="formData.password" type="password" id="password" minlength="16" required />
+            <input v-model="formData.password" type="password" id="password" minlength="16" required placeholder="Enter a password" />
 
-            <label for="full_name">Enter your full name: </label>
-            <input v-model="formData.full_name" type="text" id="full_name" />
+            <label for="full_name">Enter your full name*: </label>
+            <input v-model="formData.full_name" type="text" id="full_name" required placeholder="Enter your full name"/>
 
             <label for="bio">Describe yourself: </label>
-            <textarea v-model="formData.bio" id="bio" rows="4" cols="50">Default bio</textarea>
+            <textarea v-model="formData.bio" id="bio" rows="4" cols="50" placeholder="Describe yourself here..."></textarea>
 
             <label for="birthDate">Enter your birth date*: </label>
             <input v-model="formData.birthDate" type="date" id="birthDate" required />
@@ -150,10 +150,10 @@ export default defineComponent({
     <template v-else-if="!login_error">
         <form @submit.prevent="login">
             <label>Enter your username/email: </label>
-            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="username" />
+            <input type="text" name="usernameOrEmail" id="usernameOrEmail" required v-model="username" placeholder="Username or email"/>
 
             <label for="password">Enter your password*: </label>
-            <input type="password" name="password" id="password" minlength="16" required v-model="password" />
+            <input type="password" name="password" id="password" minlength="16" required v-model="password" placeholder="Password" />
             <input type="submit" value="Login" :class="`${mode}-mode`"></input>
         </form>
     </template>
