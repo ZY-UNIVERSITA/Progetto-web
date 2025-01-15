@@ -40,7 +40,7 @@
             <article>
                 <section class="header">
                     <template v-if="comment.profile_picture">
-                        <img class="profilePicture" :src="'/images/profile_photo/' + comment.username + '.jpg'" alt="profileImage" />
+                        <img class="profilePicture" :src="'/siteUpload/profile_photo/' + comment.profile_picture" alt="profileImage" />
                     </template>
                     <template v-else>
                         <img class="profilePicture" :src="'/images/profile_photo/vite.svg'" alt="profileImage" />

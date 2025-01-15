@@ -146,7 +146,8 @@ export default defineComponent({
         <header class='profileHeader'>
             <template v-if="post.profile_picture">
                 <figure>
-                    <img class="profilePicture" :src="'/siteUpload/profile_photo/' + post.profile_picture" alt="profileImage" />
+                    <img class="profilePicture" :src="'/siteUpload/profile_photo/' + post.profile_picture"
+                        alt="profileImage" />
                 </figure>
             </template>
             <template v-else>
@@ -228,6 +229,9 @@ export default defineComponent({
 }
 
 .full-name {
+
+    overflow-x: hidden;
+    max-width: 90%;
     box-sizing: border-box;
     margin: 0 1%;
     font-weight: bold;
