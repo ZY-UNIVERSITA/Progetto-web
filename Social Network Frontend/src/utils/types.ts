@@ -30,6 +30,8 @@ export interface Post extends UserToken {
     profile_picture: string,
 
     post_liked: number,
+
+    post_visibility: string
 }
 
 export interface PostImages {

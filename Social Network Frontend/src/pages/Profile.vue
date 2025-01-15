@@ -4,11 +4,13 @@ import axios from 'axios';
 import { Post, User, UserToken, Comment } from '../utils/types';
 import SinglePostComponent from '../components/singlePostComponent.vue';
 import ProfileBanner from '../components/ProfileBanner.vue';
+import ModifyPost from '../components/ModifyPost.vue';
 
 export default defineComponent({
     components: {
         SinglePostComponent,
-        ProfileBanner
+        ProfileBanner,
+        ModifyPost
     },
     props: {
         user: {
@@ -24,6 +26,7 @@ export default defineComponent({
             required: true,
         },
     },
+
     data() {
         return {
             posts: [] as Post[],
@@ -33,7 +36,8 @@ export default defineComponent({
             comments: [] as Comment[],
 
             userProfile: null as User | null,
-            
+            modifyPost: false as boolean,
+            motifyPostContent: null as Post | null,
         }
     },
     methods: {
@@ -63,21 +67,6 @@ export default defineComponent({
                 }
             }
         },
-        // async deletePost(postID: string, index: number) {
-        //     try {
-        //         console.log(postID);
-        //         await axios.delete(`/api/post/${postID}`);
-        //         this.posts = this.posts.filter(post => post.post_id !== postID); // Rimuovi il post localmente
-
-        //         // Notifica al componente figlio di svuotare le immagini
-        //         const child = (this.$refs.singlePostComponents as unknown as ComponentPublicInstance<typeof SinglePostComponent>[])[index];
-        //         if (child) {
-        //             child.clearImages();
-        //         }
-        //     } catch (e: any) {
-        //         console.error("Error deleting post: ", e);
-        //     }
-        // },
         async deleteComment(commentID: number) {
             try {
                 console.log(commentID);
@@ -95,7 +84,17 @@ export default defineComponent({
         },
         settings() {
             this.$router.push({ name: 'Settings' });
-        }
+        },
+
+        notifyParent(postContent: Post) {
+            this.motifyPostContent = postContent;
+            this.modifyPost = true;
+        },
+
+        closeModifyView() {
+            this.motifyPostContent = null;
+            this.modifyPost = false;
+        }        
     },
     created() {
         if (this.user !== null) {
@@ -116,7 +115,7 @@ export default defineComponent({
                 <label for="theme-toggle" class="theme-label">Change Theme</label>
                 <label class="switch">
                     <input type="checkbox" id="theme-toggle" :checked="mode === 'light'" @change="toggleTheme" />
-                    <span class="slider"></span>
+                    <span class="slider profile-slider"></span>
                 </label>
             </section>
 
@@ -141,7 +140,8 @@ export default defineComponent({
                         <template v-for="(post, index) in posts">
                             <div class="post-container">
                                 <SinglePostComponent ref="singlePostComponents" class="post" :post="post" :user="user"
-                                    :class="`${mode}-mode`" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
+                                    :class="`${mode}-mode`" v-on:click="goToPost(post.post_id)" @notify="notifyParent">
+                                </SinglePostComponent>
                                 <!-- <button @click="deletePost(post.post_id, index)" class="delete-btn">Delete</button> -->
                             </div>
                         </template>
@@ -170,6 +170,11 @@ export default defineComponent({
         </section>
     </template>
 
+    <template v-if="modifyPost && motifyPostContent !== null">
+        <section id="modifyPost_section">
+            <ModifyPost :user="user" :post="motifyPostContent" @notify="closeModifyView"></ModifyPost>
+        </section>
+    </template>
 </template>
 
 <style lang="scss" scoped>
@@ -178,4 +183,35 @@ export default defineComponent({
     font-weight: bold;
     margin-top: 1rem;
 }
+
+#modifyPost_section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(48, 41, 41, 0.5); 
+  z-index: 1000;
+  padding: 0; 
+  box-sizing: border-box;
+  overflow: hidden; 
+}
+
+#modify_post {
+  position: absolute; 
+  top: 5%; 
+  left: 5%; 
+  right: 5%; 
+  bottom: 5%; 
+  background-color: rgb(63, 58, 58); 
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto; 
+}
+
+
+
+
+
+
 </style>

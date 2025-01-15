@@ -132,6 +132,11 @@ export default defineComponent({
 
         getURL(): void {
             this.url = this.$route.path;
+        },
+
+        notifyParent() {
+            this.$emit("notify", this.post);
+            document.body.classList.add('no-scroll');
         }
     }, mounted() {
         this.addedLike = this.post.post_liked == 1 ? true : false;
@@ -186,7 +191,7 @@ export default defineComponent({
                 <!-- Menu a tendina con ruoli ARIA -->
                 <menu v-if="showMenu" class="dropdown-menu">
                     <li>
-                        <button @click="editPost(post?.post_id)">Modify post</button>
+                        <button @click.stop="notifyParent">Modify post</button>
                     </li>
                     <li>
                         <button @click="deletePost(post?.post_id)">Delete post</button>
@@ -248,9 +253,7 @@ export default defineComponent({
     width: 50%;
 }
 
-.profileHeader>nav {
+.profileHeader > nav {
     margin-left: auto;
 }
-
-/* Contenitore del menu */
 </style>

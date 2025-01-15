@@ -11,5 +11,6 @@ router.get("/api/post/images/", postController.postImages)
 router.get("/api/post/:id", postController.postID)
 router.post("/api/newPost", authBeforeUpload, upload.array('image', 10), postController.newPost)
 router.delete("/api/post/:id", postController.deletePost)
+router.put("/api/post/", postController.modifyPost)
 
 export default router;

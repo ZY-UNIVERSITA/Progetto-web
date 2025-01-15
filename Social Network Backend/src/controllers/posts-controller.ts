@@ -421,3 +421,31 @@ export const deletePost = async (req: Request, res: Response): Promise<void> => 
         res.status(404).send("Post not found.")
     }    
 }
+
+export const modifyPost = async (req: Request, res: Response): Promise<void> => {
+    const user: User | null = getUser(req, res);
+
+    const { user_id, post_id, content, visibility } = req.body as any;
+
+    if (user === null || user.user_id !== user_id) {
+        console.error("Non si può modificare il post.");
+        res.status(401).send("You don't have the permissions to do that.");
+        return;
+    } else {
+        const querySQL: string =`
+            UPDATE posts
+            SET posts.content = ?, posts.visibility = ?
+            WHERE posts.post_id = ?
+        `;
+
+        const result = await executeQuerySQL(req, res, querySQL, false, content, visibility, post_id);
+
+        console.log(result)
+
+        if (result !== null) {
+            res.status(200).send("Tutto ok");
+        } else {
+            res.status(500).send("Errore del server.");
+        }
+    }
+}
