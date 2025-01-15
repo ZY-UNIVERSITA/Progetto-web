@@ -685,6 +685,7 @@ form {
     input[type="date"],
     input[type="submit"],
     input[type="button"],
+    input[type="file"   ],
     textarea,
     select {
         width: 100%;
@@ -1432,6 +1433,18 @@ form {
             }
         }
 
+        .profile-slider {
+            .dark-mode & {
+                background-color: $bg-color-light;
+                // color: $text-color-light;
+            }
+    
+            .light-mode & {
+                background-color: $bg-color-dark;
+                // color: $text-color-dark;
+            }
+        }
+
         input:checked+.slider {
             background-color: $bg-color-dark;
         }
@@ -1723,7 +1736,7 @@ form {
         font-size: 18px;
 
         @include media($breakpoint-medium) {
-            font-size: 20px;
+            font-size: 25px;
         }
     }
 
@@ -1735,6 +1748,12 @@ form {
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        margin-bottom: 1%;
+    }
+
+    #profile_picture, #banner_picture {
+        height: 100%;
+        margin-left: 0;
     }
 
     button, input[type="submit"] {
@@ -1829,3 +1848,8 @@ form {
         font-size: 70px;
     }
 }
+
+.no-scroll {
+    overflow: hidden;
+  }
+  
