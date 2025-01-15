@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Post, User, UserToken, Comment } from '../utils/types';
 import SinglePostComponent from '../components/singlePostComponent.vue';
 import ProfileBanner from '../components/ProfileBanner.vue';
-import type { ComponentPublicInstance } from 'vue';
 
 export default defineComponent({
     components: {
@@ -28,12 +27,13 @@ export default defineComponent({
     data() {
         return {
             posts: [] as Post[],
-            tabs: ["POSTS", "COMMENTS" ],
+            tabs: ["POSTS", "COMMENTS"],
             activeTab: "POSTS",
 
             comments: [] as Comment[],
 
-            userProfile: null as User | null
+            userProfile: null as User | null,
+            
         }
     },
     methods: {
@@ -140,8 +140,8 @@ export default defineComponent({
                     <section id="posts">
                         <template v-for="(post, index) in posts">
                             <div class="post-container">
-                                <SinglePostComponent ref="singlePostComponents" class="post" :post="post" :user="user" :class="`${mode}-mode`"
-                                    v-on:click="goToPost(post.post_id)"></SinglePostComponent>
+                                <SinglePostComponent ref="singlePostComponents" class="post" :post="post" :user="user"
+                                    :class="`${mode}-mode`" v-on:click="goToPost(post.post_id)"></SinglePostComponent>
                                 <!-- <button @click="deletePost(post.post_id, index)" class="delete-btn">Delete</button> -->
                             </div>
                         </template>
@@ -163,7 +163,19 @@ export default defineComponent({
 
     </template>
     <template v-else>
-        <p>User personal page. Login to continue.</p>
+        <section class="new-post" :class="`${mode}-mode`">
+            <article class="error-message">
+                <p>User personal page. Login to continue.</p>
+            </article>
+        </section>
     </template>
 
 </template>
+
+<style lang="scss" scoped>
+.error-message {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+</style>
