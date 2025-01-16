@@ -95,7 +95,7 @@ main {
     }
 }
 
-aside {
+.main-aside {
     display: none;
 
     @include media($breakpoint-large) {
