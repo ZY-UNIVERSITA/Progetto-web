@@ -12,7 +12,7 @@ import { Request, Response } from "express";
  */
 const executeQuerySQL = async (req: Request, res: Response, querySQL: string, sendJSON: boolean, ...strings: string[]): Promise<any> => {
     // Effettua una query in modalità async/await
-    const [ results ]: any = await (await connection).execute(querySQL, strings);
+    const [results]: any = await (await connection).execute(querySQL, strings);
 
     if (sendJSON) {
         res.json(results);
@@ -20,5 +20,12 @@ const executeQuerySQL = async (req: Request, res: Response, querySQL: string, se
         return results;
     }
 };
+
+export const executeQuerySQLSemplified = async (querySQL: string, ...strings: string[]): Promise<any> => {
+    const [results]: any = await (await connection).execute(querySQL, strings);
+
+    return results;
+};
+
 
 export default executeQuerySQL;
