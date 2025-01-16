@@ -11,6 +11,7 @@ import SinglePost from './pages/SinglePost.vue';
 import SingleProfile from './pages/SingleUser.vue';
 import Profile from './pages/Profile.vue';
 import Settings from './pages/Settings.vue';
+import Chat from './pages/Chat.vue';
 
 const router: Router = createRouter({
     history: createWebHashHistory(),
@@ -23,7 +24,8 @@ const router: Router = createRouter({
         { path: "/post/:id", name: "SinglePost", component: SinglePost },
         { path: "/profile", component: Profile },
         { path: "/settings", name: "Settings", component: Settings},
-        { path: "/:pathMatch(.*)*", component: NotFound }
+        { path: "/chat", name: "Chat", component: Chat },
+        { path: "/:pathMatch(.*)*", component: NotFound },
     ]
 });
 
