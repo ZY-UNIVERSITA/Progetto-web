@@ -1,3 +1,4 @@
+
 export interface User {
     user_id: string
     username: string
@@ -84,4 +85,9 @@ export interface modificableInfo {
 export interface newOldPassword {
     oldPassword: string,
     newPassword: string,
+}
+
+export interface socket_message {
+    user_id: number,
+    socket_id: string
 }
