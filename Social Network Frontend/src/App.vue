@@ -120,8 +120,10 @@ export default defineComponent({
       <RouterView :user="user" :mode="mode" :toggleTheme="toggleTheme"></RouterView>
     </main>
 
-    <aside :class="`${mode}-mode`">
-      <p>MMMM</p>
+    <aside class="main-aside" :class="`${mode}-mode`">
+      <ul>
+        
+      </ul>
     </aside>
 
   </section>
