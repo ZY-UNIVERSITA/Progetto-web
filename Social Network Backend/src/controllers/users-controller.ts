@@ -54,3 +54,26 @@ export const isFriend = async (req: Request, res: Response): Promise<void> => {
     }
     
 }
+
+export const getFriendsList = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const user: User | null = getUser(req, res);
+
+        if (user === null) {
+            console.error("Non puoi ottenere la lista degli amici.");
+            res.status(401).send("You don't have the permissions to do that.");
+            return;
+        } else {
+            const querySQL: string =`
+                SELECT f.following_user_id AS user_id, u.username
+                FROM follower AS f LEFT JOIN users AS u ON (f.following_user_id = u.user_id)
+                WHERE f.follower_user_id = ?
+            `;
+
+            await executeQuerySQL(req, res, querySQL, true, user.user_id);
+        }
+    } catch (e: any) {
+        res.status(500).send("Errore interno del sever.");
+        console.error("Errore", e)
+    }
+}
