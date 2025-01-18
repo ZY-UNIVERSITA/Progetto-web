@@ -70,3 +70,36 @@ export interface loginForm {
     profile_picture: string | null,
     banner_picture: string | null
 }
+
+export interface Messages {
+    receiver_id: string,
+    sender_id: string,
+    receiver_username: string,
+    sender_username: string,
+    timestamp: Date,
+    content: string,
+    status: string
+}
+
+export interface ChatMessage {
+    sender_id?: string,
+    sender_username?: string,
+    receiver_id: string,
+    receiver_username?: string,
+    message: string,
+    timestamp: Date,
+    status?: string
+}
+
+export interface User_messages {
+    id: string,
+    name: string,
+    lastMessage: string,
+    lastMessageTimestamp: Date | null,
+    messages: ChatMessage[]
+}
+
+export interface Friends_list {
+    user_id: string,
+    username: string
+}
