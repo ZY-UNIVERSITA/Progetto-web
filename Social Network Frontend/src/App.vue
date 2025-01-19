@@ -2,8 +2,12 @@
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import { User } from './utils/types';
+import AsideFriends from './components/AsideFriends.vue';
 
 export default defineComponent({
+  components: {
+    AsideFriends
+  },
   data() {
     return {
       user: null as User | null,
@@ -121,9 +125,7 @@ export default defineComponent({
     </main>
 
     <aside class="main-aside" :class="`${mode}-mode`">
-      <ul>
-        
-      </ul>
+      <AsideFriends :user="user" :mode="mode"></AsideFriends>
     </aside>
 
   </section>

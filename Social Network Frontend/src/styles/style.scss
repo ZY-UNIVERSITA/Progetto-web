@@ -132,7 +132,7 @@ main {
         bottom: unset;
         top: 0px;
         margin-bottom: 0px;
-        padding: 0% 1%;
+        padding: 25px 1% 0% 1%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -534,7 +534,7 @@ article {
 #userPosts {
 
     article {
-        width: 92%;
+        width: 96%;
         text-align: left;
         border-radius: 10px;
         box-sizing: border-box;
@@ -1230,6 +1230,8 @@ form {
         align-items: center;
         margin-bottom: 20px;
 
+        
+
         .profile-picture-container {
             position: relative;
             width: 60px;
@@ -1613,8 +1615,8 @@ form {
         }
 
         .delete-btn {
-            background-color: crimson;
-            color: white;
+            // background-color: crimson;
+            // color: white;
             border: none;
             padding: 5px 10px;
             cursor: pointer;
@@ -1622,9 +1624,25 @@ form {
             margin-bottom: 10px;
             font-size: 16px;
 
-            &:hover {
-                background-color: darkred;
+            &.dark-mode {
+                background-color: $bg-color-light;
+                color: $text-color-light;
+
+                &:hover {
+                    background-color: color.scale($bg-color-light, $lightness: -5%);;
+                }
             }
+
+            &.light-mode {
+                background-color: $bg-color-dark;
+                color: $text-color-dark;
+
+                &:hover {
+                    background-color: color.scale($bg-color-dark, $lightness: -5%);;
+                }
+            }
+
+            
         }
 
         .comment {
@@ -1663,6 +1681,7 @@ form {
 /* Profile Banner */
 .follow,
 .unfollow {
+    margin-top: 20px;
     border-radius: 40px;
     padding: 0.6em 1.2em;
     font-family: $font-secondary;
