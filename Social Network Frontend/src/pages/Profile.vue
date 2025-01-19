@@ -153,7 +153,7 @@ export default defineComponent({
                         <template v-for="comment in comments">
                             <article class="comment" :class="`${mode}-mode`">
                                 <p>{{ comment.content }}</p>
-                                <button @click="deleteComment(comment.comment_id)" class="delete-btn">Delete</button>
+                                <button @click="deleteComment(comment.comment_id)" class="delete-btn" :class="`${mode}-mode`">Delete</button>
                             </article>
                         </template>
                     </section>

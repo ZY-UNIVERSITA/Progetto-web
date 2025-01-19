@@ -254,9 +254,9 @@ export default defineComponent({
       </header>
 
       <!-- Dropdown per selezionare un amico -->
-      <div v-if="isFriendsListVisible" class="friends-dropdown">
+      <div v-if="isFriendsListVisible" class="friends-dropdown" :class="`${mode}-mode`">
         <ul>
-          <li v-for="(friend, index) in friends_list" :key="index" @click="startNewChat(friend)">
+          <li v-for="(friend, index) in friends_list" :key="index" @click="startNewChat(friend)" :class="`${mode}-mode`">
             {{ friend.username }}
           </li>
         </ul>

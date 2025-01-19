@@ -133,5 +133,9 @@ export default defineComponent({
     p.bio {
         font-size: 22.5px;
     }
+
+    .birthdate {
+        font-size: 18px;
+    }
 }
 </style>
