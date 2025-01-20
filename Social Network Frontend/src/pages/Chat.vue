@@ -245,7 +245,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="chat-app">
+  <section class="chat-app" v-if="user !== null">
     <!-- Sidebar -->
     <aside :class="['chat-sidebar', { visible: isSidebarVisible }, `${mode}-mode`]">
       <header class="sidebar-header" :class="`${mode}-mode`">
@@ -256,7 +256,8 @@ export default defineComponent({
       <!-- Dropdown per selezionare un amico -->
       <div v-if="isFriendsListVisible" class="friends-dropdown" :class="`${mode}-mode`">
         <ul>
-          <li v-for="(friend, index) in friends_list" :key="index" @click="startNewChat(friend)" :class="`${mode}-mode`">
+          <li v-for="(friend, index) in friends_list" :key="index" @click="startNewChat(friend)"
+            :class="`${mode}-mode`">
             {{ friend.username }}
           </li>
         </ul>
@@ -300,6 +301,11 @@ export default defineComponent({
         <button @click="sendMessage" :class="`${mode}-mode`">Send</button>
       </footer>
     </main>
+  </section>
+  <section class="new-post" :class="`${mode}-mode`">
+    <article class="error-message">
+      <p>Only registered users can start a new chat.</p>
+    </article>
   </section>
 </template>
 

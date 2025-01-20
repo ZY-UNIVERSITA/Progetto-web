@@ -59,7 +59,20 @@ export default defineComponent({
 <template>
 
   <header>
-    <h1>DailyDot</h1>
+    <RouterLink to="/">
+      <h1>DailyDot</h1>
+    </RouterLink>
+    
+    <nav :class="`${mode}-mode`" v-if="isMobile">
+      <ul>
+        <li>
+          <RouterLink to="/chat">
+            <img class="icon" :src="mode === 'dark' ? 'icons/chat-l.svg' : 'icons/chat-d.svg'"
+              :alt="isMobile ? 'Vai alla pagina Profile' : ''" />
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
   </header>
 
   <section class="section_main">
@@ -92,6 +105,13 @@ export default defineComponent({
             <img class="icon" :src="mode === 'dark' ? 'icons/user-l.svg' : 'icons/user-d.svg'"
               :alt="isMobile ? 'Vai alla pagina Profile' : ''" />
             <span class="text" :class="`${mode}-mode`">Profile</span>
+          </RouterLink>
+        </li>
+        <li :class="`${mode}-mode`" v-if="!isMobile">
+          <RouterLink to="/chat">
+            <img class="icon" :src="mode === 'dark' ? 'icons/chat-l.svg' : 'icons/chat-d.svg'"
+              :alt="isMobile ? 'Vai alla pagina Profile' : ''" />
+            <span class="text" :class="`${mode}-mode`">Chat</span>
           </RouterLink>
         </li>
         <li :class="`${mode}-mode`" v-if="!isMobile">
@@ -139,4 +159,26 @@ export default defineComponent({
 
 <style lang="scss">
 @use "./styles/style.scss";
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center;
+
+  a {
+    color: inherit;
+    text-decoration: none
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 </style>

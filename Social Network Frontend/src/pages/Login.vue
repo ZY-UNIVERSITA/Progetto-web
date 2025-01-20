@@ -159,9 +159,23 @@ export default defineComponent({
     </template>
 
     <template v-else>
-        <form @click="close">
-            <p>Errore nell'inserimento della password o dell'username/email.</p>
-            <p>Premi questa schermata per riprovare.</p>
-        </form>
+        <section class="email_password_error" @click="close">
+            <p>Email and/or password are wrong.</p>
+            <p>Touch to continue.</p>
+        </section>
     </template>
 </template>
+
+<style lang="scss" scoped>
+.email_password_error {
+    border: solid grey;
+    padding: 1%;
+    margin: 5%;
+    box-sizing: border-box;
+    text-align: center;
+
+    @media (min-width: 1280px) {
+        margin: 1%;
+    }
+}
+</style>
